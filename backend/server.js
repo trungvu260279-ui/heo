@@ -46,6 +46,19 @@ try {
 const getDbFilePath = () => global.DB_FILE_PATH || DB_FILE;
 
 // ----------------------------------------------------
+// 0. GET /
+// Trả về câu chào mừng nếu có ai (vô tình) gõ base URL
+// ----------------------------------------------------
+app.get('/', (req, res) => {
+    res.json({
+        status: "Online",
+        message: "VanPlatform Backend (Render) is running smoothly!",
+        db_path: getDbFilePath(),
+        docs: "/api/sheet"
+    });
+});
+
+// ----------------------------------------------------
 // 1. GET /api/sheet
 // Khi User vào web -> Nạp Top Dashboard Ranking từ File JSON
 // ----------------------------------------------------
