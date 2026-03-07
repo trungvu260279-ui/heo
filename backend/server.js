@@ -9,7 +9,9 @@ const PORT = process.env.PORT || 10000;
 // Đường dẫn lưu file json trên máy chủ Render.
 // Nếu trên Render bạn có gắn Disk, bạn có thể trỏ DB_FILE tới '/data/rankings.json' 
 // để dữ liệu không bị mất khi deploy lại web!
-const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
+const DATA_DIR = process.env.DATA_DIR && process.env.DATA_DIR !== '/data' 
+    ? process.env.DATA_DIR 
+    : path.join(__dirname, 'data');
 const DB_FILE = path.join(DATA_DIR, 'rankings.json');
 
 app.use(cors({
@@ -20,12 +22,28 @@ app.use(cors({
 app.use(express.json());
 
 // Khởi tạo thư mục và file database
-if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+try {
+    if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    if (!fs.existsSync(DB_FILE)) {
+        fs.writeFileSync(DB_FILE, JSON.stringify([]));
+    }
+} catch (error) {
+    console.error("Failed to create data directory/file. Using __dirname fallback.", error);
+    // Nếu lỗi tạo thư mục (ví dụ mount path /data bị cấm do không add disk), fallback về thư mục hiện tại
+    const FALLBACK_DIR = path.join(__dirname, 'data');
+    if (!fs.existsSync(FALLBACK_DIR)) fs.mkdirSync(FALLBACK_DIR, { recursive: true });
+    
+    // Đổi lại hằng số DATA_DIR và DB_FILE theo fallback
+    // (Bởi vì thư mục hiện tại chắc chắn có quyền ghi)
+    process.env.DATA_DIR = FALLBACK_DIR;
+    global.DB_FILE_PATH = path.join(FALLBACK_DIR, 'rankings.json');
+    if (!fs.existsSync(global.DB_FILE_PATH)) fs.writeFileSync(global.DB_FILE_PATH, JSON.stringify([]));
 }
-if (!fs.existsSync(DB_FILE)) {
-    fs.writeFileSync(DB_FILE, JSON.stringify([]));
-}
+
+// Hàm helper để luôn lấy đúng file DB
+const getDbFilePath = () => global.DB_FILE_PATH || DB_FILE;
 
 // ----------------------------------------------------
 // 1. GET /api/sheet
@@ -33,7 +51,7 @@ if (!fs.existsSync(DB_FILE)) {
 // ----------------------------------------------------
 app.get('/api/sheet', (req, res) => {
     try {
-        const raw = fs.readFileSync(DB_FILE, 'utf-8');
+        const raw = fs.readFileSync(getDbFilePath(), 'utf-8');
         const data = JSON.parse(raw);
         
         // Front-end yêu cầu format dạng mảng 2 chiều theo Google Sheets cũ
@@ -68,7 +86,7 @@ app.post('/api/sheet', (req, res) => {
             return res.status(400).json({ error: "Missing identity" });
         }
 
-        const raw = fs.readFileSync(DB_FILE, 'utf-8');
+        const raw = fs.readFileSync(getDbFilePath(), 'utf-8');
         const data = JSON.parse(raw);
         
         // Thêm bản ghi mới
@@ -82,7 +100,7 @@ app.post('/api/sheet', (req, res) => {
         });
         
         // Lưu lại xuống Ổ cứng (Render disk)
-        fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+        fs.writeFileSync(getDbFilePath(), JSON.stringify(data, null, 2));
         
         res.json({ success: true, message: "Score saved to Render Disk DB!" });
     } catch(e) {
@@ -92,5 +110,5 @@ app.post('/api/sheet', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Backend Rank/History Server running on port ${PORT}`);
-    console.log(`Saving JSON DB to: ${DB_FILE}`);
+    console.log(`Saving JSON DB to: ${getDbFilePath()}`);
 });
