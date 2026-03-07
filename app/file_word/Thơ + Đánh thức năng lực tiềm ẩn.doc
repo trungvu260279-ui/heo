@@ -1,0 +1,362 @@
+{\rtf1\ansi\ansicpg1252\uc1\deflang1066\adeflang1066\deflangfe1066\deff4\stshfloch4\stshfhich4\stshfbi4\stshfdbch4
+{\fonttbl
+{\f0\froman\fcharset0 Times New Roman;}
+{\f1\froman\fcharset163 Times New Roman;}
+{\f2\fswiss\fcharset0 Calibri;}
+{\f3\fswiss\fcharset163 Calibri;}
+{\f4\fnil\fcharset0 Microsoft Sans Serif;}
+{\f5\fnil\fcharset163 Microsoft Sans Serif;}
+}
+{\colortbl
+;
+\red0\green0\blue0
+;
+\red0\green0\blue255
+;
+\red0\green255\blue255
+;
+\red0\green255\blue0
+;
+\red255\green0\blue255
+;
+\red255\green0\blue0
+;
+\red255\green255\blue0
+;
+\red255\green255\blue255
+;
+\red0\green0\blue128
+;
+\red0\green128\blue128
+;
+\red0\green128\blue0
+;
+\red128\green0\blue128
+;
+\red128\green0\blue0
+;
+\red128\green128\blue0
+;
+\red128\green128\blue128
+;
+\red192\green192\blue192
+;
+\red0\green102\blue204
+;
+}
+{\*\defchp\fs24\afs24\loch\af4\hich\af4\dbch\af4}
+{\*\defpap\aspalpha\aspnum\faauto\adjustright\cgrid\li0\ri0\ltrpar\ql\fi0\sb0\sa0\sl240\slmult1}
+{\stylesheet
+{\aspalpha\aspnum\faauto\adjustright\cgrid\li0\ri0\ltrpar\ql\fi0\sb0\sa0\sl240\slmult1\lang1066\langfe1066\f5\fs24\afs24\charscalex100\expndtw0
+\cf1\dn0 Normal;}
+{\*\cs10\additive Default Paragraph Font;}
+{\*\cs15\additive\ul\cf17\sbasedon10 Hyperlink;}
+{\*\cs16\additive\f1\b\i0\ul0\strike0\scaps0\fs20\afs20\sbasedon10\slink39 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (8) Exact;}
+{\*\cs17\additive\f1\b\i0\ul0\strike0\scaps0\sbasedon10\slink40 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (3)_;}
+{\*\cs18\additive\f1\b\i0\ul0\strike0\scaps0\fs20\afs20\sbasedon17 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (3) + 10 pt;}
+{\*\cs19\additive\f1\b0\i\ul0\strike0\scaps0\fs20\afs20\sbasedon10\slink41 \u272 ?\u7847 ?u trang ho\u7863 ?c ch\'E2n trang_;}
+{\*\cs20\additive\f1\b0\i\ul0\strike0\scaps0\fs20\afs20\sbasedon19 \u272 ?\u7847 ?u trang ho\u7863 ?c ch\'E2n trang;}
+{\*\cs21\additive\f1\b\i0\ul\strike0\scaps0\fs20\afs20\sbasedon17 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (3) + 10 pt;}
+{\*\cs22\additive\f1\b\i0\ul\strike0\scaps0\fs20\afs20\expndtw20\sbasedon17 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (3) + 10
+ pt,Gi\'E3n c\'E1ch 1 pt;}
+{\*\cs23\additive\lang1024\langfe1024\f0\b\i0\ul0\strike0\scaps0\fs20\afs20\expndtw20\sbasedon17 V\u259 ?n b\u7843 ?n n\u7897 ?i
+ dung (3) + 10 pt,Gi\'E3n c\'E1ch 1 pt;}
+{\*\cs24\additive\f1\b\i0\ul0\strike0\scaps\sbasedon17 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (3) + Ch\u7919 ? hoa nh\u7887 ?;}
+{\*\cs25\additive\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\sbasedon10\slink42 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (4)_;}
+{\*\cs26\additive\f1\b0\i\ul0\strike0\scaps0\fs21\afs21\sbasedon10\slink43 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (5)_;}
+{\*\cs27\additive\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\sbasedon10\slink44 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (6)_;}
+{\*\cs28\additive\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\sbasedon10\slink45 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (2)_;}
+{\*\cs29\additive\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\sbasedon28 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (2) + Kh\'F4ng in
+ nghi\'EAng;}
+{\*\cs30\additive\f1\b0\i0\ul0\strike0\scaps0\fs11\afs11\sbasedon10\slink46 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (7)_;}
+{\*\cs31\additive\f3\b0\i\ul0\strike0\scaps0\fs10\afs10\sbasedon30 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (7) + Calibri,5 pt,In
+ nghi\'EAng;}
+{\*\cs32\additive\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\sbasedon25 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (4) + In \u273 ?\u7853 ?m;}
+{\*\cs33\additive\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\sbasedon28 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (2) + In \u273 ?\u7853 ?m,Kh\'F4
+ng in nghi\'EAng;}
+{\*\cs34\additive\f1\b0\i0\ul\strike0\scaps0\fs26\afs26\sbasedon25 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (4);}
+{\*\cs35\additive\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\sbasedon25 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (4) + In nghi\'EAng;}
+{\*\cs36\additive\f1\b\i\ul0\strike0\scaps0\fs26\afs26\sbasedon10\slink47 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (9)_;}
+{\*\cs37\additive\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\sbasedon36 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (9) + Kh\'F4ng in
+ nghi\'EAng;}
+{\*\cs38\additive\f1\b\i0\ul0\strike0\scaps\fs26\afs26\sbasedon27 V\u259 ?n b\u7843 ?n n\u7897 ?i dung (6) + Ch\u7919 ? hoa
+ nh\u7887 ?;}
+{\s39\aspalpha\aspnum\faauto\adjustright\cgrid\cbpat8\sl0\slmult0\f1\b\i0\ul0\strike0\scaps0\fs20\afs20\sbasedon0\slink16
+V\u259 ?n b\u7843 ?n n\u7897 ?i dung (8);}
+{\s40\aspalpha\aspnum\faauto\adjustright\cgrid\cbpat8\qj\sl-278\slmult0\f1\b\i0\ul0\strike0\scaps0\sbasedon0\slink17 V\u259 ?n
+ b\u7843 ?n n\u7897 ?i dung (3);}
+{\s41\aspalpha\aspnum\faauto\adjustright\cgrid\cbpat8\sl0\slmult0\f1\b0\i\ul0\strike0\scaps0\fs20\afs20\sbasedon0\slink19
+\u272 ?\u7847 ?u trang ho\u7863 ?c ch\'E2n trang;}
+{\s42\aspalpha\aspnum\faauto\adjustright\cgrid\cbpat8\qc\sa180\sl-278\slmult0\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\sbasedon0\slink25
+V\u259 ?n b\u7843 ?n n\u7897 ?i dung (4);}
+{\s43\aspalpha\aspnum\faauto\adjustright\cgrid\cbpat8\fi2200\sb180\sl0\slmult0\f1\b0\i\ul0\strike0\scaps0\fs21\afs21\sbasedon0\slink26
+V\u259 ?n b\u7843 ?n n\u7897 ?i dung (5);}
+{\s44\aspalpha\aspnum\faauto\adjustright\cgrid\cbpat8\qj\sb180\sl-298\slmult0\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\sbasedon0\slink27
+V\u259 ?n b\u7843 ?n n\u7897 ?i dung (6);}
+{\s45\aspalpha\aspnum\faauto\adjustright\cgrid\cbpat8\sb180\sl-298\slmult0\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\sbasedon0\slink28
+V\u259 ?n b\u7843 ?n n\u7897 ?i dung (2);}
+{\s46\aspalpha\aspnum\faauto\adjustright\cgrid\cbpat8\qj\sl0\slmult0\f1\b0\i0\ul0\strike0\scaps0\fs11\afs11\sbasedon0\slink30
+V\u259 ?n b\u7843 ?n n\u7897 ?i dung (7);}
+{\s47\aspalpha\aspnum\faauto\adjustright\cgrid\cbpat8\sl-298\slmult0\f1\b\i\ul0\strike0\scaps0\fs26\afs26\sbasedon0\slink36
+V\u259 ?n b\u7843 ?n n\u7897 ?i dung (9);}
+}
+{\info
+{\title}
+{\subject}
+{\author}
+{\keywords}
+}
+\paperw11900\paperh16840\margl1016\margr574\margt816\margb960\gutter0\viewkind1\viewzk1\fet2\splytwnine\ftnlytwnine\htmautsp\useltbaln\alntblind
+\lytcalctblwd\lyttblrtgr\lnbrkrule\nobrkwrptbl\snaptogridincell\allowfieldendsel\wrppunct\asianbrkrule\newtblstyruls\nogrowautofit\usenormstyforlist
+\noindnmbrts\felnbrelev\nocxsptable\indrlsweleven\noafcnsttbl\afelev\utinl\hwelev\spltpgpar\notcvasp\notvatxbx\krnprsnet\cachedcolbal\noxlattoyen
+\noultrlspc\dntblnsbdb\nospaceforul\nolnhtadjtbl\notbrkcnstfrctbl\dgmargin\dghspace181\dgvspace181\dghshow1\dgvshow1\sectd\ltrsect\headery0
+\footery3\colsx720\sectlinegrid360\sftnbj\sftnrstcont
+{\footer
+\pard\plain\wrapdefault\aspalpha\aspnum\faauto\adjustright\cgrid\fs2\afs2
+{\shp
+{\*\shpinst\shpleft10184\shptop16162\shpright10962\shpbottom16344\shpfhdr1\shpbxpage\shpbypage\shpwr3\shpwrk0
+{\sp{\sn fBehindDocument}{\sv 1}}
+\shpz0
+{\sp{\sn shapeType}{\sv 202}}
+{\sp{\sn dxTextLeft}{\sv 0}}
+{\sp{\sn dyTextTop}{\sv 0}}
+{\sp{\sn dxTextRight}{\sv 0}}
+{\sp{\sn dyTextBottom}{\sv 0}}
+{\sp{\sn WrapText}{\sv 2}}
+{\sp{\sn fFitShapeToText}{\sv 1}}
+{\sp{\sn fFilled}{\sv 0}}
+{\sp{\sn fLine}{\sv 0}}
+{\sp{\sn dxWrapDistLeft}{\sv 63500}}
+{\sp{\sn dxWrapDistRight}{\sv 63500}}
+{\sp{\sn fLayoutInCell}{\sv 1}}
+{\shptxt
+\pard\plain\wrapdefault\s41\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs20\afs20
+{\cs20\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs20\afs20\charscalex100\expndtw0\cf1\dn0 Trang }
+{\field
+{\*\fldinst  PAGE \\* MERGEFORMAT }
+{\fldrslt
+{\cs20\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs20\afs20\charscalex100\expndtw0\cf1\dn0 #}
+}
+}
+{\cs20\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs20\afs20\charscalex100\expndtw0\cf1\dn0 /2}
+\par
+}
+}
+}
+\par
+}
+\pard\plain\tx4891\li840\qj\sl-278\slmult0\wrapdefault\s40\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b\i0\ul0\strike0\scaps0
+{\cs18\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs20\afs20\charscalex100\expndtw0\cf1\dn0 S\u7902 ? GI\'C1O D\u7908 ?C
+ V\'C0 \'D0\'C0O T\u7840 ?O\tab}
+{\cs17\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs24\afs24\charscalex100\expndtw0\cf1\dn0 \'D0\u7872 ? THI KH\u7842 ?O
+ S\'C1T CH\u7844 ?T L\'DD\u7906 ?NG H\u7884 ?C K\u7922 ? I}
+\par
+\pard\plain\tx6290\li1620\qj\sl-278\slmult0\wrapdefault\s40\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b\i0\ul0\strike0\scaps0
+{\cs21\lang1066\langfe1066\f1\super\b\i0\ul\strike0\scaps0\fs20\afs20\charscalex100\expndtw0\cf1\dn0 NAM}
+{\cs21\lang1066\langfe1066\f1\b\i0\ul\strike0\scaps0\fs20\afs20\charscalex100\expndtw0\cf1\dn0  }
+{\cs22\lang1066\langfe1066\f1\b\i0\ul\strike0\scaps0\fs20\afs20\charscalex100\expndtw20\cf1\dn0 \'D0\u7882 ?NH}
+{\cs23\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs20\afs20\charscalex100\expndtw20\cf1\dn0\tab}
+{\cs24\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps\fs24\afs24\charscalex100\expndtw0\cf1\dn0 n\'E3m h\u7885 ?c 2024-2025}
+\par
+\pard\plain\li40\qc\sa235\sl-278\slmult0\wrapdefault\s42\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs26\afs26
+{\shp
+{\*\shpinst\shpleft1186\shptop168\shpright2880\shpbottom448\shpfhdr0\shpbxmargin\shpbypara\shpwr2\shpwrk2
+{\sp{\sn fBehindDocument}{\sv 1}}
+\shpz0
+{\sp{\sn shapeType}{\sv 202}}
+{\sp{\sn dxTextLeft}{\sv 0}}
+{\sp{\sn dyTextTop}{\sv 0}}
+{\sp{\sn dxTextRight}{\sv 0}}
+{\sp{\sn dyTextBottom}{\sv 0}}
+{\sp{\sn fFitShapeToText}{\sv 1}}
+{\sp{\sn fFilled}{\sv 0}}
+{\sp{\sn fLine}{\sv 0}}
+{\sp{\sn dxWrapDistLeft}{\sv 63500}}
+{\sp{\sn dyWrapDistTop}{\sv 106680}}
+{\sp{\sn dxWrapDistRight}{\sv 1725295}}
+{\sp{\sn dyWrapDistBottom}{\sv 337185}}
+{\sp{\sn fLayoutInCell}{\sv 1}}
+{\shptxt
+\pard\plain\sl-200\slmult0\brdrt\brdrs\brdrw10\brsp20\brdrb\brdrs\brdrw10\brsp20\brdrl\brdrs\brdrw10\brsp80\brdrr\brdrs\brdrw10\brsp80\wrapdefault
+\s39\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b\i0\ul0\strike0\scaps0\fs20\afs20
+{\cs16\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs20\afs20\charscalex100\expndtw0\cf1\dn0 \'D0\u7872 ? CH\'CDNH TH\u7912 ?C}
+\par
+}
+}
+}
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 M\'F4n: Ng\u7919 ? v\'E3n
+ - l\u7899 ?p 12 THPT, GDTX\line
+(Th\u7901 ?i gian l\'E0m b\'E0i: 120 ph\'FAt)}
+\par
+\pard\plain\fi2200\sl-210\slmult0\wrapdefault\s43\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs21\afs21
+{\cs26\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs21\afs21\charscalex100\expndtw0\cf1\dn0 \'D0\u7873 ? thi kh\u7843 ?o
+ s\'E1t g\u7891 ?m 02 trang.}
+\par
+\pard\plain\tldot\tx5902\qj\sl-260\slmult0\wrapdefault\s42\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 H\u7885 ? v\'E0 t\'EAn h\u7885 ?c
+ sinh:\tab}
+\par
+\pard\plain\tldot\tx5902\qj\sa130\sl-260\slmult0\wrapdefault\s42\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs26
+\afs26
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 S\u7889 ? b\'E1o danh:\tab}
+\par
+\pard\plain\qj\sl-298\slmult0\wrapdefault\s44\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs27\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 I. \'D0\u7884 ?C HI\u7874 ?U
+ (4,0 \'F0i\u7875 ?m)}
+\par
+\pard\plain\qj\sl-298\slmult0\wrapdefault\s42\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 \'D0\u7885 ?c b\'E0i th\'F5:}
+\par
+\pard\plain\li340\qc\sl-298\slmult0\wrapdefault\s44\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs27\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 BAN MAI}
+\par
+\pard\plain\li340\qc\sa180\sl-298\slmult0\wrapdefault\s44\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs27\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 (Nguy\u7877 ?n Quang Thi\u7873 ?u)}
+\par
+\pard\plain\li2200\sl-298\slmult0\wrapdefault\s45\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs26\afs26
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 B\'F3ng t\u7889 ?i \'F0\'EAm
+ d\u7847 ?n s\'E1ng nh\'FD m\u7897 ?t con m\'E8o nhung kh\u7893 ?ng l\u7891 ? b\'FD\u7899 ?c \'F0i uy\u7875 ?n chuy\u7875 ?n}
+\par
+\pard\plain\li2200\sa180\sl-298\slmult0\wrapdefault\s45\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs26\afs26
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 C\'E1i \'F0u\'F4i m\u7873 ?m
+ c\u7911 ?a n\'F3 ch\u7841 ?m v\'E0o t\'F4i l\'E0m t\'F4i t\u7881 ?nh gi\u7845 ?c T\'F4i c\u7921 ?a m\u236 ?nh nh\'FD b\'FAp
+ non m\u7903 ? l\'E1 \u221 ? ngh\u297 ? m\u7881 ?m c\'FD\u7901 ?i trong v\u7855 ?t tr\'FD\u7899 ?c ban mai}
+\par
+\pard\plain\fi2200\sl-298\slmult0\wrapdefault\s45\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs26\afs26
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Nh\u7919 ?ng x\'F4n xao l\'F9a
+ qua h\'F5i \u7849 ?m}
+\par
+\pard\plain\fi2200\sl-298\slmult0\wrapdefault\s45\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs26\afs26
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 V\u7885 ?ng v\u7873 ? t\u7915 ?
+ c\'E1nh \'F0\u7891 ?ng r\u7897 ?ng l\u7899 ?n m\u7901 ? s\'FD\'F5ng}
+\par
+\pard\plain\fi2200\sl-298\slmult0\wrapdefault\s45\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs26\afs26
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Ti\u7871 ?ng b\'E1nh xe tr\'E2u
+ l\u7863 ?ng l\u7869 ? qua \'F0\'EAm}
+\par
+\pard\plain\li40\qc\sa180\sl-298\slmult0\wrapdefault\s45\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs26\afs26
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Ch\u7845 ?t \'F0\u7847 ?y
+ h\'FD\'F5ng c\u7887 ? t\'FD\'F5i l\'E3n v\u7873 ? n\'F5i h\u7915 ?ng s\'E1ng}
+\par
+\pard\plain\li2200\sa180\sl-298\slmult0\wrapdefault\s45\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs26\afs26
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 \'D5i... \'F5i...\'F5i, nh\u7919 ?ng
+ con \'F0\'FD\u7901 ?ng th\'E2n thu\u7897 ?c Nh\'FD nh\u7919 ?ng ng\'F3n tay ng\'FD\u7901 ?i y\'EAu l\'F9a m\u227 ?i v\'E0o
+ ch\'E2n t\'F3c Ai g\u7885 ?i \'F0\u7845 ?y, ai \'F0ang c\'FD\u7901 ?i kh\'FAc kh\'EDch T\'F4i l\'E1ch m\u236 ?nh qua khe
+ c\u7917 ?a, \'F5i}
+{\cs29\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 ... }
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 \'F5i}
+{\cs29\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 ...}
+\par
+\pard\plain\li2200\sa184\sl-298\slmult0\wrapdefault\s45\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs26\afs26
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Ng\'FD\u7901 ?i n\'F4ng d\'E2n
+ b\u7871 ? t\'F4i l\'EAn v\'E0 \'F0\u7863 ?t v\'E0o th\'F9ng xe D\'FD\u7899 ?i v\'E0nh n\'F3n c\u7911 ?a ng\'FD\u7901 ?i
+ c\u7845 ?t l\'EAn tr\u7847 ?m tr\u7847 ?m gi\u7885 ?ng h\'E1t Nh\'FD ti\u7871 ?ng l\'FAa kh\'F4 ch\u7843 ?y v\'E0o trong
+ c\'F3t Nh\'FD \'F0\u7845 ?t \u7845 ?m tr\'E0o l\'EAn trong l\'F3e s\'E1ng l\'FD\u7905 ?i c\'E0y}
+\par
+\pard\plain\fi2200\sl-293\slmult0\wrapdefault\s45\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs26\afs26
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Chi\u7871 ?c b\'E1nh xe tr\'E2u
+ m\u7897 ?t n\u7917 ?a \'F0\u227 ? qua \'F0\'EAm M\u7897 ?t n\u7917 ?a th\'F9ng c\u7887 ? t\'FD\'F5i c\u242 ?n trong b\'F3ng
+ t\u7889 ?i V\'E0 sau ti\u7871 ?ng hu\u7847 ?y \'F5 nh\'FD ti\u7871 ?ng ng\'FD\u7901 ?i ch\u7907 ?t th\u7913 ?c Nh\u7919 ?ng
+ ng\u7885 ?n ban mai m\'F5n m\u7903 ?n r\'FD\u7899 ?n m\u236 ?nh (S\u7921 ? m\u7845 ?t ng\u7911 ? c\u7911 ?a l\u7917 ?a,}
+{\cs29\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0  Nguy\u7877 ?n Quang Thi\u7873 ?u,
+ NXB H\u7897 ?i nh\'E0 v\'E3n, 2015, tr.13-14)}
+\par
+\pard\plain\tlul\tx1808\tx2323\qj\sl-110\slmult0\wrapdefault\s46\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs11
+\afs11
+{\cs30\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs11\afs11\charscalex100\expndtw0\cf1\dn0 rrii _ 1 \'95 \u7840 ? _
+ }
+{\cs31\lang1066\langfe1066\f3\b0\i\ul0\strike0\scaps0\fs10\afs10\charscalex100\expndtw0\cf1\dn0 r}
+{\cs30\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs11\afs11\charscalex100\expndtw0\cf1\dn0  \tab}
+{\cs31\lang1066\langfe1066\f3\b0\i\ul0\strike0\scaps0\fs10\afs10\charscalex100\expndtw0\cf1\dn0 /y\tab _ _}
+\par
+\pard\plain\qj\sl-298\slmult0\wrapdefault\s44\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs27\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Th\u7921 ?c hi\u7879 ?n c\'E1c
+ y\'EAu c\'E2u:}
+\par
+\pard\plain\qj\sl-298\slmult0\wrapdefault\s42\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs32\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 C\'E2u 1. }
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 X\'E1c \'F0\u7883 ?nh nh\'E2n
+ v\u7853 ?t tr\u7919 ? t\u236 ?nh trong b\'E0i th\'F5.}
+\par
+\pard\plain\ri380\qj\sl-298\slmult0\wrapdefault\s42\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs32\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 C\'E2u 2. }
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Ch\u7881 ? ra nh\u7919 ?ng
+ t\u7915 ? ng\u7919 ?, h\u236 ?nh \u7843 ?nh bi\u7875 ?u \'F0\u7841 ?t c\u7843 ?m gi\'E1c m\u7899 ?i m\u7867 ?, ni\u7873 ?m
+ vui trong s\'E1ng c\u7911 ?a nh\'E2n v\u7853 ?t tr\u7919 ? t\u236 ?nh khi t\u7881 ?nh gi\u7845 ?c tr\'FD\u7899 ?c ban mai
+ trong kh\u7893 ? 1 c\u7911 ?a b\'E0i th\'F5.}
+\par
+\pard\plain\qj\sl-298\slmult0\wrapdefault\s42\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs32\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 C\'E2u 3. }
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Ph\'E2n t\'EDch t\'E1c d\u7909 ?ng
+ c\u7911 ?a bi\u7879 ?n ph\'E1p tu t\u7915 ? so s\'E1nh \'F0\'FD\u7907 ?c s\u7917 ? d\u7909 ?ng trong nh\u7919 ?ng d\u242 ?ng
+ th\'F5 sau:}
+\par
+\pard\plain\fi2200\sl-298\slmult0\wrapdefault\s45\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs26\afs26
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 \'D5i}
+{\cs29\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 ... }
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 \'F5i.\'F5i, nh\u7919 ?ng
+ con \'F0\'FD\u7901 ?ng th\'E2n thu\u7897 ?c Nh\'FD nh\u7919 ?ng ng\'F3n tay ng\'FD\u7901 ?i y\'EAu l\'F9a m\u227 ?i v\'E0o
+ ch\'E2n t\'F3c }
+{\cs33\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 C\'E2u 4. }
+{\cs29\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 N\'EAu t\'E2m tr\u7841 ?ng
+ c\u7911 ?a nh\'E2n v\u7853 ?t tr\u7919 ? t\u236 ?nh khi nghe ti\u7871 ?ng }
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 b\'E1nh xe tr\'E2u l\u7863 ?ng
+ l\u7869 ?}
+{\cs29\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0  v\'E0 ti\u7871 ?ng }
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 ai g\u7885 ?i, ai c\'FD\u7901 ?i
+ kh\'FAc kh\'EDch}
+{\cs29\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0  l\'FAc ban mai.}
+\par
+\pard\plain\ri380\qj\sl-298\slmult0\wrapdefault\s42\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs32\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 C\'E2u 5. }
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 T\u7915 ? h\u236 ?}
+{\cs34\lang1066\langfe1066\f1\b0\i0\ul\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 nh}
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0  \u7843 ?nh \'93ban mai\'94
+ trong c\'E2u th\'F5 \'93}
+{\cs35\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Nh\u7919 ?ng ng\u7885 ?n
+ ban mai m\'F5n m\u7903 ?n r\'FD\u7899 ?n m\u236 ?nh\'94,}
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0  h\u227 ?y b\'E0y t\u7887 ?
+ suy ngh\u297 ? c\u7911 ?a anh/ch\u7883 ? v\u7873 ? s\u7921 ? c\u7847 ?n thi\u7871 ?t ph\u7843 ?i \'F0\'E1nh th\u7913 ?c
+ ban mai trong t\'E2m h\u7891 ?n con ng\'FD\u7901 ?i (tr\u236 ?nh b\'E0y kho\u7843 ?ng 5 - 7 d\u242 ?ng).}
+{\page
+}
+\par
+\pard\plain\sl-298\slmult0\wrapdefault\s44\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs27\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 II. VI\u7870 ?T (6,0 \'F0i\u7875 ?m)}
+\par
+\pard\plain\sl-298\slmult0\wrapdefault\s47\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b\i\ul0\strike0\scaps0\fs26\afs26
+{\cs37\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 C\'E2u 1 (}
+{\cs36\lang1066\langfe1066\f1\b\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 2,0 \'F0i\u7875 ?m)}
+\par
+\pard\plain\fi760\sl-298\slmult0\wrapdefault\s42\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Vi\u7871 ?t \'F0o\u7841 ?n
+ v\'E3n (kho\u7843 ?ng 200 ch\u7919 ?) ph\'E2n t\'EDch nh\u7919 ?ng li\'EAn t\'FD\u7903 ?ng c\u7911 ?a nh\'E2n v\u7853 ?t
+ tr\u7919 ? t\u236 ?nh khi nghe gi\u7885 ?ng h\'E1t c\u7911 ?a ng\'FD\u7901 ?i n\'F4ng d\'E2n trong \'F0o\u7841 ?n th\'F5
+ \u7903 ? ph\u7847 ?n \'D0\u7885 ?c hi\u7875 ?u:}
+\par
+\pard\plain\li2180\ri2160\sl-298\slmult0\wrapdefault\s45\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i\ul0\strike0\scaps0\fs26\afs26
+{\cs28\lang1066\langfe1066\f1\b0\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Ng\'FD\u7901 ?i n\'F4ng d\'E2n
+ b\u7871 ? t\'F4i l\'EAn v\'E0 \'F0\u7863 ?t v\'E0o th\'F9ng xe D\'FD\u7899 ?i v\'E0nh n\'F3n c\u7911 ?a ng\'FD\u7901 ?i
+ c\u7845 ?t l\'EAn tr\u7847 ?m tr\u7847 ?m gi\u7885 ?ng h\'E1t Nh\'FD ti\u7871 ?ng l\'FAa kh\'F4 ch\u7843 ?y v\'E0o trong
+ c\'F3t Nh\'FD \'F0\u7845 ?t \u7845 ?m tr\'E0o l\'EAn trong l\'F3e s\'E1ng l\'FD\u7905 ?i c\'E0y}
+\par
+\pard\plain\sl-298\slmult0\wrapdefault\s47\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b\i\ul0\strike0\scaps0\fs26\afs26
+{\cs37\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 C\'E2u 2 }
+{\cs36\lang1066\langfe1066\f1\b\i\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 (4,0 \'F0i\u7875 ?m)}
+\par
+\pard\plain\fi760\sl-341\slmult0\wrapdefault\s42\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Tr\'FD\u7899 ?c nh\u7919 ?ng
+ t\u236 ?nh hu\u7889 ?ng th\u7917 ? th\'E1ch trong \'F0\u7901 ?i s\u7889 ?ng, \'F0\'F4i khi ng\'FD\u7901 ?i tr\u7867 ? b\u7897 ?c
+ l\u7897 ? nh\u7919 ?ng n\'E3ng l\u7921 ?c m\'E0 ch\'EDnh h\u7885 ? c\u361 ?ng kh\'F4ng bi\u7871 ?t \'F0\u7871 ?n.}
+\par
+\pard\plain\fi760\sa305\sl-341\slmult0\wrapdefault\s42\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b0\i0\ul0\strike0\scaps0\fs26\afs26
+{\cs25\lang1066\langfe1066\f1\b0\i0\ul0\strike0\scaps0\fs26\afs26\charscalex100\expndtw0\cf1\dn0 Vi\u7871 ?t b\'E0i v\'E3n
+ ngh\u7883 ? lu\u7853 ?n (kho\u7843 ?ng 600 ch\u7919 ?) b\'E0y t\u7887 ? \u253 ? ki\u7871 ?n c\u7911 ?a anh/ch\u7883 ? v\u7873 ?
+ vi\u7879 ?c ng\'FD\u7901 ?i tr\u7867 ? c\u7847 ?n \'F0\'E1nh th\u7913 ?c nh\u7919 ?ng n\'E3ng l\u7921 ?c ti\u7873 ?m \u7849 ?n
+ trong ch\'EDnh m\u236 ?nh.}
+\par
+\pard\plain\tlhyph\tx4750\tlhyph\tx6079\li3900\qj\sl-260\slmult0\wrapdefault\s44\aspalpha\aspnum\faauto\adjustright\cgrid\f0\b\i0\ul0\strike0
+\scaps0\fs26\afs26
+{\cs38\lang1066\langfe1066\f1\b\i0\ul0\strike0\scaps\fs26\afs26\charscalex100\expndtw0\cf1\dn0\tab h\u7871 ?t\tab}
+\par
+}

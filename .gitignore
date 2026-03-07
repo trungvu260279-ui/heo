@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+.DS_Store
+.vscode/
+
+# Backend
+backend/node_modules/
+backend/data/
+
+# Frontend (app)
+app/node_modules/
+app/dist/
+app/.vercel/
