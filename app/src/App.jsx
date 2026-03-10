@@ -8,6 +8,7 @@ const Assistant = lazy(() => import('./pages/Assistant'))
 const Ranking = lazy(() => import('./pages/Ranking'))
 const Roadmap = lazy(() => import('./pages/Roadmap'))
 const Exams = lazy(() => import('./pages/Exams'))
+const TeacherAssistant = lazy(() => import('./pages/TeacherAssistant'))
 
 function LoadingSpinner() {
     return (
@@ -67,6 +68,14 @@ export default function App() {
                     element={
                         <Suspense fallback={<LoadingSpinner />}>
                             <Exams />
+                        </Suspense>
+                    }
+                />
+                <Route
+                    path="teacher-assistant"
+                    element={
+                        <Suspense fallback={<LoadingSpinner />}>
+                            <TeacherAssistant />
                         </Suspense>
                     }
                 />

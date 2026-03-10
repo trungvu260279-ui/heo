@@ -8,7 +8,7 @@ const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL
 
 // Hỗ trợ chạy local với .env (nếu không chạy vercel dev)
 const LOCAL_API_KEY = import.meta.env.VITE_GEMINI_API_KEY
-const LOCAL_MODEL_NAME = import.meta.env.VITE_GEMINI_MODEL || 'gemini-1.5-flash'
+const LOCAL_MODEL_NAME = import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash'
 
 async function callGeminiAPI(instruction) {
     // 1. Nếu đang ở môi trường dev và có key trong .env -> gọi thẳng (cho tiện)

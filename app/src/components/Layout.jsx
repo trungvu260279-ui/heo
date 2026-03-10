@@ -10,6 +10,7 @@ const navItems = [
     { to: '/assessment', icon: 'insights', label: 'Đánh giá năng lực' },
     { to: '/assistant', icon: 'smart_toy', label: 'Trợ lý AI' },
     { to: '/exams', icon: 'menu_book', label: 'Thư viện Đề thi' },
+    { to: '/teacher-assistant', icon: 'person_search', label: 'Trợ lý Giáo viên', role: 'teacher' },
 ]
 
 export default function Layout() {
@@ -48,7 +49,7 @@ export default function Layout() {
 
                     {/* Nav */}
                     <nav className="flex flex-col gap-1">
-                        {navItems.map((item) => (
+                        {navItems.filter(item => !item.role || item.role === user?.role).map((item) => (
                             <NavLink
                                 key={item.label}
                                 to={item.to}

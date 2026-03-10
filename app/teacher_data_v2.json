@@ -1,0 +1,1202 @@
+{
+  "ke_hoach_day_học": [
+    {
+      "grade": "10",
+      "bai_hoc": "",
+      "so_tiet": "4",
+      "thoi_diem": "Tiết 1-4 (Tuần 1-4)",
+      "thiet_bi": "Sơ đồ quy trình và cấu trúc một báo cáo nghiên cứu khoa học",
+      "tich_hop_nls": "1.1.NC1a.HS cần xác định và đáp ứng được nhu cầu thông tin để phục vụ cho đề tài nghiên cứu cụ thể về văn học dân gian (ví dụ: cần tài liệu về “truyền thuyết”, “sự tích”, “cấu trúc truyện cổ tích”,...) 1.1.NC1b.HS cần biết áp dụng các kỹ thuật tìm kiếm nâng cao để thu thập dữ liệu về văn học dân gian một cách hiệu quả và chuyên sâu hơn. 1.2.NC1a.HS cần đánh giá được độ tin cậy của các nguồn tài liệu, dữ liệu tìm được để đảm bảo tính khoa học và chính xác cho báo cáo nghiên cứu.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "10",
+      "bai_hoc": "",
+      "so_tiet": "6",
+      "thoi_diem": "Tiết 5-10 (Tuần 5-10)",
+      "thiet_bi": "Sơ đồ quy trình và cấu trúc một báo cáo nghiên cứu khoa học",
+      "tich_hop_nls": "2.2.NC1a.HS cần biết chia sẻ tài liệu nghiên cứu, bản thảo báo cáo, và các nội dung đa phương tiện liên quan đến đề tài nghiên cứu (ví dụ: hình ảnh lễ hội, đoạn âm thanh ca dao). 3.1.NC1a.HS cần chỉnh sửa và chuyển đổi định dạng của dữ liệu, thông tin và nội dung số đã thu thập được để đưa vào báo cáo và bài thuyết trình. 5.3.NC1a.HS cần sáng tạo ra sản phẩm cuối cùng là báo cáo nghiên cứu và bài thuyết trình dựa trên việc tổng hợp các dữ liệu và công cụ số.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "10",
+      "bai_hoc": "",
+      "so_tiet": "5",
+      "thoi_diem": "Tiết 11-15 (Tuần 11-15)",
+      "thiet_bi": "Sơ đồ quy trình tiến hành sân khấu hoá một tác phẩm văn học",
+      "tich_hop_nls": "1.1.NC1a.HS cần xác định và tìm kiếm các thông tin cần thiết để hiểu về sân khấu hóa tác phẩm văn học, kịch bản sân khấu và các văn bản liên quan. 1.2.NC1a.HS cần đánh giá độ tin cậy của các nguồn thông tin thu thập được, đặc biệt là các dị bản truyện kể hoặc bản kịch không chính thức, để phục vụ cho việc phân tích, so sánh chính xác.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "10",
+      "bai_hoc": "",
+      "so_tiet": "10",
+      "thoi_diem": "Tiết 16-25 (Tuần 16-25)",
+      "thiet_bi": "",
+      "tich_hop_nls": "5.3.NC1a.HS sáng tạo ra Sản phẩm Cuối cùng (vở diễn hoàn chỉnh) và các tài liệu hỗ trợ bằng cách áp dụng công cụ số.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "10",
+      "bai_hoc": "",
+      "so_tiet": "2",
+      "thoi_diem": "Tiết 26-27 (Tuần 26-27)",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a. HS cần xác định các thông tin cần thiết để hỗ trợ cho việc đọc hiểu sâu một tác phẩm hoặc một vấn đề liên quan đến di sản nghệ thuật.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "10",
+      "bai_hoc": "",
+      "so_tiet": "5",
+      "thoi_diem": "Tiết 28-32 (Tuần 28-32)",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1b.HS cần sử dụng kỹ thuật tìm kiếm hiệu quả để thu thập các tác phẩm mẫu, lý luận văn học, và các khóa học/hướng dẫn viết chuyên nghiệp. 1.2.NC1a.HS cần đánh giá độ tin cậy của các nguồn hướng dẫn viết, lý thuyết văn học, và các tư liệu thực tế để đảm bảo kiến thức sáng tác là chính xác và có chiều sâu.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "10",
+      "bai_hoc": "",
+      "so_tiet": "3",
+      "thoi_diem": "Tiết 33-35 (Tuần 33-35)",
+      "thiet_bi": "",
+      "tich_hop_nls": "3.1.NC1a.HS cần chỉnh sửa và thiết kế nội dung văn bản (thông tin về tác phẩm, báo cáo) thành bài trình chiếu (định dạng slide) hấp dẫn, dễ theo dõi. 5.3.NC1a.HS cần sáng tạo ra sản phẩm cuối cùng là bài thuyết trình đa phương tiện (sử dụng phương tiện hỗ trợ) bằng cách ứng dụng công nghệ số.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "11",
+      "bai_hoc": "",
+      "so_tiet": "4",
+      "thoi_diem": "Tiết 1-4 (Tuần 1-4)",
+      "thiet_bi": "Video/clip/phim tư liệu về thơ Nôm của Hồ Xuân Hương Video/clip/phim tư liệu về thơ của  Nguyễn Khuyến",
+      "tich_hop_nls": "1.1.NC1a. Học sinh xác định các nhu cầu thông tin cụ thể và thực hiện tìm kiếm để bổ sung các tri thức nền cần thiết cho việc triển khai đề tài nghiên cứu. 1.1.NC1b. Học sinh áp dụng các kỹ thuật tìm kiếm nâng cao (sử dụng dấu ngoặc kép, tìm kiếm file PDF/doc, tìm kiếm trên các cổng thông tin nghiên cứu) để lấy được các luận án, bài nghiên cứu, hoặc tài liệu phê bình chuyên sâu phục vụ cho nghiên cứu. 1.2.NC1a. Học sinh kiểm tra chéo độ tin cậy của các nguồn tài liệu (tác giả, cơ quan chủ quản, năm xuất bản) để phân biệt giữa nguồn nghiên cứu chính thống và nguồn thông tin phổ thông nhằm đảm bảo cơ sở lý luận cho đề tài.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "11",
+      "bai_hoc": "",
+      "so_tiet": "6",
+      "thoi_diem": "Tiết 5-10 (Tuần 5-10)",
+      "thiet_bi": "Video/clip/phim tư liệu về thơ Nôm của Hồ Xuân Hương Video/clip/phim tư liệu về thơ của  Nguyễn Khuyến",
+      "tich_hop_nls": "3.1.NC1a. Học sinh sử dụng các công cụ soạn thảo để tạo và chỉnh sửa báo cáo (định dạng tiêu đề, căn chỉnh lề, tạo mục lục tự động, chèn hình ảnh minh họa) để đảm bảo văn bản đạt chuẩn học thuật.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "11",
+      "bai_hoc": "",
+      "so_tiet": "4",
+      "thoi_diem": "Tiết 11-14 (Tuần 11-14)",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a. Học sinh xác định nhu cầu tìm hiểu về các hiện tượng ngôn ngữ mới  1.1.NC1b. Học sinh sử dụng các từ khóa kết hợp để tìm kiếm các bài nghiên cứu, bài báo chính luận phân tích về bản chất xã hội và văn hóa của các yếu tố ngôn ngữ mới, nhằm làm rõ các luận điểm trong bài học  1.2.NC1a. Học sinh kiểm tra độ tin cậy của các định nghĩa và cách sử dụng các từ ngữ mới. Đặc biệt, đánh giá tính phù hợp và rủi ro của việc vận dụng ngôn ngữ mới trong các ngữ cảnh giao tiếp khác nhau",
+      "bo_sung": ""
+    },
+    {
+      "grade": "11",
+      "bai_hoc": "",
+      "so_tiet": "5",
+      "thoi_diem": "Tiết 15-19 (Tuần 15-19)",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "11",
+      "bai_hoc": "",
+      "so_tiet": "6",
+      "thoi_diem": "Tiết 20-25 (Tuần 20-25)",
+      "thiet_bi": "",
+      "tich_hop_nls": "2.4.NC1a. Học sinh đề xuất công nghệ số nào là tối ưu để vận dụng ngôn ngữ mới và phương tiện phi ngôn ngữ 3.1.NC1a. Học sinh tạo và chỉnh sửa các phương tiện phi ngôn ngữ (ví dụ: tạo GIF, meme, Infographic đơn giản) để tích hợp vào nội dung giao tiếp, làm tăng hiệu quả biểu đạt.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "11",
+      "bai_hoc": "",
+      "so_tiet": "2",
+      "thoi_diem": "Tiết 26-27 (Tuần 26-27)",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a. Học sinh xác định nhu cầu tìm hiểu các thông tin cơ bản và thực hiện tìm kiếm để làm giàu kiến thức nền cho việc ghi chép và tổng hợp thông tin theo phiếu đọc.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "11",
+      "bai_hoc": "",
+      "so_tiet": "5",
+      "thoi_diem": "Tiết 28-32 (Tuần 28-32)",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a. Học sinh xác định nhu cầu tìm kiếm các tư liệu đặc thù để đáp ứng mục tiêu khai thác được toàn bộ tư liệu đã chuẩn bị và làm rõ thành tựu nổi bật. 1.1.NC1b. Học sinh sử dụng các kỹ thuật tìm kiếm chi tiết để thu thập các luận điểm, lí lẽ, bằng chứng phục vụ cho cấu trúc bài viết và hướng đi đã chọn.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "11",
+      "bai_hoc": "",
+      "so_tiet": "3",
+      "thoi_diem": "Tiết 33-35 (Tuần 33-35)",
+      "thiet_bi": "",
+      "tich_hop_nls": "3.1.NC1a. Học sinh tạo và chỉnh sửa nội dung thuyết trình (chữ viết, biểu đồ, hình ảnh, video) ở các định dạng khác nhau (slide, video clip) để trình bày những thông tin cơ bản về cuộc đời và sáng tác của tác giả một cách hấp dẫn.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "HỌC KÌ I (18 tuần; 54 tiết)",
+      "so_tiet": "HỌC KÌ I (18 tuần; 54 tiết)",
+      "thoi_diem": "",
+      "thiet_bi": "HỌC KÌ I (18 tuần; 54 tiết)",
+      "tich_hop_nls": "HỌC KÌ I (18 tuần; 54 tiết)",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Bài mở đầu",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "- Những nội dung chính của sách Ngữ văn 12 - Cấu trúc và các bài học trong sách Ngữ văn 12",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Bài 1 - Khả năng lớn lao của tiểu thuyết",
+      "so_tiet": "09",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Đọc hiểu văn bản: VB1: Xuân tóc đỏ cứu quốc - Vũ Trọng Phụng VB2: Nỗi buồn chiến tranh - Bảo Ninh",
+      "so_tiet": "05",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "VB1: 1.1.NC1b Tìm kiếm và thu thập tài liệu, thông tin về tác giả Vũ Trọng Phụng, về tiểu thuyết Số đỏ (bối cảnh xã hội, giá trị hiện thực, nghệ thuật trào phúng) và ý nghĩa nhan đề đoạn trích “Xuân Tóc Đỏ cứu quốc” để chuẩn bị bài. 4.2.NC1a Học sinh ghi rõ nguồn tài liệu (tên sách, tên tác giả, đường link trang web) khi hoàn thành phiếu học tập hoặc slide trình chiếu; không chia sẻ mật khẩu khi dùng chung nền tảng học tập trực tuyến. VB2: 1.1.NC1b Tìm kiếm và thu thập tài liệu, thông tin về tác giả Bảo Ninh, về tiểu thuyết Nỗi buồn chiến tranh (bối cảnh ra đời, các giải thưởng quốc tế, nội dung và ý nghĩa), và các khái niệm nghệ thuật liên quan (đồng hiện, dòng ý thức). 1.2.NC1a Sàng lọc và xác minh độ tin cậy của các nguồn thông tin về tiểu thuyết Nỗi buồn chiến tranh, đặc biệt là khi tác phẩm có nhiều góc nhìn và tranh luận khác nhau. Cần ưu tiên các nguồn từ nhà phê bình, nhà nghiên cứu uy tín.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "THTV: Biện pháp tu từ nói mỉa, nghịch ngữ: đặc điểm và tác dụng",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Tìm kiếm các ví dụ, tài liệu giải thích về đặc điểm và cách nhận biết biện pháp tu từ nói mỉa và nghịch ngữ để hiểu bài học và hoàn thành các bài tập thực hành.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Viết bài văn nghị luận so sánh, đánh giá hai tác phẩm truyện",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Sử dụng công cụ số để thu thập thông tin và tư liệu cần thiết (bài phân tích, phê bình, tài liệu về tác giả, bối cảnh lịch sử, xã hội,...) nhằm phục vụ cho việc so sánh, đánh giá hai tác phẩm truyện. 1.1.NC1b Áp dụng các từ khóa, bộ lọc tìm kiếm nâng cao để lấy được dữ liệu/nội dung phân tích chuyên sâu, tiêu biểu, xác đáng về hai tác phẩm truyện.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Nói và nghe: Trình bày kết quả so sánh, đánh giá hai tác phẩm truyện",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "3.1.NC1a Tạo nội dung trình chiếu (slides) sử dụng phần mềm số, kết hợp các định dạng khác nhau (hình ảnh minh họa, biểu đồ so sánh, video clip liên quan) để hỗ trợ phần nói, làm cho bài thuyết trình trực quan, sinh động và thuyết phục hơn.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Bài 2 - Những thế giới thơ",
+      "so_tiet": "10",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Đọc hiểu văn bản: VB1: Cảm hoài (Nỗi lòng - Đặng Dung) VB2: Tây Tiến (Quang Dũng) VB3: Đàn ghi ta của Lor-ca (Thanh Thảo)",
+      "so_tiet": "06",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "VB1: 1.1.NC1a Tìm kiếm và thu thập thông tin về tác giả Đặng Dung, hoàn cảnh sáng tác bài thơ “Cảm hoài”, và thể thơ thất ngôn xen lục ngôn . 1.1.NC1b Sử dụng các công cụ tìm kiếm với từ khóa phù hợp (“Cảm hoài Đặng Dung”, “thể thơ cổ điển”, “ý nghĩa hình tượng quốc thù chưa báo đầu đã bạc”) để lấy được thông tin chính xác. VB2: 1.1.NC1a Tìm kiếm và thu thập thông tin về tác giả Quang Dũng, Đoàn quân Tây Tiến, hoàn cảnh sáng tác bài thơ, và phong cách lãng mạn trong thơ ca kháng chiến để phục vụ việc đọc hiểu. 1.1.NC1b Sử dụng các kỹ thuật tìm kiếm nâng cao với từ khóa hiệu quả (“Tây Tiến phong cách lãng mạn”, “đặc trưng thể loại thơ trữ tình hiện đại”) để lấy được dữ liệu, hình ảnh/video tư liệu để hỗ trợ phân tích nghệ thuật . VB3: 1.1.NC1a Tìm kiếm và thu thập thông tin nền tảng về nhà thơ Lor-ca (tiểu sử, sự nghiệp, hoàn cảnh cái chết), thể loại thơ hiện đại, tượng trưng, siêu thực để hiểu bối cảnh và phong cách sáng tác của Thanh Thảo. 1.1.NC1b Sử dụng kỹ thuật tìm kiếm nâng cao với từ khóa hiệu quả (“Đàn ghi ta của Lorca phân tích siêu thực”, “biểu tượng áo choàng đỏ”) để lấy được các bài phân tích chuyên sâu về các hình tượng, biểu tượng phức tạp trong bài thơ. 1.2.NC1a Đối chiếu và chọn lọc các bài bình giảng về nghệ thuật, hình tượng và cảm xúc ngưỡng vọng của Thanh Thảo từ các nguồn học thuật có uy tín để tránh hiểu sai các yếu tố tượng trưng, siêu thực. 2.2.NC1a Sử dụng các công cụ số (diễn đàn trực tuyến, infographic) để tổ chức, chia sẻ và trình bày kết quả phân tích về ngôn ngữ, hình tượng, biểu tượng trong bài thơ, thể hiện được suy nghĩ, cảm xúc cá nhân khi tiếp nhận văn bản.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "THTV: Tác dụng của một số biện pháp tu từ trong thơ",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Viết bài văn nghị luận so sánh, đánh giá hai tác phẩm thơ",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Tìm kiếm thông tin, tài liệu để xác định cơ sở và phương diện so sánh (ví dụ: phong cách, chủ đề, hình tượng) giữa hai tác phẩm thơ và tìm kiếm các dẫn chứng/nhận định hỗ trợ cho việc đánh giá và thể hiện ý kiến cá nhân. 1.1.NC1b sử dụng kỹ thuật tìm kiếm hiệu quả (từ khóa kết hợp, tìm kiếm nâng cao) để lấy được các tài liệu, bài viết mẫu, hoặc các phân tích chuyên sâu về các thao tác nghị luận (như cách lựa chọn cách trình bày nội dung, cách đặt luận điểm so sánh). 1.2.NC1a đối chiếu và chọn lọc các ý kiến đánh giá (về giá trị nội dung/nghệ thuật) từ các nguồn khác nhau, cẩn trọng khi sử dụng các nhận định không chính thống, nhằm đảm bảo các luận cứ so sánh, đánh giá trong bài viết là khách quan và có cơ sở học thuật.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Nói và nghe: Trình bày so sánh, đánh giá hai tác phẩm thơ",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "3.1.NC1a Chuyển đổi nội dung bài viết từ văn bản sang định dạng đa phương tiện (slides/ video clip ngắn/ audio) để tăng tính hấp dẫn cho bài nói và thể hiện được cảm xúc cá nhân về các bài thơ.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Bài 3 - Lập luận trong văn nghị luận",
+      "so_tiet": "10",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Đọc hiểu văn bản: - VB1: Nhìn về vốn văn hóa dân tộc (Trần Đình Hượu) - VB2: Năng lực sáng tạo (Phan Đình Diệu)",
+      "so_tiet": "03",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "VB1: 1.1.NC1a Tìm kiếm, thu thập và đọc văn bản “Nhìn về vốn văn hoá dân tộc” để đáp ứng nhu cầu tìm hiểu kiến thức về vốn văn hóa dân tộc, nét đặc thù của văn hóa Việt Nam theo mục tiêu bài học (mục 1. Về kiến thức). VB2: 1.1.NC1a Sử dụng công cụ số để tìm kiếm thông tin nền về tác giả Phan Đình Diệu, tác phẩm, và bối cảnh “kinh tế tri thức”.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Ôn tập Kiểm tra giữa kì 1",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1b Sử dụng các công cụ/kỹ thuật tìm kiếm (từ khóa, bộ lọc) để tìm kiếm nhanh và chính xác các kiến thức cần ôn tập.  1.2.NC1a Khi tìm kiếm các tài liệu ôn tập (ví dụ: bài giải, đề thi thử, tài liệu phân tích), HS cần đánh giá nguồn gốc, tính học thuật và độ chính xác của thông tin/nội dung số đó.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "- VB3: Mấy ý nghĩ về thơ (Nguyễn Đình Thi)",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Sử dụng công cụ số để tìm kiếm thông tin nền về tác giả Nguyễn Đình Thi, bối cảnh ra đời của văn bản và quan điểm về thơ ca của các nhà thơ cùng thời để phục vụ việc bình luận, so sánh.  1.1.NC1b Vận dụng các cú pháp tìm kiếm nâng cao để trích xuất các bằng chứng/ví dụ thơ ca (của Nguyễn Đình Thi hoặc các tác giả khác) nhằm chứng minh cho các luận điểm trong văn bản (ví dụ: thơ ca phải gắn với đời sống, cái mới trong thơ). 2.1.NC1a Sử dụng các nền tảng số (diễn đàn, ứng dụng học tập, trình chiếu) để thảo luận, chia sẻ cảm thụ thơ và trình bày kết quả phân tích về luận đề, luận điểm cũng như hiệu quả nghệ thuật của văn bản nghị luận.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Trả bài viết giữa kì 1",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "THTV: Lỗi logic, lỗi câu mơ hồ và cách sửa",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Viết bài văn nghị luận về một vấn đề liên quan đến tuổi trẻ (những hoài bão, ước mơ)",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định nhu cầu thông tin để phục vụ việc xây dựng luận điểm, lí lẽ, và bằng chứng cho bài văn nghị luận về hoài bão, ước mơ của tuổi trẻ. 1.1.NC1b Sử dụng hiệu quả các công cụ và kỹ thuật tìm kiếm trên môi trường số để thu thập lí lẽ sắc bén, bằng chứng xác đáng phục vụ cho các thao tác chứng minh, bình luận trong bài viết. 1.2.NC1a Đánh giá độ tin cậy và sự phù hợp của các nguồn thông tin số để đảm bảo tính xác đáng của bằng chứng và lí lẽ sử dụng trong bài văn nghị luận.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Nói và nghe: Thuyết trình về một vấn đề liên quan đến tuổi trẻ",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định nhu cầu thông tin để xây dựng nội dung thuyết trình (luận điểm, lí lẽ, bằng chứng) về một vấn đề xã hội liên quan đến tuổi trẻ. 1.1.NC1b Sử dụng kỹ thuật tìm kiếm hiệu quả trên môi trường số để thu thập các loại dữ liệu, thông tin, và nội dung đa phương tiện (hình ảnh, biểu đồ, video clip) tăng sức hấp dẫn cho bài thuyết trình. 3.1.NC1a Tạo và chỉnh sửa nội dung đa phương tiện (văn bản, hình ảnh, biểu đồ, âm thanh) để thiết kế slide thuyết trình hoặc các công cụ trình bày khác, nhằm hỗ trợ và minh họa cho bài nói.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Bài 4 - Yếu tố kì ảo trong truyện kể",
+      "so_tiet": "10",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Đọc hiểu văn bản: VB1: Hải khẩu linh từ - Đền thiêng cửa bể (Đoàn Thị Điểm) VB2: Muối của rừng (Nguyễn Huy Thiệp)",
+      "so_tiet": "06",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "VB1: 1.1.NC1a Nhận diện nhu cầu tìm kiếm tài liệu, thông tin về truyện truyền kỳ và tác phẩm “Hải khẩu linh từ” để đáp ứng mục tiêu đọc hiểu và so sánh tác phẩm.  1.1.NC1b:  Sử dụng hiệu quả các công cụ và từ khóa tìm kiếm số để thu thập dữ liệu về đề tài của truyện, vai trò yếu tố kỳ ảo, và tài liệu so sánh (Chuyện chức phán sự đền Tản Viên).  VB2: 1.1.NC1a: Nhận diện nhu cầu tìm kiếm tài liệu, thông tin ngoài văn bản để phục vụ việc phân tích giá trị nội dung và nghệ thuật của truyện ngắn hiện đại, đặc biệt là sự kết hợp giữa hiện thực và kỳ ảo.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "THTV: Nghệ thuật sử dụng điển cố trong tác phẩm văn học",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Viết bài văn nghị luận về việc vay mượn - cải biến - sáng tạo trong tác phẩm văn học",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a: Nhận diện nhu cầu tìm kiếm tài liệu học thuật về tác phẩm có trước và tác phẩm tiếp nhận để xác định yếu tố vay mượn, cải biến và sáng tạo theo yêu cầu của kiểu bài (Mục 1).",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Nói và nghe: Trình bày về việc vay mượn - cải biến - sáng tạo trong tác phẩm văn học",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1b Tìm kiếm, thu thập thông tin và dữ liệu số: Học sinh sử dụng các công cụ tìm kiếm để thu thập các tài liệu, bài viết, nhận định về tác phẩm “Bến trần gian” (tác giả Lưu Minh Sơn). 1.2.NC1a:  Đánh giá độ tin cậy của nguồn thông tin số: Học sinh so sánh và xác định tính chính xác, khách quan của các tài liệu tìm được để lựa chọn thông tin phù hợp cho bài nghị luận.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Bài 5 - Tiếng cười của hài kịch",
+      "so_tiet": "07",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Đọc hiểu văn bản: VB1: Nhân vật quan trọng (Trích Quan thanh tra - Ni-cô-lai Gô-gôn- Nikolai Gogol) VB2: Giấu của (Trích Quẫn - Lộng Chương)",
+      "so_tiet": "04",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "VB1: 1.1.NC1a: Xác định nhu cầu và phạm vi thông tin: Học sinh xác định rõ loại thông tin cần thiết để giải quyết các yêu cầu bài học về hài kịch (yếu tố, thủ pháp trào phúng, tác động xã hội). 1.1.NC1b: Tìm kiếm hiệu quả: Học sinh sử dụng các kỹ thuật tìm kiếm nâng cao để thu thập nhanh chóng các tài liệu, bài giảng, và nhận định liên quan đến hài kịch và tác phẩm. 2.2.NC1a: Hợp tác và chia sẻ tài nguyên số: Học sinh sử dụng các công cụ số để chia sẻ thông tin đã tìm kiếm và đánh giá được, phục vụ cho quá trình làm việc nhóm. VB2: 1.1.NC1a: Xác định nhu cầu thông tin chuyên biệt: Học sinh nhận diện chính xác loại thông tin cần thiết để phân tích tác phẩm hài kịch, đặc biệt là các yếu tố gây cười và tác động xã hội. 1.1.NC1b: Tìm kiếm dữ liệu văn học và xã hội: Học sinh sử dụng các công cụ tìm kiếm để thu thập tài liệu, nhận định về tác phẩm, và các vấn đề xã hội liên quan (như tham nhũng, thói keo kiệt).",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Viết báo cáo nghiên cứu về một vấn đề tự nhiên, xã hội",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1b: Tìm kiếm và thu thập dữ liệu nghiên cứu: Học sinh sử dụng các kỹ thuật tìm kiếm chuyên sâu để thu thập các bằng chứng chính xác, đầy đủ (số liệu, nghiên cứu khoa học, thống kê) và các lí lẽ thuyết phục phục vụ cho bài báo cáo.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Nói và nghe: Trình bày báo cáo kết quả nghiên cứu về một vấn đề tự nhiên hoặc xã hội",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1b: Học sinh áp dụng các kỹ thuật tìm kiếm nâng cao (như tìm kiếm theo từ khóa chuyên ngành, dùng dấu ngoặc kép, giới hạn phạm vi tìm kiếm) để thu thập thông tin và tài liệu phục vụ cho việc: hệ thống hóa những yêu cầu cần đạt của đề bài và xây dựng hệ thống luận điểm cho bài văn nghị luận. 1.2.NC1a: Học sinh thực hiện đánh giá các nguồn thông tin đã tìm kiếm được để chọn lọc những tài liệu đáng tin cậy, chính xác và có chiều sâu học thuật, giúp thể hiện được quan điểm cá nhân về vấn đề cần bàn luận một cách thuyết phục và có căn cứ.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Ôn tập Kiểm tra cuối học kì I",
+      "so_tiet": "03",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Trả bài cuối kì 1",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "HỌC KÌ II (17 tuần; 51 tiết)",
+      "so_tiet": "HỌC KÌ II (17 tuần; 51 tiết)",
+      "thoi_diem": "",
+      "thiet_bi": "HỌC KÌ II (17 tuần; 51 tiết)",
+      "tich_hop_nls": "HỌC KÌ II (17 tuần; 51 tiết)",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Bài 6: Hồ Chí Minh - “Văn hóa soi đường cho quốc dân đi”",
+      "so_tiet": "11",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "VB1: Tác gia Hồ Chí Minh VB2: Tuyên ngôn Độc lập  VB3: Mộ (Chiều tối)  VB4: Nguyên tiêu (Rằm tháng giêng)  VB5: Những trò lố hay là Va-ren và Phan Bội Châu",
+      "so_tiet": "07",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/phim tư liệu về Hồ Chí Minh và tác phẩm Tuyên ngôn Độc lập của Hồ Chí Minh",
+      "tich_hop_nls": "VB1: 1.1.NC1b: Tìm kiếm nâng cao: HS biết sử dụng các kỹ thuật tìm kiếm chuyên sâu để thu thập tài liệu, tác phẩm và tư liệu chính xác về Hồ Chí Minh. 1.2.NC1a: Đánh giá nguồn thông tin: HS biết phân tích, so sánh và đánh giá độ tin cậy, tính xác thực của các nguồn tài liệu số về cuộc đời và tác phẩm của Hồ Chí Minh. 2.2.NC1a: Chia sẻ tài nguyên học tập: HS chia sẻ các tác phẩm, tư liệu đã tìm được về Hồ Chí Minh với bạn học, giáo viên một cách có hệ thống. 2.4.NC1a: Phối hợp nhóm: HS đề xuất và sử dụng công cụ số để hợp tác phân tích, tổng hợp kiến thức về sự thống nhất giữa cuộc đời và tác phẩm của Hồ Chí Minh. VB2: 1.2.NC1a:  Đánh giá tính chính thống, độ tin cậy của các tài liệu số, bài viết phân tích liên quan đến “Tuyên ngôn Độc lập” và hoàn cảnh ra đời, để phục vụ cho việc đọc hiểu và lập luận. VB3: 1.1.NC1b: Tìm kiếm chuyên sâu tư liệu thơ ca: Sử dụng các từ khóa, bộ lọc chuyên ngành để tìm kiếm bản dịch, bản phiên âm, và các bài nghiên cứu về các tác phẩm thơ chữ Hán của Bác. 1.2.NC1b: So sánh và đánh giá các bản dịch/bình luận: Phân tích, so sánh các bản dịch khác nhau của một bài thơ (chữ Hán ra tiếng Việt) và các ý kiến bình luận về cấu tứ, biện pháp tu từ, để chọn ra thông tin đáng tin cậy nhất. 3.1.NC1a: Tạo sản phẩm phân tích đa phương tiện: Tạo và chỉnh sửa nội dung số để trình bày kết quả phân tích về vẻ đẹp tâm hồn của nhà thơ chiến sĩ (như tạo bản trình bày, video, hoặc Infographic). 3.1.NC1b: Thể hiện cảm xúc và thái độ cá nhân: Sáng tạo nội dung số để bày tỏ sự trân trọng, đồng cảm với tài năng và tâm hồn của Hồ Chí Minh, qua đó thể hiện cá tính riêng. VB4: 1.1.NC1b: Tìm kiếm đa dạng tư liệu: Áp dụng kỹ thuật tìm kiếm nâng cao để thu thập các bản phiên âm, bản dịch, và các bài phê bình nghệ thuật (ngôn ngữ, hình ảnh, thủ pháp) về thơ chữ Hán của Hồ Chí Minh. 3.1.NC1a: Tạo sản phẩm nghệ thuật đa phương tiện: Tạo và chỉnh sửa nội dung số (âm thanh, hình ảnh, văn bản) để trình bày kết quả phân tích nghệ thuật, các nét đặc sắc trong thơ chữ Hán của Hồ Chí Minh. 3.1.NC1b: Thể hiện sự trân trọng tài năng: Tạo ra nội dung số mang dấu ấn cá nhân để bày tỏ lòng trân trọng tài năng văn chương của Hồ Chí Minh và cảm nhận về vẻ đẹp tâm hồn của Người.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "THTV: Một số biện pháp làm tăng tính khẳng định, phủ định trong văn bản nghị luận",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Viết báo cáo kết quả của bài tập dự án",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "3.1.NC1a: Sáng tạo và Chỉnh sửa Báo cáo Đa phương tiện: Học sinh áp dụng các kỹ năng tạo và chỉnh sửa để hoàn thiện bài báo cáo kết quả dưới nhiều định dạng số (văn bản, biểu đồ, hình ảnh) nhằm miêu tả và đánh giá kết quả nổi bật một cách trực quan và chuyên nghiệp.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Nói và nghe: kết quả của bài tập dự án",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1b: Tìm kiếm và Thu thập Tư liệu Dự án: Học sinh áp dụng các kỹ thuật tìm kiếm nâng cao để thu thập dữ liệu, thông tin, và các tư liệu cần thiết (như các minh chứng chọn lọc, các ví dụ về hướng sử dụng kết quả, hoặc các báo cáo dự án mẫu để học hỏi kinh nghiệm) phục vụ cho việc viết và hoàn thiện bài báo cáo dự án. 3.1.NC1a: Phát triển Nội dung Báo cáo Đa định dạng: Học sinh áp dụng các cách tạo và chỉnh sửa nội dung số để làm nổi bật kết quả chính và đóng góp riêng của mình, kèm theo các minh chứng chọn lọc được trình bày bằng những hình thức phương tiện phù hợp (ví dụ: video tóm tắt, infographic quy trình, văn bản báo cáo chính thức).",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Bài 7: Sự thật trong tác phẩm kí",
+      "so_tiet": "09",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Đọc hiểu văn bản: VB1: Nghệ thuật băm thịt gà (Trích Việc làng - Ngô Tất Tố) VB2: Bước vào đời (Trích Nhớ nghĩ chiều hôm - Đào Duy Anh)",
+      "so_tiet": "05",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "VB1: 1.1.NC1a Xác định từ khóa, khái niệm cần tìm kiếm (tính phi hư cấu, thủ pháp nghệ thuật, tài liệu phê bình) để hỗ trợ phân tích giá trị nội dung và nghệ thuật của văn bản. 1.1.NC1b Sử dụng công cụ tìm kiếm số (Google, thư viện số) để lấy được thông tin về tác giả Ngô Tất Tố, bối cảnh xã hội “Việc làng”, và đặc điểm thể loại phóng sự. VB2: 1.1.NC1a Xác định rõ thông tin cần thiết về bối cảnh lịch sử, tính phi hư cấu của hồi kí để phân tích. 1.1.NC1b Sử dụng kỹ thuật tìm kiếm nâng cao (bộ lọc, từ khóa chính xác) trên công cụ số để thu thập thông tin về tác giả và đặc điểm hồi kí.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "THTV: Ngôn ngữ trang trọng và ngôn ngữ thân mật",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Viết bài văn nghị luận về một vấn đề liên quan đến tuổi trẻ (Cách ứng xử trong các mối quan hệ gia đình, xã hội)",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1b Sử dụng kỹ thuật tìm kiếm hiệu quả để thu thập số liệu, báo cáo, ý kiến chuyên gia làm luận cứ cho bài nghị luận.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Nói và nghe: Trình bày quan điểm về một vấn đề liên quan đến tuổi trẻ (Cách ứng xử trong các mối quan hệ gia đình, xã hội)",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1b HS tìm kiếm, chọn lọc thông tin liên quan đến chủ đề cách ứng xử trong các mối quan hệ từ các nguồn số. 3.1.NC1a Giao tiếp và ứng xử có văn hóa, tôn trọng và có trách nhiệm khi sử dụng các công cụ số để trình bày và đối thoại. 4.2.NC1b Đảm bảo tính xác thực, độ tin cậy và tránh tạo ra nội dung gây hại (rủi ro thông tin) khi trình bày quan điểm.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Bài 8: Dữ liệu trong văn bản thông tin",
+      "so_tiet": "10",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Đọc hiểu văn bản: VB1: Pa-ra-na (Parana) (Trích nhiệt đới buồn- Cờ-lốt Lê-vi-Xtơ- Claude Lé-vi-Strauss) VB2: Giáo dục khai hóa ở Việt Nam nhìn từ Đông Kinh Nghĩa Thục (Nguyễn Nam)",
+      "so_tiet": "04",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "VB1: 1.1.NC1a Tìm kiếm và lọc thông tin cơ bản về tác giả Claude Lévi-Strauss, tác phẩm “Nhiệt đới buồn”, sông Pa-ra-na, hoặc các khái niệm liên quan đến Dân tộc học/Văn minh và Hoang dã để hỗ trợ phân tích văn bản. VB2: 1.1.NC1a Sử dụng các công cụ số để tìm kiếm, lọc các thông tin liên quan đến “Giáo dục khai phóng”, “Đông Kinh Nghĩa Thục” và tác giả Nguyễn Nam để hỗ trợ phân tích văn bản.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Ôn tập Kiểm tra giữa học kì II",
+      "so_tiet": "03",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1b Sử dụng các công cụ số để sắp xếp và lưu trữ các tài liệu ôn tập (sách giáo khoa điện tử, đề cương, đề thi thử, tóm tắt kiến thức) một cách khoa học và dễ dàng truy cập.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "VB3: Đời muối (Trích Đời muối: Lịch sử thế giới - Mác Kơ -len-xki- Mark Kurlansky)",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Tìm kiếm và chọn lọc các thông tin liên quan đến tác giả Mark Kurlansky, tác phẩm “Đời muối: Lịch sử thế giới”, và vai trò của muối trong lịch sử (kinh tế, chính trị, chiến tranh) để mở rộng bối cảnh phân tích.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "THTV: Tôn trọng và bảo vệ quyền sở hữu trí tuệ",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "4.1.NC1c Bảo vệ dữ liệu cá nhân (tên tuổi, thông tin liên hệ,...) khi đăng tải các sản phẩm mang quyền sở hữu trí tuệ (bài viết, video) lên môi trường số, tránh bị lợi dụng hoặc giả mạo. 4.2.NC1a Tuân thủ các quy tắc bản quyền khi sử dụng bất kỳ thông tin, hình ảnh, hoặc ý tưởng nào của người khác trong quá trình thực hiện nhiệm vụ học tập. 4.2.NC1b Hiểu và áp dụng các điều khoản khi sử dụng các phần mềm, hình ảnh, hoặc âm nhạc có bản quyền trong sản phẩm của mình, phân biệt giữa nội dung miễn phí và nội dung có tính phí/giới hạn sử dụng.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Viết thư trao đổi về công việc hoặc một vấn đề đáng quan tâm",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Tìm kiếm và chọn lọc các thông tin, số liệu, hoặc ví dụ liên quan đến đề tài (công việc hoặc vấn đề đáng quan tâm) đã chọn để đưa vào thư, đảm bảo tính cập nhật và chính xác.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Nói và nghe: Tranh biện về một vấn đề đời sống",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Tìm kiếm và chọn lọc các dữ liệu, bằng chứng, số liệu thống kê hoặc ý kiến trái chiều từ môi trường số để xây dựng hệ thống luận điểm cho phần tranh biện. 3.1.NC1a Tạo và chỉnh sửa nội dung số (slide, biểu đồ, infographic, hoặc video ngắn) để trình bày và minh họa cho các luận cứ trong quá trình tranh biện, tăng tính trực quan.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Trả bài giữa kì 2",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Bài 9: Văn hóa và cuộc đời (+ Ôn tập cuối kì 2)",
+      "so_tiet": "14",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Đọc hiểu văn bản:  VB1: Vội vàng (Xuân Diệu)  VB2: Trở về (Ernest Hemingway) VB3: Hồn Trương Ba, da hàng thịt (Lưu Quang Vũ)",
+      "so_tiet": "08",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/phim tư liệu về kịch của Lưu Quang Vũ",
+      "tich_hop_nls": "VB1: 1.1.NC1a Học sinh sử dụng công cụ tìm kiếm để tra cứu thông tin về “Phong trào Thơ mới” và “Vị trí của Xuân Diệu” trong phong trào này. VB2: 1.1.NC1b Học sinh cần sử dụng các kỹ thuật tìm kiếm nâng cao để thu thập thông tin chuyên sâu về tác giả Hemingway và tác phẩm “Ông già và biển cả” nhằm phục vụ việc phân tích thông điệp và phong cách nghệ thuật. VB3: 1.1.NC1b Học sinh sử dụng công cụ tìm kiếm (như Google, thư viện số, cơ sở dữ liệu học thuật) để tìm kiếm các tài liệu, thông tin và nội dung số liên quan trực tiếp đến tác phẩm",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Ôn tập cuối kì 2",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.3.NC1a Hệ thống hóa, tổ chức kiến thức đã học thành các tệp số hóa (bản đồ tư duy, bảng tổng hợp, đề cương chi tiết) để dễ dàng tra cứu và ôn tập.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "THTV: Giữ gìn và phát triển Tiếng Việt",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Nhận diện nhu cầu tìm kiếm: Xác định các ví dụ cụ thể về lỗi vi phạm chuẩn tiếng Việt hoặc xu hướng sáng tạo, bổ sung từ/cách nói mới trên các nền tảng số (mạng xã hội, báo điện tử, diễn đàn). 1.1.NC1b Thu thập ví dụ đa dạng: Sử dụng công cụ tìm kiếm hoặc khai thác các nền tảng số để thu thập, ghi lại (dưới dạng số) các nội dung văn bản (bài viết, bình luận, trích dẫn) vi phạm chuẩn hoặc thể hiện sự sáng tạo ngôn ngữ.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Kiểm tra, đánh giá cuối kì 2",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Viết bài phát biểu trong lễ phát động một phong trào hoặc một hoạt động xã hội",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định đề tài và luận điểm: Học sinh sử dụng môi trường số để xác định vấn đề xã hội nóng hổi và nhu cầu thu thập số liệu, bằng chứng để xây dựng luận điểm, thu hút người nghe.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Nói và nghe: Thuyết trình về một vấn đề liên quan đến cơ hội và thách thức đối với đất nước",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "3.1.NC1a Tạo và chỉnh sửa nội dung số (slide, infographic, video clip, v.v.) để hỗ trợ cho bài thuyết trình về cơ hội và thách thức của đất nước.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "Trả bài cuối kì 2",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "10",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định từ khóa, công cụ tìm kiếm phù hợp để tra cứu các tài liệu học thuật (sách, bài báo, luận văn) về vấn đề văn học hiện đại cần nghiên cứu. 1.1.NC1b Vận dụng các thao tác tìm kiếm nâng cao để thu thập, sao chép và lưu trữ thông tin/tài liệu nghiên cứu một cách có hệ thống. 3.1.NC1a Sử dụng các công cụ số để tạo và chỉnh sửa các thành phần của báo cáo nghiên cứu và bài thuyết trình ở nhiều định dạng",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "01",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định từ khóa, công cụ tìm kiếm phù hợp để tra cứu các tài liệu học thuật (sách, bài báo, luận văn) về vấn đề văn học hiện đại cần nghiên cứu. 1.1.NC1b Vận dụng các thao tác tìm kiếm nâng cao để thu thập, sao chép và lưu trữ thông tin/tài liệu nghiên cứu một cách có hệ thống. 3.1.NC1a Sử dụng các công cụ số để tạo và chỉnh sửa các thành phần của báo cáo nghiên cứu và bài thuyết trình ở nhiều định dạng",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "05",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định từ khóa, công cụ tìm kiếm phù hợp để tra cứu các tài liệu học thuật (sách, bài báo, luận văn) về vấn đề văn học hiện đại cần nghiên cứu. 1.1.NC1b Vận dụng các thao tác tìm kiếm nâng cao để thu thập, sao chép và lưu trữ thông tin/tài liệu nghiên cứu một cách có hệ thống. 3.1.NC1a Sử dụng các công cụ số để tạo và chỉnh sửa các thành phần của báo cáo nghiên cứu và bài thuyết trình ở nhiều định dạng",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "04",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định từ khóa, công cụ tìm kiếm phù hợp để tra cứu các tài liệu học thuật (sách, bài báo, luận văn) về vấn đề văn học hiện đại cần nghiên cứu. 1.1.NC1b Vận dụng các thao tác tìm kiếm nâng cao để thu thập, sao chép và lưu trữ thông tin/tài liệu nghiên cứu một cách có hệ thống. 3.1.NC1a Sử dụng các công cụ số để tạo và chỉnh sửa các thành phần của báo cáo nghiên cứu và bài thuyết trình ở nhiều định dạng",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "15",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định từ khóa chính xác và đa dạng để tìm kiếm thông tin về tác phẩm văn học gốc và tác phẩm nghệ thuật chuyển thể liên quan. 1.1.NC1b Vận dụng các kĩ thuật tìm kiếm chuyên biệt để thu thập và lưu trữ nội dung đa phương tiện cần thiết cho việc phân tích, thưởng thức. 3.1.NC1a Sử dụng linh hoạt các công cụ số để tạo và chỉnh sửa các thành phần đa phương tiện phục vụ cho việc phân tích, so sánh, và trình bày về tác phẩm chuyển thể.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định từ khóa chính xác và đa dạng để tìm kiếm thông tin về tác phẩm văn học gốc và tác phẩm nghệ thuật chuyển thể liên quan. 1.1.NC1b Vận dụng các kĩ thuật tìm kiếm chuyên biệt để thu thập và lưu trữ nội dung đa phương tiện cần thiết cho việc phân tích, thưởng thức. 3.1.NC1a Sử dụng linh hoạt các công cụ số để tạo và chỉnh sửa các thành phần đa phương tiện phục vụ cho việc phân tích, so sánh, và trình bày về tác phẩm chuyển thể.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "03",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định từ khóa chính xác và đa dạng để tìm kiếm thông tin về tác phẩm văn học gốc và tác phẩm nghệ thuật chuyển thể liên quan. 1.1.NC1b Vận dụng các kĩ thuật tìm kiếm chuyên biệt để thu thập và lưu trữ nội dung đa phương tiện cần thiết cho việc phân tích, thưởng thức. 3.1.NC1a Sử dụng linh hoạt các công cụ số để tạo và chỉnh sửa các thành phần đa phương tiện phục vụ cho việc phân tích, so sánh, và trình bày về tác phẩm chuyển thể.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "10",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định từ khóa chính xác và đa dạng để tìm kiếm thông tin về tác phẩm văn học gốc và tác phẩm nghệ thuật chuyển thể liên quan. 1.1.NC1b Vận dụng các kĩ thuật tìm kiếm chuyên biệt để thu thập và lưu trữ nội dung đa phương tiện cần thiết cho việc phân tích, thưởng thức. 3.1.NC1a Sử dụng linh hoạt các công cụ số để tạo và chỉnh sửa các thành phần đa phương tiện phục vụ cho việc phân tích, so sánh, và trình bày về tác phẩm chuyển thể.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "10",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định hệ thống từ khóa và công cụ tìm kiếm học thuật phù hợp để tìm kiếm tài liệu về lí luận văn học và các trường phái văn học có ảnh hưởng rộng rãi ở Việt Nam. 1.1.NC1b Vận dụng linh hoạt các kĩ thuật tìm kiếm nâng cao để thu thập đầy đủ và đa dạng các nguồn tài liệu (văn bản, hình ảnh, trích đoạn tác phẩm) phục vụ cho việc nghiên cứu tổng quan. 3.1.NC1a Sử dụng các công cụ số để tạo và chỉnh sửa các thành phần đa phương tiện nhằm giới thiệu tác giả và tác phẩm một cách hiệu quả.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "03",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định hệ thống từ khóa và công cụ tìm kiếm học thuật phù hợp để tìm kiếm tài liệu về lí luận văn học và các trường phái văn học có ảnh hưởng rộng rãi ở Việt Nam. 1.1.NC1b Vận dụng linh hoạt các kĩ thuật tìm kiếm nâng cao để thu thập đầy đủ và đa dạng các nguồn tài liệu (văn bản, hình ảnh, trích đoạn tác phẩm) phục vụ cho việc nghiên cứu tổng quan. 3.1.NC1a Sử dụng các công cụ số để tạo và chỉnh sửa các thành phần đa phương tiện nhằm giới thiệu tác giả và tác phẩm một cách hiệu quả.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "02",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định hệ thống từ khóa và công cụ tìm kiếm học thuật phù hợp để tìm kiếm tài liệu về lí luận văn học và các trường phái văn học có ảnh hưởng rộng rãi ở Việt Nam. 1.1.NC1b Vận dụng linh hoạt các kĩ thuật tìm kiếm nâng cao để thu thập đầy đủ và đa dạng các nguồn tài liệu (văn bản, hình ảnh, trích đoạn tác phẩm) phục vụ cho việc nghiên cứu tổng quan. 3.1.NC1a Sử dụng các công cụ số để tạo và chỉnh sửa các thành phần đa phương tiện nhằm giới thiệu tác giả và tác phẩm một cách hiệu quả.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "05",
+      "thoi_diem": "",
+      "thiet_bi": "",
+      "tich_hop_nls": "1.1.NC1a Xác định hệ thống từ khóa và công cụ tìm kiếm học thuật phù hợp để tìm kiếm tài liệu về lí luận văn học và các trường phái văn học có ảnh hưởng rộng rãi ở Việt Nam. 1.1.NC1b Vận dụng linh hoạt các kĩ thuật tìm kiếm nâng cao để thu thập đầy đủ và đa dạng các nguồn tài liệu (văn bản, hình ảnh, trích đoạn tác phẩm) phục vụ cho việc nghiên cứu tổng quan. 3.1.NC1a Sử dụng các công cụ số để tạo và chỉnh sửa các thành phần đa phương tiện nhằm giới thiệu tác giả và tác phẩm một cách hiệu quả.",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Sơ đồ quy trình và cấu trúc một báo cáo nghiên cứu khoa học",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Sơ đồ quy trình tiến hành sân khấu hoá một tác phẩm văn học",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/ phim tư liệu về truyện cổ dân gian Việt Nam",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/ phim tư liệu về truyện ngắn, kí của Nguyễn Tuân",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Sơ đồ quy trình và cấu trúc một báo cáo nghiên cứu khoa học",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Tranh nạn đói năm 1945",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/ phim tư liệu về sự nghiệp văn chương của Nam Cao",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/ phim tư liệu về đoạn trích vở kịch Vĩnh biệt Cửu Trùng Đài - Nguyễn Huy Tưởng",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/ phim tư liệu về thơ chữ Hán của Nguyễn Du",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/phim tư liệu về Nguyễn Đình Chiểu và các tác phẩm của Nguyễn Đình Chiểu.",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/phim tư liệu về thơ Nôm của Hồ Xuân Hương",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/phim tư liệu về thơ của Nguyễn Khuyến",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/phim tư liệu về Hồ Chí Minh và tác phẩm Tuyên ngôn Độc lập của Hồ Chí Minh.",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    },
+    {
+      "grade": "12",
+      "bai_hoc": "",
+      "so_tiet": "",
+      "thoi_diem": "",
+      "thiet_bi": "Video/clip/phim tư liệu về kịch của Lưu Quang Vũ",
+      "tich_hop_nls": "",
+      "bo_sung": ""
+    }
+  ],
+  "nang_luc_so_chi_tiet": [
+    {
+      "grade": "10",
+      "tiet": "1,2,3",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a: Biết thu thập, tìm kiếm thông tin số phục vụ nhu cầu học tập, giải trí, phát triển cá nhân. 1.1.NC1c: Biết xác định độ tin cậy của các nguồn thông tin số và ý thức bảo mật cá nhân khi truy cập các nguồn thông tin. 2.1.NC1a: Biết lựa chọn công cụ số, hình thức số để xử lí, sáng tạo, truyền đạt thông tin một cách phù hợp.",
+      "yeu_cau": "",
+      "minh_chung": "1.1.NC1a: HS sử dụng Google để tìm kiếm các bản kể thần thoại khác nhau về nguồn gốc thế giới (ví dụ: thần thoại Hi Lạp, thần thoại Bắc Âu) để so sánh với các vị thần sáng tạo của Việt Nam. 1.1.NC1c: Trong quá trình chuẩn bị bài, HS đánh giá và chọn lọc thông tin giữa một bài viết trên Wikipedia và một bài nghiên cứu trên tạp chí chuyên ngành về các dị bản của truyện Thần Trụ Trời để đảm bảo tính học thuật cho phần trình bày. 2.1.NC1a: Nhóm HS thiết kế một bài thuyết trình đa phương tiện (có hình ảnh minh họa, sơ đồ) tóm tắt các yếu tố và ý nghĩa của chùm truyện thần thoại. HS sử dụng công cụ số để ghi lại cảm nhận về vẻ đẹp \"một đi không trở lại\" của thần thoại dưới dạng đoạn văn hoặc infographic."
+    },
+    {
+      "grade": "10",
+      "tiet": "3,4",
+      "bai_hoc": "",
+      "chi_bao": "1.3.NC1 b Quản lý dữ liệu, thông tin và nội dung số: Triển khai được việc tổ chức và sắp xếp dữ liệu, thông tin và nội dung trong môi trường có cấu trúc. 3.1. NC1a Phát triển nội dung số: Áp dụng được các công cụ và công nghệ số khác nhau để tạo ra nội dung số (văn bản, hình ảnh, âm thanh/video) phức tạp và phù hợp với mục đích sử dụng. 5.2.NC1c Xác định nhu cầu và đáp ứng bằng công nghệ số: Sử dụng được các cách khác nhau để điều chỉnh và tùy chỉnh môi trường số theo nhu cầu cá nhân.",
+      "yeu_cau": "",
+      "minh_chung": "1.3.NC1 b Học sinh tạo thư mục số có cấu trúc trên các nền tảng lưu trữ (Google Drive, Onedrive...) để lưu trữ và quản lí các tài liệu tham khảo, bài phân tích, và hình ảnh minh họa cho truyện. 3.1. NC1a Học sinh thiết kế một bài trình chiếu (PowerPoint/Canva) hoặc infographic để phân tích chủ đề về lòng dũng cảm, chính trực của Nguyễn Tử Văn, hoặc để minh họa các chi tiết kì ảo và vai trò của chúng trong tác phẩm. 5.2.NC1c Học sinh sử dụng các tính năng ghi chú, đánh dấu (highlight/annotate) màu sắc trên bản PDF hoặc tài liệu số của truyện để phân loại các yếu tố (ví dụ: đánh dấu màu xanh cho lời người kể chuyện, màu đỏ cho chi tiết kì ảo) phục vụ cho việc phân tích và truy xuất thông tin nhanh chóng."
+    },
+    {
+      "grade": "10",
+      "tiet": "5,6,7",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1a -Khai thác dữ liệu và thông tin  -Đánh giá dữ liệu, thông tin và nội dung số 1.2.NC1b - Khai thác dữ liệu và thông tin - Đánh giá dữ liệu, thông tin và nội dung số 3.2.NC1a -Sáng tạo nội dung số -Sáng tạo nội dung số tổng hợp",
+      "yeu_cau": "",
+      "minh_chung": "1.2.NC1a Học sinh tìm kiếm, thu thập thông tin và tài liệu (văn bản, hình ảnh, video...) trên mạng để tìm hiểu về tác giả Nguyễn Tuân và bối cảnh xã hội, văn hóa liên quan đến việc viết chữ đẹp (Thư pháp) thời phong kiến, giúp phân tích bối cảnh truyện. 1.2.NC1b Học sinh đánh giá độ tin cậy, tính xác thực của các nguồn thông tin trên mạng (ví dụ: các bài phê bình, phân tích văn học) để chọn lọc những tài liệu chính xác, phục vụ cho việc khái quát đặc điểm tính cách Huấn Cao và quản ngục hoặc phân tích chủ đề tác phẩm. 3.2.NC1a Học sinh sử dụng các nền tảng số (ví dụ: Google Docs, Padlet, Zalo nhóm, ứng dụng trình chiếu) để thảo luận nhóm về điểm tương đồng giữa Huấn Cao và Tử Văn, chia sẻ tài liệu và cùng nhau hoàn thành sản phẩm học tập (bản tóm tắt, sơ đồ tư duy, bài thuyết trình về chủ đề tác phẩm)."
+    },
+    {
+      "grade": "10",
+      "tiet": "8",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a Đáp ứng được nhu cầu thông tin. 2.1.NC1a Sử dụng được nhiều công nghệ số để tương tác. 5.2.NC1a Phân tích được các vấn đề kĩ thuật (ví dụ: cần phải làm gì khi không truy cập được trang web, không thể kết nối hoặc không tìm thấy ứng dụng hoặc thiết bị) và tìm được giải pháp.",
+      "yeu_cau": "",
+      "minh_chung": "1.1.NC1a Học sinh (HS) tìm kiếm, chọn lọc các thông tin (ví dụ: ý nghĩa, từ nguyên, cách sử dụng) của các từ Hán Việt gặp khó trong SGK hoặc văn bản đọc/tạo lập thông qua từ điển trực tuyến hoặc công cụ tìm kiếm để đáp ứng yêu cầu giải bài tập và vận dụng. 2.1.NC1a HS sử dụng các nền tảng giao tiếp hoặc cộng tác trực tuyến (ví dụ: Google Docs, Zalo, diễn đàn học tập) để trao đổi, thảo luận với giáo viên/bạn bè về nghĩa và cách dùng chuẩn xác của các từ Hán Việt, hoặc cùng nhau chỉnh sửa sản phẩm tạo lập văn bản để đảm bảo tính trong sáng của tiếng Việt. 5.2.NC1a HS xác định và khắc phục các sự cố đơn giản (ví dụ: không truy cập được trang web từ điển, ứng dụng học từ vựng bị lỗi, không tải được tài liệu bài tập về THV) để đảm bảo quá trình học tập sử dụng công cụ số diễn ra liên tục."
+    },
+    {
+      "grade": "10",
+      "tiet": "9",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1b (Tìm kiếm, truy cập và lọc thông tin) 1.3.NC1b (Đánh giá dữ liệu, thông tin và nội dung số) 3.3.NC1a (Sử dụng các công cụ, ứng dụng, phần mềm để tạo lập nội dung số)",
+      "yeu_cau": "",
+      "minh_chung": "1.2.NC1b * Sử dụng công cụ tìm kiếm (Google Scholar, thư viện số, trang web uy tín) để tìm các bài phê bình, đánh giá về tác phẩm. * Lọc thông tin (lí lẽ, bằng chứng) để chọn ra những ngữ liệu sinh động, có giá trị và phù hợp nhất với luận điểm phân tích (ví dụ: tìm chi tiết, câu văn tiêu biểu cho chủ đề, đặc sắc nghệ thuật). 1.3.NC1b * Kiểm tra tác giả/nguồn xuất bản của bài viết/nhận định (nguồn học thuật, báo chí chính thống hay diễn đàn cá nhân). * Đối chiếu thông tin từ nhiều nguồn khác nhau để đảm bảo sự chính xác của các chi tiết về tác phẩm (ví dụ: ngày xuất bản, tên nhân vật, trích dẫn). * Thể hiện quan điểm phản biện trong bài viết nghị luận, không sao chép mà tổng hợp và đánh giá thông tin đã tìm được. 3.3.NC1a * Sử dụng phần mềm soạn thảo (Word, Google Docs) để viết và định dạng văn bản (căn lề, phông chữ, cỡ chữ, đánh số trang, tạo mục lục tự động cho bài viết dài/dự án). * Áp dụng chức năng kiểm tra chính tả/ngữ pháp (công cụ hỗ trợ) để nâng cao chất lượng ngôn ngữ. * Lưu trữ và chia sẻ văn bản dưới định dạng số phù hợp (PDF, DOCX) để nộp bài hoặc thảo luận nhóm."
+    },
+    {
+      "grade": "10",
+      "tiet": "10",
+      "bai_hoc": "",
+      "chi_bao": "3.2.NC1a (Sáng tạo nội dung) 2.1.NC1b (Truyền thông và Hợp tác) 5.1.NC1b (An toàn thông tin)",
+      "yeu_cau": "",
+      "minh_chung": "3.2.NC1a Tạo bài thuyết trình (PowerPoint, Google Slides, Canva, v.v.) có cấu trúc rõ ràng, sử dụng hình ảnh, video, sơ đồ (phương tiện phi ngôn ngữ) một cách hợp lí để làm nổi bật nội dung giới thiệu, đánh giá tác phẩm (tên truyện, tác giả, giá trị nội dung - nghệ thuật). 2.1.NC1b Sử dụng các nền tảng số (Google Classroom, Zalo, Teams, v.v.) để chia sẻ tài liệu nghiên cứu, bài thuyết trình đã tạo với giáo viên và các bạn; thực hiện hoạt động đánh giá/phản biện bài trình bày của bạn khác bằng cách sử dụng công cụ số (ví dụ: gửi nhận xét qua form trực tuyến, bình luận trong file chia sẻ). 5.1.NC1b Trích dẫn nguồn thông tin, hình ảnh rõ ràng, hợp pháp khi sử dụng trong bài thuyết trình; giữ thái độ tôn trọng, lịch sự và tuân thủ các quy tắc bảo mật khi tương tác, nhận xét trên các nền tảng trực tuyến (phẩm chất công dân số)."
+    },
+    {
+      "grade": "10",
+      "tiet": "11",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a: Thu thập, khai thác thông tin (liên quan đến bài học) 1.1.NC1b: Xử lý, phân tích thông tin (từ các nguồn số đã thu thập)",
+      "yeu_cau": "",
+      "minh_chung": "1.1.NC1a: Học sinh sử dụng máy tính/điện thoại và Internet để tìm kiếm (search) thông tin bổ sung/củng cố cho việc phân tích, đánh giá tác phẩm văn học (ví dụ: tìm hiểu về bối cảnh lịch sử, lý luận phê bình liên quan). 1.1.NC1b: Học sinh sử dụng công cụ xử lý văn bản (như Google Docs, Word) để: 1. Kiểm tra chính tả, ngữ pháp cho bài làm. 2. Sắp xếp, tổ chức lại các ý trong bài viết nghị luận để dễ sửa chữa. 3. Tổng hợp các nhận định từ các website học thuật để rút kinh nghiệm cho bản thân (nhận ra ưu, nhược điểm)."
+    },
+    {
+      "grade": "10",
+      "tiet": "Tiết",
+      "bai_hoc": "",
+      "chi_bao": "Chỉ báo gốc",
+      "yeu_cau": "",
+      "minh_chung": "Minh chứng trong Bài học"
+    },
+    {
+      "grade": "10",
+      "tiet": "12",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a Năng lực tìm kiếm và thu thập thông tin số 2.4.NC1a Năng lực hợp tác, giao tiếp và chia sẻ thông tin số 3.1.NC1b Năng lực đánh giá thông tin số:",
+      "yeu_cau": "",
+      "minh_chung": "1.1.NC1a * Tìm kiếm: Tra cứu trên mạng (Google, thư viện số) các thông tin về lịch sử phát triển, cấu trúc 5-7-5, tinh thần Thiền/Wabi-Sabi của thơ Hai-cư. * Thu thập: Tải về hoặc lưu trữ các bản dịch thơ Hai-cư để so sánh với văn bản trong SGK, hoặc tìm hình ảnh minh họa cho các hình ảnh thơ được gợi tả (ví dụ: ve sầu, ao cổ, sương thu...). 2.4.NC1a Hợp tác/Trình bày: Sử dụng Google Slides/PowerPoint để thiết kế bài trình bày về sức hấp dẫn của thơ Hai-cư (sức gợi hình ảnh và ngôn từ cô đọng, hàm súc).   3.1.NC1b * Chia sẻ/Trao đổi: Sử dụng Zalo/Google Docs/các nền tảng học tập để chia sẻ tài liệu, góp ý cho bài làm nhóm về phần liên hệ điểm gần gũi về nội dung giữa thơ Hai-cư và thơ Việt Nam. * Đánh giá nguồn: So sánh các bài viết, video giải thích về cấu trúc và giá trị thẩm mĩ của thơ Hai-cư trên các trang mạng khác nhau (ví dụ: Wikipedia so với các trang học thuật về văn học Nhật Bản). * Lựa chọn: Chỉ sử dụng các bản dịch thơ Hai-cư đã được xuất bản chính thức hoặc được các nhà nghiên cứu uy tín giới thiệu khi thực hiện nhiệm vụ phân tích và đánh giá giá trị thẩm mĩ của từ ngữ, hình ảnh trong thơ."
+    },
+    {
+      "grade": "10",
+      "tiet": "13,14",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1a Thông tin và Dữ liệu Đánh giá thông tin và dữ liệu. 1.3.NC1b Quản lý thông tin, dữ liệu và nội dung số. Thành phần Đánh giá thông tin và dữ liệu. 2.3.NC1a Giao tiếp và Hợp tác Hợp tác thông qua các công nghệ số.",
+      "yeu_cau": "",
+      "minh_chung": "1.2.NC1a HS sử dụng công cụ tìm kiếm hoặc thư viện số để so sánh các nguồn thông tin (ví dụ: về ý nghĩa điển cố, hình ảnh trong bài thơ, hoặc các bản dịch khác nhau) để xác định bản chất và độ tin cậy của thông tin trước khi sử dụng. 1.3.NC1b HS tạo một thư mục số (trên Drive, máy tính, v.v.) để lưu trữ: bản gốc chữ Hán, các bản dịch thơ, tài liệu phân tích bài thơ, các bài thơ hai-cư và thơ trung đại Việt Nam để so sánh (đáp ứng mục tiêu so sánh văn hóa). 2.3.NC1a Trong hoạt động \"hợp tác khi trao đổi, thảo luận về thành tựu nội dung, nghệ thuật\", HS sử dụng các công cụ như Google Docs, Zalo nhóm, hay Kahoot (để ôn tập) để cùng nhau xây dựng bản nháp bài nghị luận hoặc chuẩn bị bài thuyết trình phân tích giá trị thẩm mĩ của bài thơ."
+    },
+    {
+      "grade": "10",
+      "tiet": "15,16",
+      "bai_hoc": "",
+      "chi_bao": "1.NC1a  - Khai thác dữ liệu và thông tin - Duyệt, tìm kiếm và lọc dữ liệu, thông tin và nội dung số: 3.2.NC1a  -Sáng tạo nội dung số -Phát triển nội dung số: 2.1.NC1a - Giao tiếp và Hợp tác -Tương tác thông qua công nghệ số:",
+      "yeu_cau": "",
+      "minh_chung": "1.NC1a  Học sinh tra cứu trực tuyến (ví dụ: Google, các trang web uy tín về văn học) để tìm kiếm: * Thông tin về tác giả Hàn Mặc Tử và phong trào Thơ Mới (thơ hiện đại). * Khái niệm về nhịp điệu, nhạc điệu trong thơ để chuẩn bị cho việc phân tích ngôn từ. 3.2.NC1a  Học sinh sử dụng các công cụ số (ví dụ: Google Docs, PowerPoint, Canva) để: * Soạn thảo các ý chính về giá trị thẩm mĩ của tổ chức ngôn từ trong thơ. * Thiết kế slide/bản đồ tư duy tóm tắt các đặc điểm của thơ hiện đại (như nhịp, vần, hình ảnh) để phân biệt với thơ cổ điển. 2.1.NC1a Học sinh sử dụng nền tảng số (ví dụ: Google Meet, Zoom, diễn đàn học tập trực tuyến) để: * Thảo luận nhóm về các cách kết hợp từ ngữ độc đáo trong bài thơ (ví dụ: \"mùa xuân chín\"). * Chia sẻ file chứa các nhận xét, bình luận trực tuyến về những điểm gần gũi về nội dung (phẩm chất: rung động trước cái đẹp) giữa \"Mùa xuân chín\" và một tác phẩm thơ nước ngoài."
+    },
+    {
+      "grade": "10",
+      "tiet": "17",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1a: Tìm kiếm, thu thập thông tin từ các nguồn số 1.3.NC1b: Đánh giá, lựa chọn thông tin phù hợp 2.1.NC1a: Tổ chức, xử lí dữ liệu số",
+      "yeu_cau": "",
+      "minh_chung": "1.2.NC1a: Học sinh sử dụng Google, các trang web học thuật (như tài liệu chuyên khảo/bách khoa thư online), hoặc YouTube (video phân tích) để: • Tra cứu thông tin về hoàn cảnh sáng tác bài \"Tiếng thu\". • Tìm kiếm các bài phê bình, nhận định khác về bài thơ. 1.3.NC1b: Học sinh so sánh thông tin về Lưu Trọng Lư từ một website cá nhân và một tạp chí khoa học/website giáo dục uy tín để chọn lọc nội dung chính xác. • Lựa chọn những minh chứng nghệ thuật trong bài phê bình (ví dụ: các biện pháp tu từ, vần, nhịp) và xác nhận lại qua các nguồn số đáng tin cậy.  2.1.NC1a: Học sinh sử dụng PowerPoint/Google Slides để tóm tắt các luận điểm chính của bài phê bình. • Sử dụng Mind Map (sơ đồ tư duy) hoặc Google Docs/Word để lập dàn ý các bước viết một bài nghị luận về thơ ca, dựa trên cấu trúc và thao tác của văn bản \"Bản hòa âm ngôn từ...\""
+    },
+    {
+      "grade": "10",
+      "tiet": "18",
+      "bai_hoc": "",
+      "chi_bao": "3.2.NC1a (Tương ứng với một khía cạnh của Giao tiếp và Hợp tác số) 4.3.NC1a (Tương ứng với một khía cạnh của Tạo nội dung số) 5.2.NC1c (Tương ứng với một khía cạnh của An toàn số)",
+      "yeu_cau": "",
+      "minh_chung": "3.2.NC1a HS sử dụng các công cụ giao tiếp số (ví dụ: diễn đàn, email, tin nhắn) để thực hành sửa lỗi dùng từ/trật tự từ trong các văn bản/tin nhắn trao đổi, đảm bảo thông tin truyền đạt chính xác và rõ ràng về mặt ngôn ngữ. 4.3.NC1a  HS sử dụng phần mềm soạn thảo (ví dụ: Google Docs, Word) hoặc công cụ số để viết/tạo ra các đoạn văn bản và tự kiểm tra/sửa chữa các lỗi dùng từ, lỗi trật tự từ, đảm bảo độ chính xác và tính hợp lý của câu chữ trước khi chia sẻ. 5.2.NC1c HS nhận biết được việc dùng từ sai nghĩa, sai sắc thái hoặc sắp xếp trật tự từ không hợp lí trong môi trường số (mạng xã hội, bình luận) có thể dẫn đến hiểu lầm, thông tin sai lệch hoặc xúc phạm/gây tổn thương (tức là một rủi ro về giao tiếp và an toàn thông tin cá nhân/cộng đồng)"
+    },
+    {
+      "grade": "10",
+      "tiet": "19,20",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1a Đánh giá dữ liệu, thông tin và nội dung số: Đánh giá được độ tin cậy và độ tin cậy của các nguồn dữ liệu, thông tin và nội dung số. 1.3.NC1b Quản lý dữ liệu, thông tin và nội dung số: Triển khai được việc tổ chức và sắp xếp dữ liệu, thông tin và nội dung trong môi trường có cấu trúc. 3.3.NC1a Phản ánh và tự đánh giá trong môi trường số: Sử dụng được các công cụ số để ghi lại, phân tích, phản ánh và đánh giá được sự phát triển NLS của bản thân.",
+      "yeu_cau": "",
+      "minh_chung": "1.2.NC1a HS đánh giá các nguồn tài liệu (trang web, blog, sách điện tử, video YouTube,...) tìm kiếm được về bài thơ (ví dụ: thông tin về hoàn cảnh sáng tác, nhận định của nhà phê bình) để chọn lọc và sử dụng cho bài viết. 1.3.NC1b HS tạo dàn ý trên công cụ số (ví dụ: Google Docs, Word, Mindmap tool) bằng cách sắp xếp logic các ý chính (luận điểm), các trích dẫn thơ (dữ liệu) và các lý lẽ, dẫn chứng (thông tin) theo trình tự mở bài - thân bài - kết bài. 3.3.NC1a HS sử dụng tính năng \"Đề xuất chỉnh sửa\" (Suggesting) hoặc \"Bình luận\" (Comment) trong Google Docs/Word để nhận xét, góp ý và tự đánh giá sự phù hợp của luận điểm, dẫn chứng trong bài viết; từ đó rút kinh nghiệm cho bản thân (Tự đánh giá năng lực viết)."
+    },
+    {
+      "grade": "10",
+      "tiet": "21",
+      "bai_hoc": "",
+      "chi_bao": "3.1.NC1a Năng lực giải quyết vấn đề 3.2.NC1a Năng lực tự quản bản thân 2.1.NC1a Năng lực giao tiếp",
+      "yeu_cau": "",
+      "minh_chung": "3.1.NC1a Sử dụng công cụ tìm kiếm (Google, thư viện số,...) để tìm tài liệu, hình ảnh, video minh họa về tác phẩm, tác giả; chọn lọc thông tin đáng tin cậy. 3.2.NC1a Tạo thư mục hoặc sử dụng công cụ đám mây (Google Drive, Onedrive) để lưu trữ, phân loại các slide trình chiếu, hình ảnh, văn bản nghiên cứu một cách khoa học. Sử dụng ứng dụng nhắc nhở để quản lý thời gian chuẩn bị bài. 2.1.NC1a Sử dụng các ứng dụng trình chiếu (PowerPoint, Google Slides, Canva) để thiết kế bài thuyết trình; sử dụng Email/phần mềm học tập để gửi bài cho giáo viên hoặc chia sẻ với nhóm; sử dụng tính năng bình luận/chat để trao đổi, đặt câu hỏi một cách văn minh, lịch sự."
+    },
+    {
+      "grade": "10",
+      "tiet": "22",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a   (Tìm kiếm, thu thập thông tin và dữ liệu số) 1.1.NC1b   (Đánh giá tính tin cậy của nguồn thông tin và dữ liệu số) 2.1.NC1a  Sửa chữa, rút kinh nghiệm cho bản thân (dựa trên các bài mẫu).",
+      "yeu_cau": "",
+      "minh_chung": "1.1.NC1a    Học sinh sử dụng công cụ tìm kiếm (Google, thư viện số,...) để tìm kiếm các tài liệu tham khảo/nghiên cứu (bài phê bình, tiểu sử tác giả, bản dịch khác, video phân tích) về tác phẩm thơ đang học. 1.1.NC1b    Học sinh lưu trữ và phân loại các bài viết, hình ảnh, hoặc file âm thanh liên quan đến bài thơ trong một thư mục số (Drive, máy tính cá nhân) để dễ dàng trích dẫn, so sánh khi viết bài nghị luận. 2.1.NC1a Học sinh sử dụng các phần mềm soạn thảo văn bản (Google Docs, Microsoft Word) để viết bài nghị luận. Sử dụng các tính năng như kiểm tra chính tả/ngữ pháp tự động, định dạng tiêu đề, và chèn chú thích để đảm bảo chất lượng bài viết"
+    },
+    {
+      "grade": "10",
+      "tiet": "35,36,37",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1a: Đánh giá được tính chính xác của các nguồn dữ liệu, thông tin và nội dung số. 1.1.NC1b: Áp dụng được kỹ thuật tìm kiếm để lấy được dữ liệu, thông tin và nội dung trong môi trường số. 6.1NC1a: Phân tích được cách AI hoạt động trong các ứng dụng cụ thể.",
+      "yeu_cau": "1.2.NC1a. Tìm kiếm thông tin số về sử thi, văn hóa Hy Lạp và tác phẩm. 1.1.NC1b. Sử dụng từ khóa, bộ lọc tìm kiếm nâng cao (ví dụ: tìm kiếm bằng hình ảnh, tìm trong phạm vi website cụ thể) để truy xuất các nguồn tài liệu đa phương tiện về Sử thi và Văn hóa Hy Lạp. 6.1.NC1a. Sử dụng và phân tích cách các công cụ AI (ví dụ: Công cụ tóm tắt văn bản, dịch tự động, hoặc các AI chatbot) xử lý và cung cấp thông tin về nội dung bao quát hoặc giá trị của sử thi đối với đời sống đương đại..",
+      "minh_chung": "1.1.NC1a. Tự đặt câu hỏi để thu thập thông tin tiểu sử Hô-me-rơ, bối cảnh chiến tranh thành Tơ-roa, văn hóa Hy Lạp cổ đại.  1.1.NC1b. Tìm kiếm hình ảnh \"Chiến tranh thành Troy\" trên Google Arts & Culture, hoặc sử dụng từ khóa chính xác để tìm bản dịch/bình luận của học giả uy tín về một \"chi tiết tiêu biểu\" trong văn bản. 6.2.NC1a. Thử dùng AI để tóm tắt một đoạn trích dài của I-li-át; Phân tích những điểm mạnh và hạn chế (ví dụ: Thiếu đi lời kể sử thi trang trọng, cảm xúc, hoặc hiểu sai ngữ cảnh văn hóa) của kết quả tóm tắt đó so với bản gốc."
+    },
+    {
+      "grade": "10",
+      "tiet": "38,39",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a: Đáp ứng được nhu cầu thông tin (Nằm trong 1.1.NC1a: Tìm kiếm thông tin và nội dung số) 1.2NC1b: Tiến hành đánh giá được các dữ liệu, thông tin và nội dung số khác nhau. 2.2.NC1a Chia sẻ dữ liệu, thông tin và nội dung số thông qua nhiều công cụ số phù hợp.",
+      "yeu_cau": "1.1.NC1a. Xác định và khai thác các nguồn số để tìm kiếm thông tin cần thiết, giúp tự tìm kiếm tri thức liên quan đến văn bản theo bộ câu hỏi định hướng. 1.2.NC1b So sánh, đối chiếu các nguồn thông tin số (bản tóm tắt, video phân tích, bài bình luận) để chọn lọc dữ liệu chính xác, phục vụ cho việc phân tích các chi tiết tiêu biểu và các yếu tố của sử thi. 2.2.NC1a. Sử dụng các nền tảng số (Google Docs/Slides, Zalo, Email,...) để chia sẻ tài liệu, hình ảnh, hoặc kết quả phân tích các chi tiết tiêu biểu giữa các thành viên trong nhóm, phục vụ cho Năng lực giao tiếp và hợp tác.",
+      "minh_chung": "1.1.NC1a. Sử dụng công cụ tìm kiếm để tra cứu \"hoàn cảnh sáng tác\" hoặc \"ý nghĩa hình tượng nhân vật anh hùng\" trước khi vào bài, nhằm đáp ứng nhu cầu hiểu rõ bối cảnh để tóm tắt các sự kiện chính. 1.2.NC1b.Đối chiếu bản tóm tắt cốt truyện trên một blog văn học với tóm tắt trong Sách giáo khoa hoặc tài liệu chuyên ngành để đánh giá tính đầy đủ và chính xác của sự kiện chính và cốt truyện. 2.2.NC1a.Tạo và chia sẻ một bài trình chiếu (Google Slides) về \"Không gian, thời gian và lời kể sử thi\"; Gửi tài liệu tham khảo cho bạn bè qua email/tin nhắn để cùng thực hiện nhiệm vụ làm việc nhóm thực hiện các nhiệm vụ học tập."
+    },
+    {
+      "grade": "10",
+      "tiet": "40",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1a Thực hiện đánh giá được độ tin cậy của các nguồn dữ liệu, thông tin và nội dung số. 1.3.NC1a. Thao tác được thông tin, dữ liệu và nội dung để tổ chức, lưu trữ và truy xuất dễ dàng hơn. 4.1 NC1a. Áp dụng được các cách khác nhau để bảo vệ thiết bị và nội dung số.",
+      "yeu_cau": "1.2.NC1a. Kiểm tra, xác minh độ tin cậy của nguồn tài liệu số được sử dụng để trích dẫn và ghi cước chú, nhằm đảm bảo tính chính xác và tôn trọng sự trong sáng của tiếng Việt. 1.3.NC1a. Sử dụng các tính năng số (ví dụ: Chức năng Insert Footnote/Endnote trong MS Word/Google Docs) để tổ chức việc ghi cước chú và chú thích trích dẫn một cách hệ thống, dễ dàng truy xuất và quản lý. 4.1.NC1a. Bảo vệ nội dung số đã tạo ra (bài tập, bài nghiên cứu có sử dụng trích dẫn và cước chú) bằng cách sử dụng mật khẩu hoặc lưu trữ đám mây để tránh mất dữ liệu.",
+      "minh_chung": "1.2.NC1a. So sánh nguồn trích dẫn từ một website cá nhân với nguồn từ một sách chuyên khảo (dạng số) để quyết định ghi cước chú trích dẫn nguồn nào là tin cậy hơn. 1.3.NC1a. Thực hành tạo cước chú tự động cho các trích dẫn trong một bài tiểu luận. Lưu trữ danh sách các nguồn tham khảo (Bibliography) dưới dạng file số để truy xuất nhanh khi cần trích dẫn lại. 4.1.NC1a. Lưu bài tập có sử dụng trích dẫn và cước chú lên Google Drive hoặc OneDrive; Đặt mật khẩu (nếu cần) cho tệp tài liệu để bảo mật thành quả lao động sử dụng trích dẫn, cước chú của mình."
+    },
+    {
+      "grade": "10",
+      "tiet": "41",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a Đáp ứng được nhu cầu thông tin (Tìm kiếm thông tin và nội dung số)và nội dung số. 1.2.NC1a Thực hiện đánh giá được độ tin cậy của các nguồn dữ liệu, thông tin và nội dung số. 3.2.NC1a Làm việc với các mục nội dung... sửa đổi, tinh chỉnh và tích hợp chúng.",
+      "yeu_cau": "1.1.NC1a. Xác định, tìm kiếm và truy xuất các tài liệu số cần thiết để đáp ứng nhu cầu viết báo cáo nghiên cứu (tìm kiếm tài liệu tham khảo, bài báo khoa học, thống kê,...) theo quy trình viết. 1.2.NC1a. Đánh giá nghiêm ngặt tính xác thực, khách quan và độ tin cậy của các nguồn số được sử dụng để trích dẫn và ghi cước chú, nhằm tôn trọng sản phẩm trí tuệ và tránh đạo văn. 3.2.NC1a. Sử dụng công cụ soạn thảo số để sửa đổi, tinh chỉnh bố cục, luận điểm, và tích hợp các dữ liệu đã tìm được vào bài viết hoàn chỉnh.",
+      "minh_chung": "1.1.NC1a. Tìm kiếm bằng từ khóa chính xác để lấy số liệu thống kê hoặc ví dụ thực tiễn làm minh chứng. 1.2.NC1a. Kiểm tra thông tin từ các bài báo khoa học, tạp chí uy tín (nguồn số) thay vì các blog không rõ ràng để quyết định sử dụng trích dẫn nào trong báo cáo, củng cố tính chính xác của báo cáo. 3.2.NC1a.Sử dụng tính năng gợi ý sửa lỗi của phần mềm soạn thảo để tinh chỉnh ngôn ngữ và sắp xếp lại dàn ý."
+    },
+    {
+      "grade": "10",
+      "tiet": "42",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1a Thực hiện đánh giá được độ tin cậy của các nguồn dữ liệu, thông tin và nội dung số. 2.1.NC1b Cho người khác thấy phương tiện giao tiếp số phù hợp nhất cho một bối cảnh cụ thể. 4.4. NC1a Trình bày được các cách thức khác nhau để bảo vệ môi trường khỏi tác động của công nghệ số và việc sử dụng công nghệ số.",
+      "yeu_cau": "1.2.NC1a. Kiểm chứng và đánh giá tính học thuật, độ tin cậy của các nguồn số (bài báo, nghiên cứu, sách điện tử) và xây dựng bài nghiên cứu thuyết trình. 2.1.NC1b. Trình bày quan điểm một cách hiệu quả bằng cách sử dụng các công cụ/phương tiện công nghệ số (ví dụ: PowerPoint, Canva). 4.4.NC1a. Giao tiếp và ứng xử có văn hóa, tôn trọng và có trách nhiệm khi sử dụng các công cụ số để trình bày và đối thoại.",
+      "minh_chung": "1.1.NC1a. Lập luận việc sử dụng Google Slides là phù hợp nhất để thuyết trình vì dễ dàng chèn hình ảnh về không gian, thời gian sử thi và cho phép hợp tác nhóm cùng chỉnh sửa. 2.1.NC1b. Lập luận việc sử dụng Google Slides là phù hợp nhất để thuyết trình vì dễ dàng chèn hình ảnh và cho phép hợp tác nhóm cùng chỉnh sửa. 3.1.NC1a. Tôn trọng bản quyền thông tin, hình ảnh khi đưa vào bài thuyết trình (trích dẫn nguồn đầy đủ). Ứng xử phù hợp khi nhận xét, đánh giá quan điểm của người khác qua các kênh/phương tiện số. 4.4.NC1a. Thuyết trình hoàn toàn trên màn hình chiếu, không in bản cứng bài nghiên cứu; Gửi tài liệu tham khảo dưới dạng PDF thay vì in ra; thể hiện ý thức tiết kiệm năng lượng khi sử dụng máy tính."
+    },
+    {
+      "grade": "10",
+      "tiet": "43",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a Đáp ứng được nhu cầu thông tin (Tìm kiếm thông tin và nội dung số) 1.1.NC1b Áp dụng được các kĩ thuật tìm kiếm để lấy được dữ liệu, thông tin và nội dung trong môi trường số.",
+      "yeu_cau": "1.1.NC1a. Xác định và khai thác các nguồn số để tìm kiếm thông tin cần thiết, giúp tự tìm kiếm tri thức và đáp ứng nhu cầu tìm hiểu về vị trí đoạn trích, bối cảnh văn hóa Ấn Độ cổ đại, và giá trị sử thi. 1.1.NC1b. Sử dụng từ khóa và cú pháp tìm kiếm nâng cao (ví dụ: tìm kiếm trong phạm vi một trang web học thuật, tìm kiếm bằng hình ảnh) để truy xuất các bài phân tích sâu về sự giằng xé nội tâm của Ra-ma hoặc đặc điểm nhân vật lí tưởng trong sử thi.",
+      "minh_chung": "1.1.NC1a Tìm kiếm các bản đồ cổ, hình ảnh, hoặc video về Ấn Độ cổ đại và văn hóa Vê-đic (nơi sử thi ra đời) để hiểu rõ hơn về quan niệm danh dự/trinh tiết của người phụ nữ, phục vụ cho việc phân tích bi kịch của Xita. 1.1.NC1b Áp dụng các từ khóa chuyên sâu (ví dụ: \"Rama's internal conflict\", \"Sita's Agni Pariksha analysis\") để tìm tài liệu phân tích, phục vụ cho năng lực phân tích và đánh giá mâu thuẫn bi kịch trong hành động của Ra-ma."
+    },
+    {
+      "grade": "10",
+      "tiet": "44,45",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1a Thực hiện đánh giá được độ tin cậy và độ tin cậy của các nguồn dữ liệu, thông tin và nội dung số. 1.1.NC1b Áp dụng được kỹ thuật tìm kiếm để lấy được dữ liệu, thông tin và nội dung trong môi trường số. 2.1.NC1b Cho người khác thấy phương tiện giao tiếp số phù hợp nhất cho một bối cảnh cụ thể.",
+      "yeu_cau": "1.2.NC1a Đánh giá Nguồn thông tin số về Chèo (Thông tin và Dữ liệu). 1.1.NC1b Tìm kiếm thông tin số hiệu quả về Chèo (Thông tin và Dữ liệu). 2.1.NC1b Lựa chọn công cụ Giao tiếp số phù hợp (Giao tiếp và Cộng tác số).",
+      "minh_chung": "1.2.NC1a So sánh các nguồn thông tin khác nhau về các yếu tố của văn bản Chèo. Đánh giá xem nguồn nào cung cấp thông tin chính xác, khách quan và đáng tin cậy hơn để phân tích trích đoạn \"Xúy Vân giả dại\". 1.1.NC1b Sử dụng các từ khóa chuyên sâu (ví dụ: 'đặc trưng văn bản chèo truyền thống', 'phân tích nhân vật Xúy Vân', 'nguồn gốc tích truyện chèo', 'lưu truyền chèo cổ') để tìm kiếm các tài liệu, video, hoặc bản ghi âm liên quan đến trích đoạn và các yếu tố của Chèo, phục vụ cho hoạt động phân tích. 2.1. NC1b Quyết định sử dụng công cụ nào để trình bày kết quả hoạt động nhóm và trao đổi thông tin về Chèo."
+    },
+    {
+      "grade": "10",
+      "tiet": "46",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1b: Áp dụng được kỹ thuật tìm kiếm để lấy được dữ liệu, thông tin và nội dung trong môi trường số (Thông tin và Dữ liệu). 2.2NC1b: Hướng dẫn người khác cách đóng vai trò trung gian để chia sẻ thông tin và nội dung thông qua công nghệ số (Giao tiếp và Cộng tác số). 5.2.NC1b Áp dụng được các công cụ số khác nhau và các giải pháp công nghệ có thể có để giải quyết những nhu cầu đó (Giải quyết vấn đề bằng công nghệ số)..",
+      "yeu_cau": "1.2.NC1b Tìm kiếm Tài liệu chuyên sâu (Sử dụng cú pháp tìm kiếm) 2.2.NC1b Quản lý và Chia sẻ Tài nguyên số cho nhóm. 5.2.NC1b Sử dụng Công cụ số để Phân tích và Trình bày nội dung.",
+      "minh_chung": "1.2.NC1b Sử dụng cú pháp tìm kiếm nâng cao  để tìm kiếm các bài nghiên cứu, clip phân tích, hoặc bản ghi chép về đặc điểm lời thoại trong chèo (như \"nói lối\", \"hát\", \"lý\") và các tài liệu lịch sử, xã hội về quan lại thời phong kiến. 2.2.NC1b Tạo và quản lý một thư mục chung trên Google Drive hoặc Microsoft Teams. Hướng dẫn các thành viên nhóm cách tải lên (upload), chỉnh sửa, và chia sẻ các tài liệu đã tìm kiếm trong văn bản số để góp ý cho nhau một cách hiệu quả. 5.2.NC1b Sử dụng các công cụ số để giải quyết các nhu cầu học tập."
+    },
+    {
+      "grade": "10",
+      "tiet": "47",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a Đáp ứng được nhu cầu thông tin (Tìm kiếm thông tin và nội dung số)và nội dung số. 1.1.NC1b. Áp dụng được kỹ thuật tìm kiếm để lấy được dữ liệu, thông tin và nội dung trong môi trường số. 1.2 NC1b. Cho người khác thấy phương tiện giao tiếp số phù hợp nhất cho một bối cảnh cụ thể.",
+      "yeu_cau": "1.1.NC1a Xác định nhu cầu và Thu thập thông tin về Rối nước. 1.1.NC1b Tìm kiếm thông tin số chuyên sâu về Rối nước (Sử dụng cú pháp tìm kiếm). 1.2. NC1b Đánh giá và Lọc Nguồn thông tin số về Rối nước.",
+      "minh_chung": "1.1.NC1a Khi được giao nhiệm vụ thuyết minh về Rối nước, HS xác định các thông tin cần có. Sau đó, HS thu thập các tài liệu số (bài báo, video tư liệu, hình ảnh) để đáp ứng đủ các phần nội dung đã xác định. 1.1.NC1b Sử dụng kết hợp các từ khóa để tìm kiếm thông tin chi tiết và chính xác hoặc tìm kiếm tư liệu về âm thanh bằng từ khóa \"âm nhạc trong múa rối nước\" site:gov.vn (giới hạn trang web chính phủ). 1.2.NC1b So sánh thông tin giữa một bài thuyết minh của VTV (được coi là đáng tin cậy) với một bài viết trên Wikipedia hoặc một bài blog. HS đánh giá tính chính xác, tính thời sự và tính khách quan của dữ liệu, loại bỏ các thông tin chưa được kiểm chứng, và lựa chọn các thông tin khoa học để đưa vào bài thuyết minh."
+    },
+    {
+      "grade": "10",
+      "tiet": "48",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a Đáp ứng được nhu cầu thông tin (Tìm kiếm thông tin và nội dung số)và nội dung số. 1.2.NC1a Thực hiện đánh giá được độ tin cậy của các nguồn dữ liệu, thông tin và nội dung số. 3.2.NC1a Làm việc với các mục nội dung... sửa đổi, tinh chỉnh và tích hợp chúng.",
+      "yeu_cau": "1.1.NC1a Xác định, tìm kiếm và truy xuất các tài liệu số cần thiết để đáp ứng nhu cầu viết báo cáo nghiên cứu (tìm kiếm tài liệu tham khảo, bài báo khoa học, thống kê,...) theo quy trình viết. 1.2.NC1a Đánh giá nghiêm ngặt tính xác thực, khách quan và độ tin cậy của các nguồn số được sử dụng để trích dẫn và ghi cước chú, nhằm tôn trọng sản phẩm trí tuệ và tránh đạo văn. 3.2.NC1a Sử dụng công cụ soạn thảo số để sửa đổi, tinh chỉnh bố cục, luận điểm, và tích hợp các dữ liệu đã tìm được vào bài viết hoàn chỉnh.",
+      "minh_chung": "1.1.NC1a Tìm kiếm bằng từ khóa chính xác để lấy số liệu thống kê hoặc ví dụ thực tiễn làm minh chứng. 1.2.NC1a Kiểm tra thông tin từ các bài báo khoa học, tạp chí uy tín (nguồn số) thay vì các blog không rõ ràng để quyết định sử dụng trích dẫn nào trong báo cáo, củng cố tính chính xác của báo cáo. 3.2.NC1a Sử dụng tính năng gợi ý sửa lỗi của phần mềm soạn thảo để tinh chỉnh ngôn ngữ và sắp xếp lại dàn ý."
+    },
+    {
+      "grade": "10",
+      "tiet": "49",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1a Thực hiện đánh giá được độ tin cậy của các nguồn dữ liệu, thông tin và nội dung số. 2.1.NC1b Cho người khác thấy phương tiện giao tiếp số phù hợp nhất cho một bối cảnh cụ thể. 4.4. NC1a Trình bày được các cách thức khác nhau để bảo vệ môi trường khỏi tác động của công nghệ số và việc sử dụng công nghệ số.",
+      "yeu_cau": "1.2.NC1a Năng lực khai thác và xử lý thông tin số: Đánh giá độ tin cậy của tài liệu nghiên cứu về sân khấu dân gian Việt Nam. 2.1.NC1b Năng lực giao tiếp và hợp tác trong môi trường số: Lựa chọn và sử dụng công cụ số (trình chiếu) hiệu quả cho buổi thuyết trình. 4.4.NC1a Năng lực tạo ra và khai thác các sản phẩm số an toàn, có đạo đức: Thực hiện các hành vi sử dụng công nghệ số một cách bền vững (giảm thiểu rác thải điện tử, tiết kiệm năng lượng).",
+      "minh_chung": "1.1.NC1a Năng lực tạo ra và khai thác các sản phẩm số an toàn, có đạo đức: Thực hiện các hành vi sử dụng công nghệ số một cách bền vững (giảm thiểu rác thải điện tử, tiết kiệm năng lượng). 2.1.NC1b HS chọn và sử dụng một công cụ trình chiếu (ví dụ: PowerPoint, Google Slides, Canva) để thiết kế slide báo cáo. Việc lựa chọn này phải phù hợp với nội dung học thuật (sân khấu dân gian) và bối cảnh lớp học (trang trọng, cần hình ảnh minh họa, video clip nghệ thuật). 4.4.NC1a Thuyết trình hoàn toàn trên màn hình chiếu, không in bản cứng bài nghiên cứu; Gửi tài liệu tham khảo dưới dạng PDF thay vì in ra; thể hiện ý thức tiết kiệm năng lượng khi sử dụng máy tính."
+    },
+    {
+      "grade": "10",
+      "tiet": "50",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a Đáp ứng được nhu cầu thông tin (Tìm kiếm thông tin và nội dung số) 1.1.NC1b Áp dụng được các kĩ thuật tìm kiếm để lấy được dữ liệu, thông tin và nội dung trong môi trường số.",
+      "yeu_cau": "1.1.NC1a Đánh giá nguồn thông tin về Tuồng và vở \"Sơn Hậu\". 1.1.NC1b Lựa chọn công cụ số để trình bày, trao đổi về đặc điểm nghệ thuật Tuồng.",
+      "minh_chung": "1.1.NC1a Tìm kiếm trên mạng các tài liệu về vở tuồng \"Sơn Hậu\" hoặc nghệ thuật Tuồng (Hát Bội), cần so sánh, chọn lọc thông tin từ các nguồn uy tín như sách, các trang web của viện nghiên cứu văn hóa, báo chí chính thống, hoặc các nhà nghiên cứu chuyên môn 1.1.NC1b Khi cần trình bày về nghệ thuật hóa trang, phục trang, hoặc điệu bộ của nhân vật Tuồng (ví dụ: vai Kép Trung, vai Hề, vai Lão), nên dùng video/YouTube để minh họa."
+    },
+    {
+      "grade": "10",
+      "tiet": "51,52",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1b Áp dụng được kỹ thuật tìm kiếm để lấy được dữ liệu, thông tin và nội dung trong môi trường số. 1.2.NC1b Tiến hành đánh giá được các dữ liệu, thông tin và nội dung số khác nhau. 1.3.NC1a Thao tác được thông tin, dữ liệu và nội dung để tổ chức, lưu trữ và truy xuất dễ dàng hơn.",
+      "yeu_cau": "1.1.NC1b Tìm kiếm thông tin tổng hợp (lịch sử văn học, lý thuyết Tiếng Việt, các thao tác lập luận). 1.2.NC1b Đánh giá và so sánh các nguồn tài liệu học tập, các bài phân tích để chọn lọc kiến thức chuẩn xác. 1.3.NC1a Tổ chức hệ thống kiến thức tổng hợp bằng các công cụ số để học tập và ôn luyện.",
+      "minh_chung": "1.1.NC1b Tìm kiếm thông tin ngoài sách giáo khoa về các tác giả mới/tác phẩm mới (ví dụ: thơ Hiện đại, truyện ngắn nước ngoài) để thu hẹp kết quả, tìm kiếm các bài phân tích chuyên sâu. * Tập làm văn: Tìm kiếm các sơ đồ lập luận hoặc bài viết mẫu/dàn ý cho một đề văn cụ thể. 1.2.NC1b Tiếng Việt: Khi tìm kiếm về lý thuyết dùng từ, đặt câu (ví dụ: lỗi logic, lỗi thiếu chủ ngữ), học sinh cần so sánh các bài viết trên các trang web học tập khác nhau để xác định định nghĩa và cách sửa chữa đúng nhất, tránh lỗi sai hoặc kiến thức lỗi thời. * Văn học: Đánh giá các bài phân tích, nhận xét về một tác phẩm, phân biệt giữa ý kiến chủ quan cá nhân (trên diễn đàn) và nhận định có cơ sở khoa học (từ các nhà phê bình, giáo trình). 1.3.NC1a Lập sơ đồ tư duy (mindmap) hoặc bảng biểu tổng hợp kiến thức: Tác giả - Tác phẩm - Đặc điểm nghệ thuật - Thao tác lập luận áp dụng, để dễ dàng tìm lại khi cần ôn tập.."
+    },
+    {
+      "grade": "10",
+      "tiet": "55,56",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a Thực hiện đánh giá được độ tin cậy của các nguồn dữ liệu, thông tin và nội dung số. 1.2.NC1b Tiến hành đánh giá được các dữ liệu, thông tin và nội dung số khác nhau. 2.3.NC1b. Sử dụng được các công nghệ số thích hợp để tự mình trang bị và tham gia vào xã hội như một công dân.",
+      "yeu_cau": "1.1.NC1a Đánh giá nguồn tài liệu về cuộc đời và sự nghiệp Nguyễn Trãi. 1.2.NC1b So sánh và đối chiếu các quan điểm về Nguyễn Trãi và tác phẩm của ông.  2.3.NC1b. Sử dụng công cụ số để tạo nội dung giới thiệu và lan tỏa giá trị văn hóa Nguyễn Trãi.",
+      "minh_chung": "1.1.NC1a Tìm kiếm thông tin về \"vụ án Lệ Chi Viên\" hoặc \"quan điểm nhân nghĩa của Nguyễn Trãi\", học sinh cần xác định và chọn lọc các nguồn chính thống, thay vì các bài viết mang tính suy đoán, không căn cứ trên các trang mạng xã hội hoặc diễn đàn không kiểm chứng, nhằm đảm bảo thông tin sử dụng là đáng tin cậy. 1.2.NC1b Tìm kiếm và đối chiếu các nhận định về vị trí, đóng góp của Nguyễn Trãi để làm rõ hơn tầm vóc vĩ đại của ông. Đồng thời, so sánh các bản dịch, chú thích tác phẩm (ví dụ: thơ Nôm) để hiểu chính xác ý nghĩa văn chương của tác gia. 2.3.NC1b. sử dụng các công cụ như PowerPoint/Canva để thiết kế bài trình bày/infographic giới thiệu về cuộc đời và đóng góp của Nguyễn Trãi. Việc này không chỉ giúp tự mình trang bị kiến thức"
+    },
+    {
+      "grade": "10",
+      "tiet": "57,58,59",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1a Thực hiện đánh giá được độ tin cậy và độ tin cậy của các nguồn dữ liệu, thông tin và nội dung số. 2.2.NC1a Chia sẻ dữ liệu, thông tin và nội dung số thông qua nhiều công cụ số phù hợp 4.4.NC1a  Trình bày được các cách thức khác nhau để bảo vệ môi trường khỏi tác động của công nghệ số và việc sử dụng công nghệ số.",
+      "yeu_cau": "1.2.NC1a Đánh giá và xác minh thông tin về bối cảnh lịch sử, phiên dịch, và phân tích Bình Ngô đại cáo. 2.2.NC1a Lựa chọn và sử dụng công cụ số để trình bày, trao đổi về mạch nghị luận và yếu tố biểu cảm của tác phẩm. 4.4.NC1a Vận dụng ý thức công dân số xanh trong quá trình tìm hiểu và học tập về chủ quyền dân tộc.",
+      "minh_chung": "1.2.NC1a Tìm kiếm thông tin lịch sử về Khởi nghĩa Lam Sơn hoặc các bản dịch/chú thích khác nhau của Bình Ngô đại cáo, học sinh phải so sánh các nguồn học thuật chính thống với các tài liệu trên mạng để đảm bảo tính chính xác của sự kiện, thuật ngữ và các luận điểm nghị luận trong Đại cáo. 2.2.NC1a Sử dụng các công cụ như Google Slides/PowerPoint để thiết kế bài trình bày về Bố cục và Lí lẽ của Đại cáo (dùng sơ đồ, bảng biểu). Sử dụng email để gửi tài liệu học tập, phân công nhiệm vụ nghiên cứu. 4.4.NC1aTtìm kiếm, thu thập, lưu trữ tài liệu về Bình Ngô đại cáo (bản PDF, Ebook, video bài giảng), thể hiện trách nhiệm với môi trường trong hoạt động học tập số."
+    },
+    {
+      "grade": "10",
+      "tiet": "60",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a Đáp ứng được nhu cầu thông tin, 1.2.NC1b Tiến hành đánh giá được các dữ liệu, thông tin và nội dung số khác nhau. 6.1.NC1b. So sánh được các hệ thống AI khác nhau và cách chúng xử lý dữ liệu.",
+      "yeu_cau": "1.1.NC1a Tìm kiếm thông tin chuyên sâu về Thơ Nôm Đường luật và chùm thơ Bảo kính cảnh giới. 1.2.NC1b Đánh giá và so sánh các bài phân tích về nghệ thuật thơ Nôm Nguyễn Trãi. 6.1.NC1b Sử dụng và đánh giá các công cụ AI (hoặc công cụ dịch thuật/chú giải) trong việc nghiên cứu tác phẩm cổ.",
+      "minh_chung": "1.1.NC1a Sử dụng công cụ tìm kiếm để thu thập các tài liệu giải thích chi tiết về luật thơ Đường luật, cách gieo vần, và các chú giải từ Hán Việt hoặc từ Nôm cổ trong bài thơ để phục vụ việc đọc hiểu sâu sắc và đáp ứng nhu cầu kiến thức cụ thể của thể loại. 1.2.NC1b Tìm kiếm các bài phê bình, phân tích về nghệ thuật đối và sự tài hoa của Nguyễn Trãi, cần so sánh các nguồn khác nhau để đối chiếu các luận điểm và chọn lọc những nhận định có giá trị, tính học thuật cao về nội dung và hình thức của thơ Nôm Đường luật. 6.1.NC1b Sử dụng các công cụ dịch thuật AI để thử nghiệm dịch các câu thơ có chứa nhiều từ Nôm cổ hoặc Hán Việt sang tiếng Việt hiện đại, để hiểu rõ hơn về độ chính xác và hạn chế của công nghệ khi xử lý dữ liệu ngôn ngữ cổ, từ đó rèn luyện khả năng phê phán và sử dụng công nghệ có trách nhiệm."
+    },
+    {
+      "grade": "10",
+      "tiet": "61",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a Đáp ứng được nhu cầu thông tin, 1.2.NC1b Tiến hành đánh giá được các dữ liệu, thông tin và nội dung số khác nhau.  5.1.NC1a Đánh giá được các vấn đề kỹ thuật khi sử dụng môi trường số và vận hành các thiết bị số.",
+      "yeu_cau": "1.1.NC1a Tìm kiếm các tài liệu dịch thuật, chú giải thơ chữ Hán, đặc biệt là các thuật ngữ Hán Việt cổ trong bài Dục Thúy sơn. 1.2.NC1b So sánh và đánh giá các bản dịch, bản chú giải hoặc bài bình giảng về bài Dục Thúy sơn. 5.1.NC1a Nhận biết và xử lý các lỗi kỹ thuật cơ bản trong quá trình tìm kiếm, hợp tác và lưu trữ dữ liệu.",
+      "minh_chung": "1.1.NC1a Sử dụng công cụ tìm kiếm để tra cứu ngữ nghĩa của các từ Hán Việt trong bài thơ, tìm hiểu về bối cảnh lịch sử của núi Dục Thúy tại Ninh Bình.  1.2.NC1b Tìm kiếm và đối chiếu các bản dịch thơ (thơ song thất lục bát, lục bát, hoặc dịch nghĩa) của Dục Thúy sơn để thấy được sự khác nhau trong cách truyền tải vẻ đẹp thiên nhiên và tâm trạng tác giả. Sau đó, đánh giá nguồn nào truyền đạt ý nghĩa và hồn thơ sát nhất với nguyên tác, từ đó rèn luyện tư duy phản biện khi tiếp nhận thông tin. 5.1.NC1a Trong quá trình học nhóm, nếu không thể truy cập tài liệu chia sẻ trên Drive, hoặc không thể gõ được chữ Hán để tra cứu, học sinh cần nhận biết nguyên nhân  và tự đề xuất giải pháp  để không gián đoạn quá trình học tập."
+    },
+    {
+      "grade": "10",
+      "tiet": "62,63",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1b Áp dụng được kỹ thuật tìm kiếm để lấy được dữ liệu, thông tin và nội dung trong môi trường số  1.2.NC1a Thực hiện đánh giá được độ tin cậy và độ tin cậy của các nguồn dữ liệu, thông tin và nội dung số 1.2.NC1b Tiến hành đánh giá được các dữ liệu, thông tin và nội dung số khác nhau.",
+      "yeu_cau": "1.1.NC1b Sử dụng cú pháp tìm kiếm nâng cao để thu thập dữ liệu (bằng chứng, số liệu, ví dụ) cho bài nghị luận. 1.2.NC1a Đánh giá nguồn gốc của các bằng chứng (số liệu, ví dụ) thu thập được để đảm bảo tính xác thực. 1.2.NC1b So sánh các góc nhìn, quan điểm khác nhau về cùng một vấn đề xã hội để xây dựng luận điểm đa chiều.",
+      "minh_chung": "1.1.NC1b Cần sử dụng các từ khóa kết hợp, hoặc bộ lọc thời gian để tìm các số liệu mới nhất, bằng chứng xác thực từ các báo cáo chính thống, phục vụ cho việc xây dựng luận điểm thuyết phục.  1.2.NC1a Cần kiểm tra xem các số liệu thống kê được lấy từ đâu Điều này giúp tránh đưa các thông tin sai lệch hoặc bằng chứng cũ, thiếu tính thời sự vào bài nghị luận. 1.2.NC1b Khi nghị luận về vấn đề có nhiều tranh cãi cần đối chiếu các bài báo, ý kiến chuyên gia (ví dụ: quan điểm tích cực về kết nối cộng đồng vs. quan điểm tiêu cực về trầm cảm) để thấy được sự phức tạp của vấn đề. Việc này giúp bài viết có tính phản biện cao và thể hiện sự tự chủ, trách nhiệm trong việc tiếp nhận thông tin."
+    },
+    {
+      "grade": "10",
+      "tiet": "64",
+      "bai_hoc": "",
+      "chi_bao": "1.2.NC1a Thực hiện đánh giá được độ tin cậy và độ tin cậy của các nguồn dữ liệu, thông tin và nội dung số. 1.2.NC1b Tiến hành đánh giá được các dữ liệu, thông tin và nội dung số khác nhau. 3.2.NC1a Làm việc với các mục nội dung và thông tin mới khác nhau, sửa đổi, tinh chỉnh, cải thiện và tích hợp chúng để tạo ra những mục mới và độc đáo.",
+      "yeu_cau": "1.2.NC1a Đánh giá độ tin cậy của các nguồn từ điển, tài liệu giải thích ý nghĩa và cách dùng từ Hán Việt. 1.2.NC1b So sánh và đối chiếu cách giải thích về giá trị biểu đạt của từ Hán Việt trong các ngữ cảnh văn học khác nhau. 3.2.NC1a Sáng tạo nội dung mới bằng cách tích hợp và tinh chỉnh từ Hán Việt thu thập được.",
+      "minh_chung": "1.2.NC1a Khi tra cứu ý nghĩa hoặc cách sử dụng từ Hán Việt phức tạp, học sinh cần xác định và sử dụng các nguồn từ điển uy tín thay vì các định nghĩa sơ sài, thiếu chuẩn xác trên các trang web không chính thống, đảm bảo sử dụng từ đúng mục đích và ý nghĩa. 1.2.NC1b Tìm kiếm và so sánh các bài phân tích về tác dụng nghệ thuật của một từ Hán Việt cụ thể (ví dụ: từ giang sơn) khi được dùng trong thơ cổ và khi dùng trong văn xuôi hiện đại. Việc đối chiếu này giúp nhận ra sự đa dạng về giá trị biểu đạt và hiệu quả nghệ thuật của từ Hán Việt. 3.2.NC1a Sử dụng các công cụ soạn thảo/thiết kế để tạo ra một bài viết/thông điệp về chủ đề xã hội. Trong quá trình viết, học sinh tích hợp từ Hán Việt đã học và tinh chỉnh vị trí từ để đạt được hiệu quả nghệ thuật cao nhất, rèn luyện thói quen sử dụng từ đúng mục đích."
+    },
+    {
+      "grade": "10",
+      "tiet": "65",
+      "bai_hoc": "",
+      "chi_bao": "2.1.NC1a Sử dụng được nhiều công nghệ số để tương tác. 2.2.NC1b Hướng dẫn người khác cách đóng vai trò trung gian để chia sẻ thông tin và nội dung thông qua công nghệ số. 4.4.NC1a Trình bày được các cách thức khác nhau để bảo vệ môi trường khỏi tác động của công nghệ số và việc sử dụng công nghệ số.",
+      "yeu_cau": "2.1.NC1a Lựa chọn và sử dụng công cụ số phù hợp để trình bày quan điểm và phản biện ý kiến. 2.2.NC1b Hướng dẫn cách tổng hợp và điều phối thông tin/ý kiến khác nhau bằng công cụ số. 4.4.NC1a Vận dụng các cách thức bảo vệ môi trường trong hoạt động học tập nhóm số.",
+      "minh_chung": "2.1.NC1a Cần thảo luận về một vấn đề gây tranh cãi, học sinh sử dụng Google Meet/Zoom để họp nhóm 2.2.NC1b Đóng vai trò người điều phối số (Moderator), hướng dẫn cách sử dụng tính năng bỏ phiếu (poll) trên Zoom/Google Forms, hoặc giao nhiệm vụ cho thành viên khác tổng hợp các luận điểm khác biệt vào một biểu đồ so sánh trên Slide/Sheet để mọi người cùng thấy, giúp nhóm đạt được tiếng nói chung hoặc tóm tắt được các góc nhìn. 4.4.NC1a Trình bày và thực hành trong nhóm về việc: Sử dụng màn hình ảo (Whiteboard) để ghi chép thay vì in ấn; Tận dụng các công cụ lưu trữ đám mây để chia sẻ tài liệu"
+    },
+    {
+      "grade": "10",
+      "tiet": "66",
+      "bai_hoc": "",
+      "chi_bao": "1.1.NC1a Đáp ứng được nhu cầu thông tin (Tìm kiếm thông tin và nội dung số) 1.1.NC1b Áp dụng được các kĩ thuật tìm kiếm để lấy được dữ liệu, thông tin và nội dung trong môi trường số.",
+      "yeu_cau": "1.1.NC1a Tìm kiếm các tài liệu đa dạng để đáp ứng các yêu cầu về lịch sử, văn học và địa lý liên quan đến bài thơ. 1.1.NC1b Sử dụng cú pháp tìm kiếm nâng cao để thu hẹp kết quả, tìm kiếm các nghiên cứu chuyên sâu về thể thơ và tư tưởng.",
+      "minh_chung": "1.1.NC1a Tra cứu thông tin về vị trí địa lý của cửa biển Bạch Đằng và các trận thủy chiến lớn (Ngô Quyền 938, Trần Hưng Đạo 1288) để củng cố kiến thức nền tảng về không khí lịch sử oai hùng 1.1.NC1b Sử dụng cú pháp nâng cao (ví dụ: \"thất ngôn bát cú\" \"niêm luật đối\" hoặc Nguyễn Trãi \"vai trò của con người\" lịch sử) để tìm kiếm các bài phân tích học thuật về luật thơ, bố cục và tư tưởng triết lý của tác giả, thay vì các kết quả đại trà, giúp đáp ứng nhu cầu thông tin chính xác và chuyên sâu."
+    }
+  ]
+}

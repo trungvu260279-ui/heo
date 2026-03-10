@@ -2,126 +2,112 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// Đường dẫn lưu file json trên máy chủ Render.
-// Nếu trên Render bạn có gắn Disk, bạn có thể trỏ DB_FILE tới '/data/rankings.json' 
-// để dữ liệu không bị mất khi deploy lại web!
+// Database fallback logic
 const DATA_DIR = process.env.DATA_DIR && process.env.DATA_DIR !== '/data' 
     ? process.env.DATA_DIR 
     : path.join(__dirname, 'data');
 const DB_FILE = path.join(DATA_DIR, 'rankings.json');
 
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors({ origin: '*', methods: ['GET', 'POST', 'OPTIONS'], allowedHeaders: ['Content-Type', 'Authorization'] }));
 app.use(express.json());
 
-// Khởi tạo thư mục và file database
-try {
-    if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    if (!fs.existsSync(DB_FILE)) {
-        fs.writeFileSync(DB_FILE, JSON.stringify([]));
-    }
-} catch (error) {
-    console.error("Failed to create data directory/file. Using __dirname fallback.", error);
-    // Nếu lỗi tạo thư mục (ví dụ mount path /data bị cấm do không add disk), fallback về thư mục hiện tại
-    const FALLBACK_DIR = path.join(__dirname, 'data');
-    if (!fs.existsSync(FALLBACK_DIR)) fs.mkdirSync(FALLBACK_DIR, { recursive: true });
-    
-    // Đổi lại hằng số DATA_DIR và DB_FILE theo fallback
-    // (Bởi vì thư mục hiện tại chắc chắn có quyền ghi)
-    process.env.DATA_DIR = FALLBACK_DIR;
-    global.DB_FILE_PATH = path.join(FALLBACK_DIR, 'rankings.json');
-    if (!fs.existsSync(global.DB_FILE_PATH)) fs.writeFileSync(global.DB_FILE_PATH, JSON.stringify([]));
-}
+// Initialize data directory
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, JSON.stringify([]));
 
-// Hàm helper để luôn lấy đúng file DB
-const getDbFilePath = () => global.DB_FILE_PATH || DB_FILE;
+const getDbFilePath = () => DB_FILE;
 
-// ----------------------------------------------------
-// 0. GET /
-// Trả về câu chào mừng nếu có ai (vô tình) gõ base URL
-// ----------------------------------------------------
 app.get('/', (req, res) => {
-    res.json({
-        status: "Online",
-        message: "VanPlatform Backend (Render) is running smoothly!",
-        db_path: getDbFilePath(),
-        docs: "/api/sheet"
-    });
+    res.json({ status: "Online", mode: "Chat Only" });
 });
 
-// ----------------------------------------------------
-// 1. GET /api/sheet
-// Khi User vào web -> Nạp Top Dashboard Ranking từ File JSON
-// ----------------------------------------------------
 app.get('/api/sheet', (req, res) => {
     try {
         const raw = fs.readFileSync(getDbFilePath(), 'utf-8');
-        const data = JSON.parse(raw);
-        
-        // Front-end yêu cầu format dạng mảng 2 chiều theo Google Sheets cũ
-        // index 0 là header: ['Email', 'Họ tên', 'Vai trò', 'Điểm', 'Bài làm', 'Ngày']
-        const formattedData = [
-            ['Email', 'Họ tên', 'Vai trò', 'Điểm', 'Bài làm', 'Ngày'],
-            ...data.map(item => [
-                item.email,
-                item.name,
-                item.role,
-                item.score,
-                item.exercise,
-                item.date
-            ])
-        ];
-        
-        res.json(formattedData);
+        res.json(JSON.parse(raw));
     } catch(e) {
         res.status(500).json({ error: e.message });
     }
 });
 
-// ----------------------------------------------------
-// 2. POST /api/sheet
-// Gửi điểm số mới vừa chấm xong xuống JSON -> Không cần Realtime Push Socket
-// ----------------------------------------------------
 app.post('/api/sheet', (req, res) => {
     try {
         const { email, name, role, score, exercise, date } = req.body;
-        
-        if (!email || !name) {
-            return res.status(400).json({ error: "Missing identity" });
-        }
-
         const raw = fs.readFileSync(getDbFilePath(), 'utf-8');
         const data = JSON.parse(raw);
-        
-        // Thêm bản ghi mới
-        data.push({ 
-            email, 
-            name, 
-            role: role || 'student', 
-            score: parseFloat(score) || 0, 
-            exercise: exercise || 'Luyện tập', 
-            date: date || new Date().toLocaleDateString('vi-VN') 
-        });
-        
-        // Lưu lại xuống Ổ cứng (Render disk)
+        data.push({ email, name, role, score, exercise, date });
         fs.writeFileSync(getDbFilePath(), JSON.stringify(data, null, 2));
-        
-        res.json({ success: true, message: "Score saved to Render Disk DB!" });
+        res.json({ success: true });
     } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+const HTMLtoDOCX = require('html-to-docx');
+
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+app.post('/api/gemini-stream', async (req, res) => {
+    const { prompt, history = [] } = req.body;
+    
+    // Set headers for SSE-like response
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    try {
+        const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+        if (!apiKey) throw new Error("Missing Gemini API Key");
+
+        const genAI = new GoogleGenerativeAI(apiKey);
+        const model = genAI.getGenerativeModel({ model: process.env.VITE_GEMINI_MODEL || "gemini-1.5-flash" });
+
+        const chat = model.startChat({ history });
+        
+        // If prompt is an array (multimodal), it will work too
+        const result = await chat.sendMessageStream(prompt);
+
+        for await (const chunk of result.stream) {
+            const chunkText = chunk.text();
+            // Send chunk as SSE data
+            res.write(`data: ${JSON.stringify({ text: chunkText })}\n\n`);
+        }
+        res.write('data: [DONE]\n\n');
+        res.end();
+    } catch (error) {
+        console.error("Gemini Stream Error:", error);
+        res.write(`data: ${JSON.stringify({ error: error.message })}\n\n`);
+        res.end();
+    }
+});
+
+app.post('/api/export-docx', async (req, res) => {
+    try {
+        const { html, filename = 'Giao-An.docx' } = req.body;
+        
+        // Wrap with basic HTML structure if needed
+        const fullHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>${html}</body></html>`;
+        
+        const fileBuffer = await HTMLtoDOCX(fullHtml, null, {
+            table: { row: { cantSplit: true } },
+            footer: true,
+            pageNumber: true,
+        });
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        res.setHeader('Content-Disposition', `attachment; filename=${encodeURIComponent(filename)}`);
+        res.send(fileBuffer);
+    } catch (e) {
+        console.error("Export Error:", e);
         res.status(500).json({ error: e.message });
     }
 });
 
 app.listen(PORT, () => {
-    console.log(`Backend Rank/History Server running on port ${PORT}`);
-    console.log(`Saving JSON DB to: ${getDbFilePath()}`);
+    console.log(`Backend Server running on port ${PORT}`);
 });
