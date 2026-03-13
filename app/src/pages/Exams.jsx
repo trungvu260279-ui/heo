@@ -1,5 +1,6 @@
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { clsx } from 'clsx'
 import examsData from '../data/exams.json'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -178,7 +179,7 @@ function QuestionBlock({ label, text, id, onHint, loadingHint, hint, answer, set
 // ─── Result Dashboard ────────────────────────────────────────────────────────
 function ResultDashboard({ result, onBack, examTitle, answers, examData }) {
     const navigate = useNavigate();
-    const { skills, overall, suggestions, commonErrors, comment } = result;
+    const { skills, overall, suggestions, commonErrors, comment, archiveId } = result;
     const label = overall >= 8 ? 'Giỏi' : overall >= 7 ? 'Khá' : overall >= 5 ? 'Trung bình' : 'Cần cố gắng';
     const labelColor = overall >= 8 ? 'text-amber-500' : overall >= 7 ? 'text-blue-500' : overall >= 5 ? 'text-emerald-500' : 'text-red-500';
     const bgColor = overall >= 8 ? 'bg-amber-50' : overall >= 7 ? 'bg-blue-50' : overall >= 5 ? 'bg-emerald-50' : 'bg-red-50';
@@ -286,7 +287,8 @@ function ResultDashboard({ result, onBack, examTitle, answers, examData }) {
                                     title: examTitle,
                                     result: result,
                                     answers: answers,
-                                    examData: examData
+                                    examData: examData,
+                                    archiveId: archiveId
                                 }
                             } 
                         });
@@ -332,6 +334,27 @@ export default function Exams() {
     const [isGrading, setIsGrading] = useState(false)
     const [submitDone, setSubmitDone] = useState(false)
     const mainRef = useRef(null)
+
+    // Anti-Copy, Anti-Paste, Anti-RightClick logic for Exam Security
+    useEffect(() => {
+        if (!isTakingExam) return;
+
+        const handleSecurity = (e) => {
+            e.preventDefault();
+        };
+
+        window.addEventListener('copy', handleSecurity);
+        window.addEventListener('cut', handleSecurity);
+        window.addEventListener('paste', handleSecurity);
+        window.addEventListener('contextmenu', handleSecurity);
+
+        return () => {
+            window.removeEventListener('copy', handleSecurity);
+            window.removeEventListener('cut', handleSecurity);
+            window.removeEventListener('paste', handleSecurity);
+            window.removeEventListener('contextmenu', handleSecurity);
+        };
+    }, [isTakingExam]);
 
     const filteredExams = useMemo(() =>
         examsData.filter(ex =>
@@ -456,6 +479,26 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
             setGradingResult(result)
             setSubmitDone(true)
 
+            // Session-based Archiving for Chat Synchronization (Token Saving & Automatic Deletion)
+            let archiveId = null;
+            try {
+                archiveId = 'VANS-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+                const archiveData = {
+                    title: selectedExam.title,
+                    result: result,
+                    answers: answers,
+                    examData: selectedExam
+                };
+                
+                // Save to sessionStorage (Temporary, auto-deletes when tab closes)
+                sessionStorage.setItem(archiveId, JSON.stringify(archiveData));
+                
+                setGradingResult(prev => ({ ...prev, archiveId }));
+                console.log("[Exams] Session archive created:", archiveId);
+            } catch (e) {
+                console.warn("Failed to create session archive", e);
+            }
+
             // Persist to evaluation store
             addEvaluation(result, {
                 icon: 'school',
@@ -503,36 +546,43 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
         <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950 overflow-hidden">
 
             {/* ── Header ── */}
-            <header className="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-20 shrink-0">
-                <div className="flex items-center gap-3">
-                    {isTakingExam && (
+            <header className="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 md:top-0 z-20 shrink-0">
+                <div className="flex items-center gap-2 md:gap-3">
+                    {(isTakingExam || selectedExam) && (
                         <button
-                            onClick={() => { setIsTakingExam(false); setSubmitDone(false) }}
-                            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors"
+                            onClick={() => { 
+                                if (isTakingExam) {
+                                    setIsTakingExam(false); 
+                                    setSubmitDone(false);
+                                } else {
+                                    setSelectedExam(null);
+                                }
+                            }}
+                            className="p-1.5 md:p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors"
                         >
-                            <span className="material-symbols-outlined">arrow_back</span>
+                            <span className="material-symbols-outlined text-[20px]">arrow_back</span>
                         </button>
                     )}
-                    <div>
-                        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                            <span className="material-symbols-outlined text-indigo-500 text-[22px]">
+                    <div className="min-w-0">
+                        <h2 className="text-base md:text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2 truncate">
+                            <span className="material-symbols-outlined text-indigo-500 text-[20px] md:text-[22px] shrink-0">
                                 {isTakingExam ? 'edit_square' : 'library_books'}
                             </span>
                             {isTakingExam ? 'Đang làm bài' : 'Thư viện Đề thi'}
                         </h2>
                         {!isTakingExam && (
-                            <p className="text-xs text-slate-400">Hỗ trợ phân tích & luyện tập trực tiếp</p>
+                            <p className="text-[10px] md:text-xs text-slate-400 truncate">Học tập & luyện tập trực tiếp</p>
                         )}
                     </div>
                 </div>
 
-                {!isTakingExam && (
-                    <div className="relative w-64 sm:w-80">
-                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px] pointer-events-none">search</span>
+                {!isTakingExam && !selectedExam && (
+                    <div className="relative w-40 sm:w-80">
+                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] pointer-events-none">search</span>
                         <input
                             type="text"
-                            placeholder="Tìm kiếm đề thi…"
-                            className="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border border-transparent rounded-xl text-sm
+                            placeholder="Tìm kiếm..."
+                            className="w-full pl-9 pr-3 py-1.5 bg-slate-100 dark:bg-slate-800 border border-transparent rounded-lg text-xs md:text-sm
                                 focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-700 outline-none transition-all"
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
@@ -545,7 +595,10 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
 
                 {/* ── Sidebar ── */}
                 {!isTakingExam && (
-                    <aside className="w-72 shrink-0 border-r border-slate-200 dark:border-slate-800 overflow-y-auto p-4 space-y-2 bg-slate-50/60 dark:bg-slate-950">
+                    <aside className={clsx(
+                        "w-full md:w-72 shrink-0 border-r border-slate-200 dark:border-slate-800 overflow-y-auto p-4 space-y-2 bg-slate-50/60 dark:bg-slate-950 transition-all",
+                        selectedExam ? "hidden md:block" : "block"
+                    )}>
                         {filteredExams.length === 0
                             ? <p className="text-center text-sm text-slate-400 pt-10">Không tìm thấy đề nào.</p>
                             : filteredExams.map(ex => (
@@ -576,7 +629,7 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                                 animate={{ x: 0, opacity: 1 }}
                                 exit={{ x: -30, opacity: 0 }}
                                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                className="p-6 md:p-10 max-w-3xl mx-auto pb-20 space-y-10"
+                                className="p-4 md:p-10 max-w-3xl mx-auto pb-20 space-y-6 md:space-y-10"
                             >
                                 {/* Title */}
                                 <div>
@@ -586,31 +639,31 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                                     </h1>
                                 </div>
 
-                                <section className="space-y-8">
+                                <section className="space-y-6 md:space-y-8">
                                     {/* Reading passage */}
-                                    <div className="p-6 rounded-3xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+                                    <div className="p-4 md:p-6 rounded-2xl md:rounded-3xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50/50 dark:bg-indigo-950/20 blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-indigo-100/50" />
                                         
                                         <div className="flex items-center justify-between mb-6 relative z-10">
                                             <div className="flex items-center gap-2">
-                                                <span className="w-1.5 h-4 rounded-full bg-indigo-500 inline-block shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
-                                                <h3 className="text-[11px] font-black uppercase tracking-widest text-indigo-500">
+                                                <span className="w-1 h-3 md:w-1.5 md:h-4 rounded-full bg-indigo-500 inline-block shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
+                                                <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-indigo-500">
                                                     Phần Đọc hiểu — Ngữ liệu
                                                 </h3>
                                             </div>
                                             <button
                                                 onClick={analyzeMaterial}
                                                 disabled={loadingAnalysis}
-                                                className="flex items-center gap-2 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-all border border-indigo-100 dark:border-indigo-800/50 disabled:opacity-50"
+                                                className="flex items-center gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-all border border-indigo-100 dark:border-indigo-800/50 disabled:opacity-50"
                                             >
-                                                <span className="material-symbols-outlined text-[16px] animate-pulse">
+                                                <span className="material-symbols-outlined text-sm md:text-[16px]">
                                                     {loadingAnalysis ? 'sync' : 'psychology'}
                                                 </span>
-                                                {loadingAnalysis ? 'Đang phân tích...' : 'Phân tích sâu ngữ liệu'}
+                                                {loadingAnalysis ? 'Đang nghĩ...' : 'Phân tích sâu'}
                                             </button>
                                         </div>
 
-                                        <div className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-[2] font-serif relative z-10 bg-slate-50/50 dark:bg-slate-900/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800/50">
+                                        <div className="text-[13px] md:text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-[1.8] md:leading-[2] font-serif relative z-10 bg-slate-50/50 dark:bg-slate-900/50 p-4 md:p-6 rounded-xl md:rounded-2xl border border-slate-100 dark:border-slate-800/50">
                                             {normalizeVN(
                                                 selectedExam.sections.doc_hieu
                                                     ? selectedExam.sections.doc_hieu.split(/Câu\s*\d+[\.\:\s]/i)[0]
@@ -736,7 +789,7 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.2 }}
-                                className="p-6 md:p-10 max-w-4xl mx-auto pb-16 space-y-6"
+                                className="p-4 md:p-10 max-w-4xl mx-auto pb-16 space-y-6"
                             >
                                 {/* Title row */}
                                 <div className="flex items-start justify-between gap-4">

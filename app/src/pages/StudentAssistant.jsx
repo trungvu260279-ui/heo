@@ -16,6 +16,10 @@ const LOCAL_API_KEYS_TEXT = import.meta.env.VITE_GEMINI_API_KEYS || import.meta.
 const LOCAL_API_KEYS = LOCAL_API_KEYS_TEXT.split(',').map(k => k.trim()).filter(Boolean)
 const LOCAL_MODEL_NAME = import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash'
 
+const LOCAL_GPT_KEYS_TEXT = import.meta.env.VITE_OPENAI_API_KEYS || ''
+const LOCAL_GPT_KEYS = LOCAL_GPT_KEYS_TEXT.split(',').map(k => k.trim()).filter(Boolean)
+const LOCAL_GPT_MODEL = import.meta.env.VITE_OPENAI_MODEL || 'gpt-4o'
+
 const SYSTEM_PROMPT = `Bạn là chatbot hỗ trợ ôn thi tốt nghiệp THPT (TN K12) môn Ngữ văn. 
 Nhiệm vụ: Hướng dẫn tư duy, hỗ trợ viết văn, chấm bài và giải thích đáp án dựa trên tài liệu ôn thi hệ thống.
 
@@ -30,12 +34,13 @@ QUY TẮC PHẢN HỒI (Tối ưu Token):
 
 PHONG CÁCH: Ngôn ngữ học sinh lớp 12, dễ hiểu, trình bày có mục (bullet points), ví dụ ngắn gọn. Luôn bám sát tài liệu hệ thống. Nếu học sinh sai, hãy chỉ lỗi và hướng dẫn sửa ngay.`
 
-// Mock data based on the provided aesthetic
+// Constants
 const WELCOME_MESSAGE = {
+    id: 'welcome',
     role: 'assistant',
-    content: `Chào mừng cậu tới không gian học thuật chuyên sâu. Tớ là **Gia sư AI**, người sẽ cùng cậu khám phá vẻ đẹp của ca từ, sự sắc sảo của lập luận và chiều sâu của tư duy văn học.
+    content: `Chào cậu nhé! Tớ là **Gia sư AI** đây. Tớ rất vui được đồng hành cùng cậu chinh phục môn Ngữ văn.
 
-Hôm nay cậu muốn chúng mình cùng phân tích tác phẩm nào? Hay cậu cần tớ hỗ trợ rèn luyện kĩ năng viết bài?`,
+Hôm nay cậu muốn chúng mình cùng "giải thích" tác phẩm nào? Hay cậu cần tớ hỗ trợ rèn luyện kĩ năng viết bài để bứt phá điểm số?`,
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
@@ -63,13 +68,17 @@ export default function StudentAssistant() {
     const [input, setInput] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [retryStatus, setRetryStatus] = useState('')
+    const [showQuickActions, setShowQuickActions] = useState(false)
+    const [kbData, setKbData] = useState(null)
     const [attachedFiles, setAttachedFiles] = useState([])
     const location = useLocation()
     const navigate = useNavigate()
     const chatEndRef = useRef(null)
     const hasTriggeredAnalysisRef = useRef(false)
+    const hasTriggeredAnalysisEffectRef = useRef(false) // Using a clearer name for the ref
     const fileInputRef = useRef(null)
     const inputRef = useRef(null)
+    const lastSendTimeRef = useRef(0)
 
     const scrollToBottom = () => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -79,42 +88,90 @@ export default function StudentAssistant() {
         scrollToBottom()
     }, [messages, isLoading])
 
+    // Load Knowledge Base
+    useEffect(() => {
+        const loadKB = async () => {
+            try {
+                const res = await fetch('/ngu_van_parsed.json')
+                if (res.ok) {
+                    const data = await res.json()
+                    setKbData(data)
+                    console.log("[StudentAssistant] Knowledge Base loaded:", data.length, "files");
+                }
+            } catch (e) {
+                console.error("Failed to load knowledge base:", e)
+            }
+        }
+        loadKB()
+    }, [])
+
+    const searchKnowledge = (query) => {
+        if (!kbData) return null
+        const keywords = query.toLowerCase().split(' ').filter(w => w.length > 3)
+        let bestMatch = null
+        let maxScore = 0
+
+        for (const item of kbData) {
+            for (const section of item.sections) {
+                let score = 0
+                const contentStr = section.content.join(' ').toLowerCase()
+                const headingStr = (section.heading || "").toLowerCase()
+
+                keywords.forEach(kw => {
+                    if (headingStr.includes(kw)) score += 10
+                    if (contentStr.includes(kw)) score += 2
+                })
+
+                if (score > maxScore) {
+                    maxScore = score
+                    bestMatch = {
+                        title: item.metadata?.title || section.heading,
+                        content: section.content.slice(0, 10).join('\n'), // Limit to avoid token blast
+                        subsections: section.subsections?.map(s => s.heading).join(', ')
+                    }
+                }
+            }
+        }
+        return maxScore > 5 ? bestMatch : null
+    }
+
     // Handle incoming Exam Analysis data
     useEffect(() => {
-        if (location.state?.type === 'EXAM_ANALYSIS' && location.state.data && !hasTriggeredAnalysisRef.current) {
-            hasTriggeredAnalysisRef.current = true;
-            const { title, result, answers } = location.state.data;
-            
-            // Format answers for better readability in prompt
-            let formattedAnswers = "";
-            if (answers) {
-                Object.entries(answers).forEach(([key, value]) => {
-                    const label = key === 'nlxh' ? 'Nghị luận xã hội' : key === 'nlvh' ? 'Nghị luận văn học' : key.replace('q_', 'Câu ');
-                    formattedAnswers += `\n[${label}]: ${value}\n`;
-                });
+        if (location.state?.type === 'EXAM_ANALYSIS' && location.state.data && !hasTriggeredAnalysisEffectRef.current) {
+            hasTriggeredAnalysisEffectRef.current = true;
+            const { title, result, answers, examData, archiveId } = location.state.data;
+
+            if (archiveId) {
+                const analysisPrompt = `Tớ vừa làm xong đề: **${title}** (Mã: **${archiveId}**). Cậu phân tích giúp tớ nhé!`;
+                navigate(location.pathname, { replace: true, state: {} });
+                setTimeout(() => {
+                    handleSend(analysisPrompt);
+                }, 500);
+                return;
+            } else {
+                const passage = examData?.sections?.doc_hieu || "";
+                let formattedContext = `**PHẦN ĐỌC HIỂU (Văn bản):**\n${passage}\n\n**CHI TIẾT BÀI LÀM:**\n`;
+                if (examData?.sections?.doc_hieu_questions) {
+                    examData.sections.doc_hieu_questions.forEach((q, idx) => {
+                        const answer = answers?.[`q_${idx}`] || "(Học sinh không trả lời)";
+                        formattedContext += `Câu ${idx + 1} [${q.label}]: ${q.text}\n-> Trả lời: ${answer}\n\n`;
+                    });
+                }
+                if (examData?.sections?.nlxh) {
+                    const answer = answers?.nlxh || "(Học sinh không trả lời)";
+                    formattedContext += `Câu NLXH: ${examData.sections.nlxh}\n-> Trả lời: ${answer}\n\n`;
+                }
+                if (examData?.sections?.nlvh) {
+                    const answer = answers?.nlvh || "(Học sinh không trả lời)";
+                    formattedContext += `Câu NLVH: ${examData.sections.nlvh}\n-> Trả lời: ${answer}\n\n`;
+                }
+
+                const analysisPrompt = `Tớ vừa làm xong đề: **${title}**. Cậu phân tích giúp tớ nhé!`;
+                navigate(location.pathname, { replace: true, state: {} });
+                setTimeout(() => {
+                    handleSend(analysisPrompt);
+                }, 500);
             }
-
-            const analysisPrompt = `Tớ vừa hoàn thành đề đề: **"${title}"** (Điểm: ${result.overall}/10).
-[Hệ thống: Phân tích trọng tâm, ngắn gọn, tránh lan man]
-
-Dưới đây là chi tiết bài làm:
-${formattedAnswers}
-
-Cậu hãy "mổ xẻ" nhanh bài làm này theo 3 ý chính:
-1. **Lỗi chí mạng**: Vấn đề cụ thể nhất về tư duy/diễn đạt đang kéo điểm của tớ xuống.
-2. **Upgrade nhanh**: Cách nâng cấp luận điểm để bứt phá lên mức Giỏi.
-3. **Chốt hạ**: Một lời khuyên ngắn gọn để định hình phong cách cá nhân.
-
-Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng, không mở bài/kết bài dài dòng.`;
-
-            // Clear location state immediately to prevent re-triggering on refresh
-            const stateData = location.state.data;
-            navigate(location.pathname, { replace: true, state: {} });
-
-            // Small delay to ensure component is fully ready and initial message is shown
-            setTimeout(() => {
-                handleSend(analysisPrompt);
-            }, 500);
         }
     }, [location.state]);
 
@@ -122,26 +179,43 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
         fileInputRef.current?.click()
     }
 
+    const quickActions = attachedFiles.length > 0 ? [
+        { id: 'summary', label: 'Tóm tắt nội dung toàn bộ tài liệu', icon: 'summarize', prompt: 'Hãy tóm tắt ngắn gọn những ý chính quan trọng nhất trong tài liệu này.' },
+        { id: 'explain_exam', label: 'Giải thích hoặc hướng dẫn dạng đề cụ thể', icon: 'quiz', prompt: 'Dựa trên tài liệu này, hãy hướng dẫn tớ phương pháp làm các dạng câu hỏi thường gặp.' },
+        { id: 'sample_writing', label: 'Viết đoạn văn mẫu theo yêu cầu', icon: 'edit_note', prompt: 'Hãy dựa vào ngữ liệu này để viết cho tớ một đoạn văn mẫu đạt điểm cao (khoảng 200 chữ).' },
+        { id: 'export', label: 'Chỉnh sửa hoặc xuất lại file', icon: 'ios_share', prompt: 'Hãy giúp tớ rà soát lỗi diễn đạt và trình bày lại nội dung này chuyên nghiệp hơn.' },
+    ] : [
+        { id: 'char_analysis', label: 'Kĩ năng: Phân tích nhân vật', icon: 'person_search', prompt: 'Hãy hướng dẫn tớ phương pháp phân tích/cảm nhận một đặc điểm của nhân vật truyện.' },
+        { id: 'narrator', label: 'Kĩ năng: Phân tích người kể chuyện', icon: 'record_voice_over', prompt: 'Hãy giúp tớ phân tích vai trò và đặc điểm của người kể chuyện trong văn bản.' },
+        { id: 'event_analysis', label: 'Kĩ năng: Phân tích tình tiết tiêu biểu', icon: 'auto_awesome_motion', prompt: 'Hãy hướng dẫn tớ cách phân tích sự kiện, tình tiết hoặc chi tiết tiêu biểu trong truyện.' },
+        { id: 'skill', label: 'Giải thích kĩ năng / Lí luận văn học', icon: 'menu_book', prompt: 'Hãy giải thích cho tớ kĩ năng viết bài hoặc một khái niệm lí luận văn học quan trọng.' },
+        { id: 'idea', label: 'Gợi ý ý tưởng & Luận điểm', icon: 'lightbulb', prompt: 'Cậu hãy gợi ý cho tớ những ý tưởng và luận điểm đắt giá cho một đề văn cụ thể nhé.' },
+    ]
+
     const handleFileChange = async (e) => {
         const files = Array.from(e.target.files)
         if (files.length === 0) return
 
-        const newFiles = await Promise.all(files.map(async file => {
-            const preview = file.type.startsWith('image/') ? URL.createObjectURL(file) : null
-            let extractedText = null
-            if (file.name.endsWith('.docx')) extractedText = await extractDocxText(file)
-            else if (file.name.endsWith('.pdf')) extractedText = await extractPdfText(file)
-            
-            return {
-                file,
-                name: file.name,
-                type: file.type,
-                preview,
-                extractedText
-            }
-        }))
+        const newFiles = await Promise.all(
+            files
+                .filter(file => !file.type.startsWith('image/')) // Filter out images
+                .map(async file => {
+                    let extractedText = null
+                    if (file.name.endsWith('.docx')) extractedText = await extractDocxText(file)
+                    else if (file.name.endsWith('.pdf')) extractedText = await extractPdfText(file)
 
-        setAttachedFiles(prev => [...prev, ...newFiles])
+                    return {
+                        file,
+                        name: file.name,
+                        type: file.type,
+                        extractedText
+                    }
+                })
+        )
+
+        const filteredFiles = newFiles.filter(Boolean);
+        setAttachedFiles(prev => [...prev, ...filteredFiles])
+        if (filteredFiles.length > 0) setShowQuickActions(true) // Show menu after file upload
         e.target.value = ''
     }
 
@@ -162,7 +236,7 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
         }
 
         if (input.trim() || attachedFiles.length > 0) {
-            const combinedInput = input.trim() 
+            const combinedInput = input.trim()
                 ? `${input.trim()}\n\n[Hệ thống: Thực hiện ${label}]\n${actionPrompt}`
                 : `[Hệ thống: Thực hiện ${label}]\n${actionPrompt}`
             handleSend(combinedInput)
@@ -173,16 +247,27 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
     }
 
     const handleSend = async (overrideInput) => {
-        const finalInput = typeof overrideInput === 'string' ? overrideInput : input
-        if (!finalInput.trim() && attachedFiles.length === 0) return
-        if (isLoading) return
+        const finalInput = typeof overrideInput === 'string' ? overrideInput : input;
+        console.log("[handleSend] Called with:", { overrideInput, input, finalInput });
+        if (!finalInput.trim() && attachedFiles.length === 0) return;
+        const now = Date.now();
+        if (now - lastSendTimeRef.current < 5000) {
+            setRetryStatus(`Vui lòng đợi ${Math.ceil((5000 - (now - lastSendTimeRef.current)) / 1000)} giây để tránh spam.`);
+            setTimeout(() => setRetryStatus(''), 2000);
+            return;
+        }
+        if (isLoading) return;
+
+        lastSendTimeRef.current = now;
 
         const userMsg = {
+            id: Date.now() + Math.random(),
             role: 'user',
             content: finalInput,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             attachments: attachedFiles
         }
+        console.log("[handleSend] Adding user message:", userMsg);
 
         setMessages(prev => [...prev, userMsg])
         setInput('')
@@ -190,20 +275,17 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
 
         // Prepare context for API
         const parts = [{ text: finalInput }]
+
+        // Inject Knowledge Base context if relevant
+        const kbMatch = searchKnowledge(finalInput)
+        if (kbMatch) {
+            parts.push({
+                text: `\n[KIẾN THỨC HỆ THỐNG - ${kbMatch.title}]:\n${kbMatch.content}\n\n(Lưu ý: Hãy ưu tiên sử dụng kiến thức này để trả lời sinh viên nếu phù hợp).`
+            })
+        }
+
         for (const file of attachedFiles) {
-            if (file.type.startsWith('image/')) {
-                const base64Data = await new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result.split(',')[1]);
-                    reader.readAsDataURL(file.file);
-                });
-                parts.push({
-                    inlineData: {
-                        data: base64Data,
-                        mimeType: file.type
-                    }
-                })
-            } else if (file.extractedText) {
+            if (file.extractedText) {
                 parts.push({
                     text: `\n[Nội dung từ tệp ${file.name}]:\n${file.extractedText}`
                 })
@@ -223,24 +305,59 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
         setAttachedFiles([])
 
         const performRequest = async () => {
-            let aiMsgAdded = false;
+            const aiMsgId = Date.now() + Math.random();
             let aiText = '';
-            let currentAiMsg = null;
+
+            // Detect Archive ID in prompt and inject context
+            let finalParts = [...parts];
+            const archiveMatch = finalInput.match(/VANS-[A-Z0-9]{4}/);
+            if (archiveMatch) {
+                try {
+                    const archiveId = archiveMatch[0];
+                    // Retrieve from sessionStorage instead of backend
+                    const rawData = sessionStorage.getItem(archiveId);
+                    if (rawData) {
+                        const data = JSON.parse(rawData);
+                        let context = `\n[HỆ THỐNG: DỮ LIỆU ĐỐI CHIẾU (${archiveId})]\n`;
+                        context += `Tiêu đề: ${data.title}\n`;
+                        context += `Ngữ liệu: ${data.examData?.sections?.doc_hieu}\n\n`;
+                        context += `Bài giải cụ thể:\n`;
+                        if (data.answers) {
+                            Object.entries(data.answers).forEach(([k, v]) => {
+                                const qLabel = k.replace('q_', 'Câu ');
+                                context += `- ${qLabel}: ${v}\n`;
+                            });
+                        }
+                        context += `\n[CHỈ THỊ CỰC KỲ QUAN TRỌNG]: Hãy phản hồi cực kỳ ngắn gọn. 
+Bắt đầu bằng 1 nhận xét Tổng quan (Điểm & Ấn tượng chung). 
+Sau đó liệt kê danh sách các phần (Đọc hiểu, NLXH, NLVH) hoặc các câu hỏi để học sinh chọn 'mổ xẻ' sâu từng mục một. 
+TUYỆT ĐỐI KHÔNG phân tích tất cả cùng lúc để tiết kiệm token và tránh làm loãng thông tin. 
+Hãy hỏi: "Cậu muốn chúng mình bắt đầu 'mổ xẻ' từ câu/phần nào trước?"`;
+                        context += `\n[KẾT THÚC DỮ LIỆU]`;
+                        finalParts.push({ text: context });
+                    } else {
+                        console.warn("[StudentAssistant] Archive ID not found in session storage:", archiveId);
+                    }
+                } catch (e) {
+                    console.error("Failed to inject archive context from session", e);
+                }
+            }
 
             const updateAiMessage = (newText) => {
                 aiText = newText;
+                console.log("[updateAiMessage] Updating AI message:", { aiMsgId, text: aiText.substring(0, 50) + "..." });
                 setMessages(prev => {
-                    const next = [...prev];
-                    if (!aiMsgAdded) {
-                        currentAiMsg = {
+                    const aiMsgIndex = prev.findIndex(m => m.id === aiMsgId);
+                    if (aiMsgIndex === -1) {
+                        return [...prev, {
+                            id: aiMsgId,
                             role: 'assistant',
                             content: aiText,
                             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                        };
-                        aiMsgAdded = true;
-                        return [...next, currentAiMsg];
+                        }];
                     } else {
-                        next[next.length - 1] = { ...next[next.length - 1], content: aiText };
+                        const next = [...prev];
+                        next[aiMsgIndex] = { ...next[aiMsgIndex], content: aiText };
                         return next;
                     }
                 });
@@ -251,7 +368,7 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
                 const res = await fetch('/api/gemini-stream', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: parts, history: chatHistory })
+                    body: JSON.stringify({ prompt: finalParts, history: chatHistory })
                 });
 
                 if (!res.ok) throw new Error("Backend API failed");
@@ -284,7 +401,7 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
                 }
             } catch (err) {
                 console.warn("Backend stream failed, rolling local...", err);
-                
+
                 if (LOCAL_API_KEYS.length > 0) {
                     let success = false;
                     for (let i = 0; i < LOCAL_API_KEYS.length; i++) {
@@ -304,7 +421,7 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
                             })
 
                             const result = await chat.sendMessageStream(parts)
-                            
+
                             for await (const chunk of result.stream) {
                                 const text = chunk.text()
                                 if (text) {
@@ -320,20 +437,152 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
                     }
 
                     if (!success) {
-                        setRetryStatus('');
-                        setMessages(prev => [...prev, {
-                            role: 'assistant',
-                            content: 'Tất cả API Keys đều đã hết hạn mức (Quota). Cậu vui lòng đợi một chút hoặc quay lại sau nhé!',
-                            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                        }])
+                        // NEW FALLBACK: GPT (OpenAI) for better file analysis/grading
+                        if (LOCAL_GPT_KEYS.length > 0) {
+                            for (let i = 0; i < LOCAL_GPT_KEYS.length; i++) {
+                                try {
+                                    setRetryStatus('Đang gọi GPT phân tích chuyên sâu...');
+                                    const gptRes = await fetch('https://api.openai.com/v1/chat/completions', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${LOCAL_GPT_KEYS[i]}`
+                                        },
+                                        body: JSON.stringify({
+                                            model: LOCAL_GPT_MODEL,
+                                            messages: [
+                                                { role: 'system', content: SYSTEM_PROMPT },
+                                                ...chatHistory.map(h => ({
+                                                    role: h.role === 'model' ? 'assistant' : 'user',
+                                                    content: h.parts[0].text
+                                                })),
+                                                { role: 'user', content: finalInput }
+                                            ],
+                                            stream: true
+                                        })
+                                    });
+
+                                    if (!gptRes.ok) throw new Error("GPT API failed");
+
+                                    const reader = gptRes.body.getReader();
+                                    const decoder = new TextDecoder();
+                                    let gptBuffer = '';
+
+                                    while (true) {
+                                        const { done, value } = await reader.read();
+                                        if (done) break;
+
+                                        gptBuffer += decoder.decode(value, { stream: true });
+                                        const lines = gptBuffer.split('\n');
+                                        gptBuffer = lines.pop();
+
+                                        for (const line of lines) {
+                                            if (line.trim().startsWith('data: ')) {
+                                                const dataStr = line.trim().substring(6);
+                                                if (dataStr === '[DONE]') continue;
+                                                try {
+                                                    const data = JSON.parse(dataStr);
+                                                    const content = data.choices[0]?.delta?.content;
+                                                    if (content) {
+                                                        setRetryStatus('');
+                                                        aiText += content;
+                                                        updateAiMessage(aiText);
+                                                    }
+                                                } catch (e) { }
+                                            }
+                                        }
+                                    }
+                                    success = true;
+                                    break;
+                                } catch (gptErr) {
+                                    console.error(`GPT Key ${i} failed:`, gptErr);
+                                }
+                            }
+                        }
+                    }
+
+                    if (!success) {
+                        // FINAL FALLBACK: Pollinations AI with Retry logic
+                        let pollinationsSuccess = false;
+                        const maxRetries = 3;
+
+                        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                            try {
+                                setRetryStatus(`Đang kết nối dự phòng (Lần ${attempt})...`);
+                                const pollinationsRes = await fetch('https://text.pollinations.ai/', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        messages: [
+                                            { role: 'system', content: SYSTEM_PROMPT },
+                                            { role: 'user', content: finalInput }
+                                        ],
+                                        seed: Math.floor(Math.random() * 1000000)
+                                    })
+                                });
+
+                                if (!pollinationsRes.ok) throw new Error("Pollinations failed");
+
+                                const pollinationsText = await pollinationsRes.text();
+                                if (pollinationsText) {
+                                    setRetryStatus('');
+                                    updateAiMessage(pollinationsText);
+                                    pollinationsSuccess = true;
+                                    break;
+                                }
+                            } catch (pErr) {
+                                console.warn(`Pollinations Attempt ${attempt} failed:`, pErr);
+                                if (attempt === maxRetries) {
+                                    setRetryStatus('');
+                                    setMessages(prev => [...prev, {
+                                        role: 'assistant',
+                                        content: 'Hệ thống đang bận một chút do lượt truy cập cao. Cậu vui lòng thử lại sau giây lát nhé!',
+                                        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                                    }]);
+                                }
+                            }
+                        }
                     }
                 } else {
-                    setRetryStatus('');
-                    setMessages(prev => [...prev, {
-                        role: 'assistant',
-                        content: 'Hệ thống đang bận một chút. Cậu vui lòng thử lại sau giây lát nhé!',
-                        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                    }])
+                    // Same Pollinations logic if no LOCAL_API_KEYS
+                    let pollinationsSuccess = false;
+                    const maxRetries = 3;
+                    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                        try {
+                            setRetryStatus(`Đang kết nối dự phòng (Lần ${attempt})...`);
+                            const pollinationsRes = await fetch('https://text.pollinations.ai/', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    messages: [
+                                        { role: 'system', content: SYSTEM_PROMPT },
+                                        { role: 'user', content: finalInput }
+                                    ],
+                                    seed: Math.floor(Math.random() * 1000000)
+                                })
+                            });
+
+                            if (!pollinationsRes.ok) throw new Error("Pollinations failed");
+
+                            const pollinationsText = await pollinationsRes.text();
+                            if (pollinationsText) {
+                                setRetryStatus('');
+                                updateAiMessage(pollinationsText);
+                                pollinationsSuccess = true;
+                                break;
+                            }
+                        } catch (pErr) {
+                            console.warn(`Pollinations Attempt ${attempt} failed:`, pErr);
+                            if (attempt === maxRetries) {
+                                setRetryStatus('');
+                                setMessages(prev => [...prev, {
+                                    role: 'assistant',
+                                    content: 'Hệ thống đang bận. Cậu vui lòng thử lại sau giây lát nhé!',
+                                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                                }]);
+                            }
+                        }
+                    }
                 }
             }
         };
@@ -353,24 +602,92 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
                 .scholar-font { font-family: 'Merriweather', serif; }
                 .display-font { font-family: 'Playfair Display', serif; }
                 
-                .markdown-body h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: #634a3a; margin-bottom: 1rem; border-left: 3px solid #634a3a; padding-left: 0.75rem; }
-                .markdown-body blockquote { font-style: italic; background-color: #f3f0e8; border-left: 3px solid #634a3a; padding: 1rem; margin: 1.5rem 0; color: #4a372d; }
-                .markdown-body p { margin-bottom: 0.75rem; line-height: 1.7; }
+                .markdown-body h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: #634a3a; margin: 1.5rem 0 0.75rem 0; border-left: 3px solid #634a3a; padding-left: 0.75rem; }
+                .markdown-body blockquote { font-style: italic; background-color: #f3f0e8; border-left: 3px solid #634a3a; padding: 0.75rem 1rem; margin: 1rem 0; color: #4a372d; border-radius: 0 8px 8px 0; }
+                .markdown-body p { margin-bottom: 0.5rem; line-height: 1.6; }
                 .markdown-body b, .markdown-body strong { color: #634a3a; font-weight: 700; }
+                .markdown-body ul, .markdown-body ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+                .markdown-body li { margin-bottom: 0.25rem; }
                 
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-                /* Custom Scrollbar for Chat Area */
-                .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+                .custom-scrollbar::-webkit-scrollbar { width: 5px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background: #634a3a30; border-radius: 10px; }
-                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #634a3a50; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: #634a3a20; border-radius: 10px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #634a3a40; }
 
-                .paper-shadow { box-shadow: 0 4px 20px -2px rgba(99, 74, 58, 0.1); }
+                .paper-shadow { box-shadow: 0 2px 15px -3px rgba(99, 74, 58, 0.08); }
+                .ai-bubble { background: white; border: 1px solid rgba(99, 74, 58, 0.15); border-radius: 4px 24px 24px 24px; }
+                .user-bubble { background: #634a3a; color: white; border-radius: 24px 4px 24px 24px; box-shadow: 0 4px 15px -2px rgba(99, 74, 58, 0.2); }
+                
+                .quick-action-card { 
+                    background: white; 
+                    border: 1px solid rgba(99, 74, 58, 0.1); 
+                    transition: all 0.2s ease;
+                }
+                .quick-action-card:hover { 
+                    background: #fdfcf9; 
+                    border-color: #634a3a; 
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px -2px rgba(99, 74, 58, 0.1);
+                }
             `}</style>
 
-            <main className="flex flex-1 flex-col scholar-font">
+            <main className="flex flex-1 flex-col scholar-font relative">
+                {/* Quick Actions Overlay */}
+                <AnimatePresence>
+                    {showQuickActions && (
+                        <div className="absolute inset-0 z-50 flex items-end justify-center px-4 pb-32 md:pb-40 pointer-events-none">
+                            <motion.div
+                                initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                                className="w-full max-w-2xl bg-white/95 backdrop-blur-md rounded-3xl p-6 paper-shadow border border-[#634a3a]/20 pointer-events-auto"
+                            >
+                                <div className="flex items-center justify-between mb-6 px-2">
+                                    <h3 className="display-font text-lg font-bold text-slate-800">
+                                        {attachedFiles.length > 0 ? "Bạn cần hỗ trợ gì với tài liệu này?" : "Hôm nay tớ có thể giúp gì cho cậu?"}
+                                    </h3>
+                                    <button
+                                        onClick={() => setShowQuickActions(false)}
+                                        className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 transition-colors"
+                                    >
+                                        <span className="material-symbols-outlined text-lg">close</span>
+                                    </button>
+                                </div>
+
+                                <div className="space-y-3">
+                                    {quickActions.map((action, idx) => (
+                                        <button
+                                            key={action.id}
+                                            onClick={() => {
+                                                setShowQuickActions(false);
+                                                handleSend(action.prompt);
+                                            }}
+                                            className="w-full flex items-center gap-4 p-4 rounded-2xl quick-action-card text-left group"
+                                        >
+                                            <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-[#634a3a]/5 text-[#634a3a] group-hover:bg-[#634a3a] group-hover:text-white transition-all">
+                                                <span className="material-symbols-outlined">{action.icon}</span>
+                                            </div>
+                                            <span className="flex-1 text-[15px] font-medium text-slate-700 group-hover:text-[#634a3a] transition-colors">
+                                                {action.label}
+                                            </span>
+                                            <span className="material-symbols-outlined text-slate-300 group-hover:text-[#634a3a] transition-colors text-sm">keyboard_return</span>
+                                        </button>
+                                    ))}
+
+                                    <button
+                                        onClick={() => setShowQuickActions(false)}
+                                        className="w-full py-3 mt-2 text-center text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
+                                    >
+                                        Bỏ qua để chat tự do
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
                 {/* Header */}
                 <header className="flex h-16 items-center justify-between border-b border-[#634a3a]/10 bg-white/80 dark:bg-slate-900/80 px-8 backdrop-blur-sm sticky top-0 z-10">
                     <div className="flex items-center gap-6">
@@ -380,7 +697,7 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
                         </div>
                         <h2 className="display-font text-lg font-bold text-slate-800 dark:text-white hidden md:block">Student AI <span className="text-[#634a3a]/50 text-sm font-normal">— Advanced Research</span></h2>
                     </div>
-                    
+
                     <div className="flex items-center gap-4">
                         <button className="material-symbols-outlined text-slate-500 hover:text-[#634a3a] transition-colors">settings</button>
                         <button className="material-symbols-outlined text-slate-500 hover:text-[#634a3a] transition-colors">notifications</button>
@@ -399,57 +716,49 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
                             {messages.map((msg, i) => (
                                 <motion.div
                                     key={i}
-                                    initial={{ opacity: 0, y: 15 }}
+                                    initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className={`flex items-start gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                                    className={`flex items-start gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
                                 >
-                                    {msg.role === 'assistant' && (
-                                        <div className="h-10 w-10 flex items-center justify-center rounded-full bg-[#634a3a] text-[#F9F7F2] shrink-0 scholar-shadow">
-                                            <span className="material-symbols-outlined text-xl">smart_toy</span>
-                                        </div>
-                                    )}
-
-                                    <div className={`flex flex-col gap-2 max-w-[85%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-                                        <div className={`rounded-2xl p-6 transition-all duration-300 relative group ${
-                                            msg.role === 'user'
-                                                ? 'bg-[#634a3a] text-white shadow-xl rounded-tr-none'
-                                                : 'bg-white dark:bg-slate-900 border border-[#634a3a]/10 shadow-sm paper-shadow rounded-tl-none'
+                                    <div className={`h-10 w-10 flex items-center justify-center rounded-full shrink-0 ${msg.role === 'user' ? 'bg-slate-200 dark:bg-slate-800' : 'bg-[#634a3a] text-[#F9F7F2]'
                                         }`}>
-                                            <div className={`text-[14px] md:text-base leading-relaxed ${msg.role === 'assistant' ? 'markdown-body' : ''}`}>
+                                        <span className="material-symbols-outlined text-xl">
+                                            {msg.role === 'user' ? 'person' : 'smart_toy'}
+                                        </span>
+                                    </div>
+
+                                    <div className={`flex flex-col gap-1.5 max-w-[80%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                                        <div className={`p-5 transition-all duration-300 relative group ${msg.role === 'user' ? 'user-bubble' : 'ai-bubble'
+                                            }`}>
+                                            <div className={`text-[15px] leading-relaxed ${msg.role === 'assistant' ? 'markdown-body text-slate-800 dark:text-slate-200' : 'text-white'}`}>
                                                 {msg.role === 'assistant' ? (
                                                     <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
                                                 ) : (
-                                                    <p>{msg.content}</p>
+                                                    <p className="whitespace-pre-wrap">{msg.content}</p>
                                                 )}
                                             </div>
                                             {msg.role === 'assistant' && (
-                                                <button 
+                                                <button
                                                     onClick={() => navigator.clipboard.writeText(msg.content)}
                                                     className="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity hover:text-[#634a3a]"
                                                     title="Copy response"
                                                 >
-                                                    <span className="material-symbols-outlined text-sm">content_copy</span>
+                                                    <span className="material-symbols-outlined text-[12px]">content_copy</span>
                                                 </button>
                                             )}
                                             {msg.attachments && msg.attachments.length > 0 && (
-                                                <div className="mt-3 flex flex-wrap gap-2">
+                                                <div className="mt-3 flex flex-wrap gap-2 text-[10px] text-white/70">
                                                     {msg.attachments.map((file, idx) => (
-                                                        <div key={idx} className="flex items-center gap-2 px-3 py-1.5 bg-black/10 rounded-lg text-xs">
-                                                            <span className="material-symbols-outlined text-sm">attachment</span>
-                                                            <span className="truncate max-w-[120px]">{file.name}</span>
+                                                        <div key={idx} className="flex items-center gap-1 bg-black/10 px-2 py-1 rounded">
+                                                            <span className="material-symbols-outlined text-[11px]">attachment</span>
+                                                            <span className="truncate max-w-[100px]">{file.name}</span>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
                                         </div>
-                                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest px-2">{msg.timestamp}</span>
+                                        <span className="text-[9px] text-slate-400 font-bold uppercase tracking-widest px-1">{msg.timestamp}</span>
                                     </div>
-
-                                    {msg.role === 'user' && (
-                                        <div className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-800 shrink-0 overflow-hidden border border-[#634a3a]/10 flex items-center justify-center">
-                                            <span className="material-symbols-outlined text-slate-500">person</span>
-                                        </div>
-                                    )}
                                 </motion.div>
                             ))}
                         </AnimatePresence>
@@ -485,13 +794,9 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
                             <div className="flex flex-wrap gap-2 mb-4 animate-in fade-in slide-in-from-bottom-2">
                                 {attachedFiles.map((file, idx) => (
                                     <div key={idx} className="relative group flex items-center gap-2 px-3 py-2 bg-white dark:bg-slate-900 border border-[#634a3a]/20 rounded-xl shadow-sm">
-                                        {file.preview ? (
-                                            <img src={file.preview} alt="preview" className="w-8 h-8 rounded-md object-cover" />
-                                        ) : (
-                                            <span className="material-symbols-outlined text-[#634a3a] text-lg">description</span>
-                                        )}
+                                        <span className="material-symbols-outlined text-[#634a3a] text-lg">description</span>
                                         <span className="text-xs font-bold text-slate-600 dark:text-slate-400 truncate max-w-[120px]">{file.name}</span>
-                                        <button 
+                                        <button
                                             onClick={() => setAttachedFiles(prev => prev.filter((_, i) => i !== idx))}
                                             className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
                                         >
@@ -505,28 +810,32 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
                         <div className="relative flex flex-col rounded-2xl border border-[#634a3a]/20 bg-white dark:bg-slate-900 shadow-2xl focus-within:ring-4 focus-within:ring-[#634a3a]/5 transition-all">
                             {/* Toolbar */}
                             <div className="flex items-center gap-1.5 md:gap-4 px-4 py-3 border-b border-[#634a3a]/5">
-                                <button 
+                                <button
                                     onClick={handleFileClick}
                                     className="material-symbols-outlined text-slate-400 hover:text-[#634a3a] transition-colors text-xl"
+                                    title="Tải tệp lên (.docx, .pdf)"
                                 >
                                     attach_file
                                 </button>
-                                <button 
-                                    onClick={handleFileClick}
-                                    className="material-symbols-outlined text-slate-400 hover:text-[#634a3a] transition-colors text-xl"
-                                >
-                                    image
-                                </button>
                                 <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
-                                
+
                                 <div className="flex-1 flex gap-2 overflow-x-auto no-scrollbar scroll-smooth">
+                                    <button
+                                        onClick={() => setShowQuickActions(true)}
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#634a3a]/5 hover:bg-[#634a3a]/10 text-[#634a3a] transition-all shrink-0"
+                                    >
+                                        <span className="material-symbols-outlined text-lg">magic_button</span>
+                                        <span className="text-[11px] font-bold display-font uppercase tracking-wider">Gợi ý nhanh</span>
+                                    </button>
+                                    <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
+
                                     {[
                                         { icon: 'analytics', label: 'Phân tích phong cách' },
                                         { icon: 'search_check', label: 'Tìm dẫn chứng' },
                                         { icon: 'format_quote', label: 'Trích dẫn' }
                                     ].map(tool => (
-                                        <button 
-                                            key={tool.label} 
+                                        <button
+                                            key={tool.label}
                                             onClick={() => handleQuickAction(tool.label)}
                                             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-[#634a3a]/10 text-slate-500 hover:text-[#634a3a] transition-all shrink-0"
                                         >
@@ -555,17 +864,7 @@ Yêu cầu: Trả lời đi thẳng vào vấn đề, dùng gạch đầu dòng,
                                 </button>
                             </div>
 
-                            <div className="px-5 pb-4 flex justify-between items-center opacity-60">
-                                <div className="flex items-center gap-6">
-                                    <label className="flex items-center gap-2 cursor-pointer group">
-                                        <input type="checkbox" className="rounded text-[#634a3a] focus:ring-[#634a3a] border-slate-300 dark:border-slate-700 bg-transparent" defaultChecked />
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 group-hover:text-[#634a3a] transition-colors">Academic DB</span>
-                                    </label>
-                                    <label className="flex items-center gap-2 cursor-pointer group">
-                                        <input type="checkbox" className="rounded text-[#634a3a] focus:ring-[#634a3a] border-slate-300 dark:border-slate-700 bg-transparent" />
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 group-hover:text-[#634a3a] transition-colors">OCR Analysis</span>
-                                    </label>
-                                </div>
+                            <div className="px-5 pb-4 flex justify-end items-center opacity-60">
                                 <p className="text-[10px] font-bold display-font text-[#634a3a] uppercase tracking-[0.2em]">Student AI Engine v3.0</p>
                             </div>
                         </div>

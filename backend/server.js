@@ -13,12 +13,14 @@ const DATA_DIR = process.env.DATA_DIR && process.env.DATA_DIR !== '/data'
     ? process.env.DATA_DIR 
     : path.join(__dirname, 'data');
 const DB_FILE = path.join(DATA_DIR, 'rankings.json');
+const ARCHIVE_DIR = path.join(DATA_DIR, 'archives');
 
 app.use(cors({ origin: '*', methods: ['GET', 'POST', 'OPTIONS'], allowedHeaders: ['Content-Type', 'Authorization'] }));
 app.use(express.json());
 
 // Initialize data directory
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
 if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, JSON.stringify([]));
 
 const getDbFilePath = () => DB_FILE;
@@ -49,9 +51,36 @@ app.post('/api/sheet', (req, res) => {
     }
 });
 
-const HTMLtoDOCX = require('html-to-docx');
+// Archive Exam Data
+app.post('/api/archive-exam', (req, res) => {
+    try {
+        if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
+        const data = req.body;
+        console.log("[Backend] Archiving exam data, size:", JSON.stringify(data).length);
+        const id = 'VANS-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+        const filePath = path.join(ARCHIVE_DIR, `${id}.json`);
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+        console.log("[Backend] Exam archived successfully with ID:", id);
+        res.json({ id });
+    } catch(e) {
+        console.error("[Backend] Archive Error:", e);
+        res.status(500).json({ error: e.message });
+    }
+});
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+app.get('/api/archive-exam/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        const filePath = path.join(ARCHIVE_DIR, `${id}.json`);
+        if (!fs.existsSync(filePath)) return res.status(404).json({ error: "Not found" });
+        const raw = fs.readFileSync(filePath, 'utf-8');
+        res.json(JSON.parse(raw));
+    } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+const HTMLtoDOCX = require('html-to-docx');
 
 app.post('/api/gemini-stream', async (req, res) => {
     const { prompt, history = [] } = req.body;
