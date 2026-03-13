@@ -1,11 +1,13 @@
 import { useState, useMemo, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import examsData from '../data/exams.json'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { motion, AnimatePresence } from 'framer-motion'
 import RadarChart from '../components/RadarChart'
 import { addEvaluation, saveExamHistoryDetail } from '../hooks/useEvalStore'
 
-const LOCAL_API_KEY = import.meta.env.VITE_GEMINI_API_KEY
+const LOCAL_API_KEYS_TEXT = import.meta.env.VITE_GEMINI_API_KEYS || import.meta.env.GEMINI_API_KEYS || import.meta.env.VITE_GEMINI_API_KEY || ''
+const LOCAL_API_KEYS = LOCAL_API_KEYS_TEXT.split(',').map(k => k.trim()).filter(Boolean)
 const LOCAL_MODEL_NAME = import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash'
 
 // ─── Fix Vietnamese diacritics & OCR Spacing Bugs ─────────────────────────────
@@ -37,14 +39,17 @@ function normalizeVN(text) {
 
 // ─── Gemini API call ──────────────────────────────────────────────────────────
 async function callGeminiAPI(instruction) {
-    if (import.meta.env.DEV && LOCAL_API_KEY) {
-        try {
-            const genAI = new GoogleGenerativeAI(LOCAL_API_KEY)
-            const model = genAI.getGenerativeModel({ model: LOCAL_MODEL_NAME })
-            const result = await model.generateContent(instruction)
-            return await result.response.text()
-        } catch (err) {
-            console.warn('Local Gemini failed, falling back to API proxy…', err)
+    // 1. Nếu đang ở môi trường dev có key trong .env -> gọi thẳng
+    if (import.meta.env.DEV && LOCAL_API_KEYS.length > 0) {
+        for (let i = 0; i < LOCAL_API_KEYS.length; i++) {
+            try {
+                const genAI = new GoogleGenerativeAI(LOCAL_API_KEYS[i])
+                const model = genAI.getGenerativeModel({ model: LOCAL_MODEL_NAME })
+                const result = await model.generateContent(instruction)
+                return await result.response.text()
+            } catch (err) {
+                console.warn(`Local Gemini Key ${i} failed, trying next...`, err)
+            }
         }
     }
     const res = await fetch('/api/gemini', {
@@ -171,7 +176,8 @@ function QuestionBlock({ label, text, id, onHint, loadingHint, hint, answer, set
 }
 
 // ─── Result Dashboard ────────────────────────────────────────────────────────
-function ResultDashboard({ result, onBack }) {
+function ResultDashboard({ result, onBack, examTitle, answers, examData }) {
+    const navigate = useNavigate();
     const { skills, overall, suggestions, commonErrors, comment } = result;
     const label = overall >= 8 ? 'Giỏi' : overall >= 7 ? 'Khá' : overall >= 5 ? 'Trung bình' : 'Cần cố gắng';
     const labelColor = overall >= 8 ? 'text-amber-500' : overall >= 7 ? 'text-blue-500' : overall >= 5 ? 'text-emerald-500' : 'text-red-500';
@@ -263,13 +269,32 @@ function ResultDashboard({ result, onBack }) {
                 </div>
             </div>
 
-            <div className="flex justify-center pt-6">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-6">
                 <button
                     onClick={onBack}
-                    className="px-8 py-3 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-sm hover:opacity-90 transition-all flex items-center gap-2"
+                    className="w-full sm:w-auto px-8 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
                 >
                     <span className="material-symbols-outlined text-[18px]">arrow_back</span>
                     Quay lại Thư viện
+                </button>
+                <button
+                    onClick={() => {
+                        navigate('/student-chat', { 
+                            state: { 
+                                type: 'EXAM_ANALYSIS',
+                                data: {
+                                    title: examTitle,
+                                    result: result,
+                                    answers: answers,
+                                    examData: examData
+                                }
+                            } 
+                        });
+                    }}
+                    className="w-full sm:w-auto px-8 py-3 rounded-2xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 dark:shadow-indigo-900/40"
+                >
+                    <span className="material-symbols-outlined text-[18px]">psychology</span>
+                    Phân tích chuyên sâu với AI Chat
                 </button>
             </div>
         </motion.div>
@@ -671,6 +696,9 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                                             <ResultDashboard 
                                                 result={gradingResult} 
                                                 onBack={() => { setIsTakingExam(false); setSubmitDone(false); setGradingResult(null); }} 
+                                                examTitle={selectedExam.title}
+                                                answers={answers}
+                                                examData={selectedExam}
                                             />
                                         ) : (
                                             <motion.button

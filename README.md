@@ -35,9 +35,14 @@
 - **AI Gợi ý Cải thiện**: phân tích điểm yếu và thế mạnh của học sinh
 - **Lịch sử Đánh giá**: timeline các bài kiểm tra với điểm số và xu hướng thay đổi
 
-### 🤖 Trợ lý AI (`/assistant`)
-- Chat AI hỗ trợ giải đáp câu hỏi Ngữ văn
-- Tích hợp Gemini API
+### 🤖 Student AI Assistant (`/student-chat`)
+- **Gia sư Ngữ văn chuyên sâu**: Tích hợp hệ thống Prompt học thuật (Scaffolding).
+- **Đa phương tiện**: Phân tích trực tiếp từ ảnh chụp bài làm, tệp PDF, Word.
+- **Công cụ bồi dưỡng**: Tích hợp thanh toolbar (Phân tích phong cách, Tìm dẫn chứng, Trích dẫn).
+- **Streaming & Fallback**: Hỗ trợ streaming real-time với cơ chế fallback local-first cho môi trường DEV.
+
+### 🤖 Trợ lý AI Cũ (`/assistant`)
+- Chat AI hỗ trợ giải đáp câu hỏi Ngữ văn cơ bản.
 
 ### 🏆 Xếp hạng Học sinh (`/ranking`)
 - **Podium Top 3** — bục vàng/bạc/đồng có spring animation, crown 👑
@@ -123,11 +128,10 @@ npm run dev
 - [ ] AI phân tích lộ trình học tập cá nhân hoá bằng Gemini API
 - [ ] So sánh năng lực với trung bình khối / toàn trường
 
-### 🤖 Trợ lý AI (mở rộng)
-- [ ] Giải thích tác phẩm văn học với trích dẫn ngữ cảnh
-- [ ] Chấm bài luận tự động với nhận xét chi tiết
-- [ ] Tạo câu hỏi trắc nghiệm theo chủ đề
-- [ ] Gợi ý tài liệu ôn tập cá nhân hoá
+### 🤖 Student AI (Chiến lược phát triển)
+- [ ] **Luyện đề → Phân tích sâu**: Kết nối trực tiếp phần Luyện đề (`Exams`) với Chat. Sau khi làm bài, học sinh có thể đẩy bài làm vào Chat để AI mổ xẻ, chấm chữa và gợi ý hướng phát triển.
+- [ ] **Tối ưu hóa Context**: Cải thiện thuật toán "quét" file để lọc nhiễu, tiết kiệm Token và tăng độ chính xác khi phân tích văn bản dài.
+- [ ] **Exclusion**: Tạm thời cô lập dữ liệu với phần Giáo viên để đảm bảo tính riêng tư và chuyên biệt của công cụ học tập.
 
 ### 📚 Thư viện & Đề thi
 - [ ] Quản lý kho bài giảng / video / tài liệu
@@ -148,8 +152,9 @@ npm run dev
 
 | Ngày | Thay đổi |
 |---|---|
+| 10/03/2026 | Triển khai **Student AI** (Scholar Mode): Hỗ trợ đa phương tiện, Streaming API, Toolbar học thuật |
+| 10/03/2026 | Tối ưu hóa giao diện: Gỡ bỏ Language Selector, thêm Custom Scrollbar, fix UI Border |
 | 05/03/2026 | Thêm trang Xếp hạng học sinh (`/ranking`) với podium, leaderboard, biểu đồ, modal |
-| 05/03/2026 | Tích hợp Recharts cho biểu đồ điểm số |
 | 01/03/2026 | Tính năng export CSV, bảo mật video YouTube |
 | 01/03/2026 | Sửa lỗi export crash & YouTube embed error |
 | 01/03/2026 | Thêm bảo mật video: anti-click, IFrame API controls |

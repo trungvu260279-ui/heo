@@ -12,7 +12,9 @@ import * as pdfjs from 'pdfjs-dist'
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`
 
 // Constants
-const LOCAL_API_KEY = import.meta.env.VITE_GEMINI_API_KEY
+// Constants
+const LOCAL_API_KEYS_TEXT = import.meta.env.VITE_GEMINI_API_KEYS || import.meta.env.GEMINI_API_KEYS || import.meta.env.VITE_GEMINI_API_KEY || ''
+const LOCAL_API_KEYS = LOCAL_API_KEYS_TEXT.split(',').map(k => k.trim()).filter(Boolean)
 const LOCAL_MODEL_NAME = import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash'
 
 // System Prompt Tối ưu (Condensed Prompt)
@@ -117,18 +119,20 @@ async function callStreamGeminiAPI(instruction, history = [], attachments = [], 
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         let fullText = '';
+        let buffer = '';
 
         while (true) {
             const { done, value } = await reader.read();
             if (done) break;
 
-            const chunk = decoder.decode(value);
-            const lines = chunk.split('\n');
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop(); // Keep partial line in buffer
 
             for (const line of lines) {
                 if (line.startsWith('data: ')) {
                     const dataStr = line.substring(6).trim();
-                    if (dataStr === '[DONE]') break;
+                    if (dataStr === '[DONE]') continue;
                     try {
                         const data = JSON.parse(dataStr);
                         if (data.text) {
@@ -143,18 +147,24 @@ async function callStreamGeminiAPI(instruction, history = [], attachments = [], 
     } catch (err) {
         console.warn("Backend stream failed, trying local...", err);
 
-        if (import.meta.env.DEV && LOCAL_API_KEY) {
-            const genAI = new GoogleGenerativeAI(LOCAL_API_KEY)
-            const model = genAI.getGenerativeModel({ model: LOCAL_MODEL_NAME })
-            const chat = model.startChat({ history: chatHistory })
-            const result = await chat.sendMessageStream(parts)
-            let fullText = ''
-            for await (const chunk of result.stream) {
-                const chunkText = chunk.text()
-                fullText += chunkText
-                onChunk(fullText)
+        if (import.meta.env.DEV && LOCAL_API_KEYS.length > 0) {
+            for (let i = 0; i < LOCAL_API_KEYS.length; i++) {
+                try {
+                    const genAI = new GoogleGenerativeAI(LOCAL_API_KEYS[i])
+                    const model = genAI.getGenerativeModel({ model: LOCAL_MODEL_NAME })
+                    const chat = model.startChat({ history: chatHistory })
+                    const result = await chat.sendMessageStream(parts)
+                    let fullText = ''
+                    for await (const chunk of result.stream) {
+                        const chunkText = chunk.text()
+                        fullText += chunkText
+                        onChunk(fullText)
+                    }
+                    return fullText
+                } catch (localErr) {
+                    console.warn(`Local Gemini Key ${i} failed, trying next...`, localErr)
+                }
             }
-            return fullText
         }
         throw err;
     }
@@ -364,8 +374,17 @@ export default function TeacherAssistant() {
                                                         ))}
                                                     </div>
                                                 )}
-                                                <div className={`p-4 md:p-6 rounded-[1.5rem] shadow-sm ${msg.role === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-tl-none w-full'}`}>
+                                                <div className={`p-4 md:p-6 rounded-[1.5rem] shadow-sm relative group ${msg.role === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-tl-none w-full'}`}>
                                                     <MarkdownContent content={msg.parts[0].text} role={msg.role} />
+                                                    {msg.role === 'model' && (
+                                                        <button 
+                                                            onClick={() => navigator.clipboard.writeText(msg.parts[0].text)}
+                                                            className="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity hover:text-primary"
+                                                            title="Copy response"
+                                                        >
+                                                            <span className="material-symbols-outlined text-sm">content_copy</span>
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

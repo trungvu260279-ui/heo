@@ -10,6 +10,7 @@ const navItems = [
     { to: '/assessment', icon: 'insights', label: 'Đánh giá năng lực' },
     { to: '/assistant', icon: 'smart_toy', label: 'Trợ lý AI' },
     { to: '/exams', icon: 'menu_book', label: 'Thư viện Đề thi' },
+    { to: '/student-chat', icon: 'auto_stories', label: 'Gia sư Văn học' },
     { to: '/teacher-assistant', icon: 'person_search', label: 'Trợ lý Giáo viên', role: 'teacher' },
 ]
 

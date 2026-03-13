@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config();
 
 const app = express();
@@ -61,28 +62,78 @@ app.post('/api/gemini-stream', async (req, res) => {
     res.setHeader('Connection', 'keep-alive');
 
     try {
-        const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
-        if (!apiKey) throw new Error("Missing Gemini API Key");
-
-        const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: process.env.VITE_GEMINI_MODEL || "gemini-1.5-flash" });
-
-        const chat = model.startChat({ history });
+        const keysText = process.env.VITE_GEMINI_API_KEYS || process.env.GEMINI_API_KEYS || process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '';
+        const keys = keysText.split(',').map(k => k.trim()).filter(Boolean);
         
-        // If prompt is an array (multimodal), it will work too
-        const result = await chat.sendMessageStream(prompt);
+        if (keys.length === 0) throw new Error("Missing Gemini API Key");
 
-        for await (const chunk of result.stream) {
-            const chunkText = chunk.text();
-            // Send chunk as SSE data
-            res.write(`data: ${JSON.stringify({ text: chunkText })}\n\n`);
+        console.log(`[Backend] Streaming request started. Keys available: ${keys.length}`);
+        let success = false;
+        let lastError = null;
+
+        for (let i = 0; i < keys.length; i++) {
+            try {
+                const genAI = new GoogleGenerativeAI(keys[i]);
+                const model = genAI.getGenerativeModel({ model: process.env.VITE_GEMINI_MODEL || "gemini-2.5-flash" });
+                const chat = model.startChat({ history });
+                const result = await chat.sendMessageStream(prompt);
+
+                for await (const chunk of result.stream) {
+                    const chunkText = chunk.text();
+                    res.write(`data: ${JSON.stringify({ text: chunkText })}\n\n`);
+                }
+                res.write('data: [DONE]\n\n');
+                res.end();
+                success = true;
+                break;
+            } catch (err) {
+                console.error(`Backend Stream Attempt ${i} failed:`, err.message);
+                lastError = err;
+            }
         }
-        res.write('data: [DONE]\n\n');
-        res.end();
+
+        if (!success) {
+            throw lastError || new Error("All API keys failed");
+        }
     } catch (error) {
-        console.error("Gemini Stream Error:", error);
+        console.error("Gemini Stream Final Error:", error);
         res.write(`data: ${JSON.stringify({ error: error.message })}\n\n`);
         res.end();
+    }
+});
+
+app.post('/api/gemini', async (req, res) => {
+    const { prompt } = req.body;
+    try {
+        const keysText = process.env.VITE_GEMINI_API_KEYS || process.env.GEMINI_API_KEYS || process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '';
+        const keys = keysText.split(',').map(k => k.trim()).filter(Boolean);
+        
+        if (keys.length === 0) throw new Error("Missing Gemini API Key");
+
+        let success = false;
+        let lastError = null;
+
+        for (let i = 0; i < keys.length; i++) {
+            try {
+                const genAI = new GoogleGenerativeAI(keys[i]);
+                const model = genAI.getGenerativeModel({ model: process.env.VITE_GEMINI_MODEL || "gemini-2.5-flash" });
+                const result = await model.generateContent(prompt);
+                const text = result.response.text();
+                res.json({ text });
+                success = true;
+                break;
+            } catch (err) {
+                console.error(`Backend API Attempt ${i} failed:`, err.message);
+                lastError = err;
+            }
+        }
+
+        if (!success) {
+            throw lastError || new Error("All API keys failed");
+        }
+    } catch (error) {
+        console.error("Gemini API Final Error:", error);
+        res.status(500).json({ error: error.message });
     }
 });
 
