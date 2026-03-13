@@ -1,0 +1,24 @@
+{
+  "name": "thpt-kim-xuyen-root",
+  "private": true,
+  "workspaces": [
+    "app",
+    "backend"
+  ],
+  "scripts": {
+    "build": "cd app && npm install && npm run build",
+    "install-all": "npm install && cd app && npm install && cd ../backend && npm install"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
+    "express": "^4.18.2",
+    "google-auth-library": "^10.6.1",
+    "googleapis": "^171.4.0",
+    "html-to-docx": "^1.8.0",
+    "mongoose": "^9.3.0",
+    "multer": "^2.1.1"
+  }
+}

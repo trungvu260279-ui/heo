@@ -353,6 +353,11 @@ app.post('/api/export-docx', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Backend Server running on port ${PORT}`);
-});
+// Export for Vercel
+module.exports = app;
+
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Backend Server running on port ${PORT}`);
+    });
+}
