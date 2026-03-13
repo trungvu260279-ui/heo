@@ -1,12 +1,7 @@
-/**
- * Persistent evaluation store via localStorage.
- * Key: 'van_eval_store'
- * Shape: { skills: [{label,value}], suggestions: [{type,title,body}], history: [{...}] }
- */
-
 import localforage from 'localforage'
+import { getAuthUser } from './useAuth'
 
-const LS_KEY = 'van_eval_store'
+const BASE_LS_KEY = 'van_eval_store'
 
 // Initialize localforage for large exam data history
 localforage.config({
@@ -14,18 +9,30 @@ localforage.config({
     storeName: 'exam_history'
 })
 
+function getStoreKey() {
+    const user = getAuthUser()
+    const emailSuffix = user?.email ? `_${user.email}` : ''
+    return `${BASE_LS_KEY}${emailSuffix}`
+}
+
 export async function saveExamHistoryDetail(examId, data) {
+    const user = getAuthUser()
+    if (!user?.email) return
     try {
-        await localforage.setItem(`exam_${Date.now()}_${examId}`, data)
+        const key = `${user.email}_exam_${Date.now()}_${examId}`
+        await localforage.setItem(key, data)
     } catch (e) {
         console.error("Failed to save exam history to localforage", e)
     }
 }
 
 export async function getAllExamHistoryDetails() {
+    const user = getAuthUser()
+    if (!user?.email) return []
     try {
         const keys = await localforage.keys()
-        const examKeys = keys.filter(k => k.startsWith('exam_'))
+        const userPrefix = `${user.email}_exam_`
+        const examKeys = keys.filter(k => k.startsWith(userPrefix))
         const results = await Promise.all(examKeys.map(k => localforage.getItem(k)))
         return results.sort((a, b) => b.timestamp - a.timestamp)
     } catch (e) {
@@ -49,9 +56,11 @@ const DEFAULT_STORE = {
 
 export function readStore() {
     try {
-        const raw = localStorage.getItem(LS_KEY)
+        const key = getStoreKey()
+        const raw = localStorage.getItem(key)
         if (!raw) return { ...DEFAULT_STORE }
-        return { ...DEFAULT_STORE, ...JSON.parse(raw) }
+        const parsed = JSON.parse(raw)
+        return { ...DEFAULT_STORE, ...parsed }
     } catch {
         return { ...DEFAULT_STORE }
     }
@@ -59,7 +68,8 @@ export function readStore() {
 
 export function writeStore(data) {
     try {
-        localStorage.setItem(LS_KEY, JSON.stringify({ ...data, hasData: true }))
+        const key = getStoreKey()
+        localStorage.setItem(key, JSON.stringify({ ...data, hasData: true }))
         window.dispatchEvent(new Event('van_eval_update'))
     } catch {
         // ignore quota errors
@@ -67,7 +77,6 @@ export function writeStore(data) {
 }
 
 export function useEvalStore() {
-    // Simple hook – just reads once (components listen to storage event themselves)
     return readStore()
 }
 
@@ -102,12 +111,13 @@ export function addEvaluation(result, exerciseInfo) {
             ? (result.overall - store.history[0].score >= 0 ? '+' : '') + (result.overall - store.history[0].score).toFixed(1)
             : '—',
         positive: store.history.length > 0 ? (result.overall >= store.history[0].score) : null,
+        timestamp: Date.now()
     }
 
     writeStore({
         skills: mergedSkills,
-        suggestions: result.suggestions, // Keep the latest suggestions
-        history: [historyEntry, ...store.history].slice(0, 10), // Keep last 10 attempts
+        suggestions: result.suggestions, 
+        history: [historyEntry, ...store.history].slice(0, 10), 
         totalAttempts: newAttempts
     })
 }

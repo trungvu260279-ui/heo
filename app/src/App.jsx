@@ -10,6 +10,7 @@ const Roadmap = lazy(() => import('./pages/Roadmap'))
 const Exams = lazy(() => import('./pages/Exams'))
 const TeacherAssistant = lazy(() => import('./pages/TeacherAssistant'))
 const StudentAssistant = lazy(() => import('./pages/StudentAssistant'))
+const Profile = lazy(() => import('./pages/Profile'))
 
 function LoadingSpinner() {
     return (
@@ -85,6 +86,14 @@ export default function App() {
                     element={
                         <Suspense fallback={<LoadingSpinner />}>
                             <StudentAssistant />
+                        </Suspense>
+                    }
+                />
+                <Route
+                    path="profile"
+                    element={
+                        <Suspense fallback={<LoadingSpinner />}>
+                            <Profile />
                         </Suspense>
                     }
                 />

@@ -3,7 +3,14 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const { OAuth2Client } = require('google-auth-library');
 require('dotenv').config();
+
+const User = require('./models/User');
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -26,7 +33,165 @@ if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, JSON.stringify([]));
 const getDbFilePath = () => DB_FILE;
 
 app.get('/', (req, res) => {
-    res.json({ status: "Online", mode: "Chat Only" });
+    res.json({ 
+        status: "Online", 
+        db: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
+        mode: "Full API" 
+    });
+});
+
+// MongoDB Connection
+const MONGODB_URI = process.env.MONGODB_URI;
+if (MONGODB_URI) {
+    mongoose.connect(MONGODB_URI)
+        .then(() => console.log("Successfully connected to MongoDB Atlas"))
+        .catch(err => console.error("MongoDB connection error:", err));
+} else {
+    console.warn("MONGODB_URI not found in environment variables. Database features will be disabled.");
+}
+
+// --- USER MANAGEMENT API ---
+app.post('/api/user/sync', async (req, res) => {
+    try {
+        const { email, name, role, grade, school, password, phone, bio } = req.body;
+        if (!email) return res.status(400).json({ error: "Email is required" });
+
+        // Tìm user theo email
+        let user = await User.findOne({ email });
+
+        if (user) {
+            // Nếu là user bình thường (không phải Google Auth) thì mới bắt check password
+            if (user.password !== 'GOOGLE_AUTH_USER') {
+                // Nếu có gửi password mới thì check, nếu không gửi (trường hợp update profile) thì bỏ qua nếu tin tưởng session
+                // Tuy nhiên hiện tại chúng ta chưa có JWT nên tạm thời vẫn bắt check nếu user.password tồn tại
+                if (!password) return res.status(400).json({ error: "Mật khẩu là bắt buộc để cập nhật tài khoản này!" });
+                
+                const isMatch = await bcrypt.compare(password, user.password);
+                if (!isMatch) {
+                    return res.status(401).json({ error: "Mật khẩu không chính xác!" });
+                }
+            }
+            
+            // Cập nhật thông tin khác
+            user.name = name || user.name;
+            user.grade = grade || user.grade;
+            user.school = school || user.school;
+            user.phone = phone !== undefined ? phone : user.phone;
+            user.bio = bio !== undefined ? bio : user.bio;
+            user.lastLogin = new Date();
+            await user.save();
+        } else {
+            // Tạo user mới (cần password)
+            if (!password) return res.status(400).json({ error: "Password is required for new accounts" });
+            
+            const hashedPassword = await bcrypt.hash(password, 10);
+            user = new User({
+                email,
+                password: hashedPassword,
+                name,
+                role,
+                grade,
+                school,
+                phone: phone || '',
+                bio: bio || '',
+                averageScore: 0,
+                totalExams: 0,
+                isVerified: true
+            });
+            await user.save();
+            
+            user.studentId = 'VANS-' + user._id.toString().slice(-6).toUpperCase();
+            await user.save();
+        }
+
+        res.json({ success: true, user });
+    } catch (e) {
+        console.error("User Sync Error:", e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.post('/api/user/google-auth', async (req, res) => {
+    try {
+        const { token } = req.body;
+        if (!token) return res.status(400).json({ error: "Token is required" });
+
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
+        const payload = ticket.getPayload();
+        const { email, name, picture } = payload;
+
+        let user = await User.findOne({ email });
+        let needsSetup = false;
+
+        if (user) {
+            // Nếu user đã có nhưng thiếu thông tin (tên/grade) thì vẫn báo needsSetup
+            if (!user.name || !user.grade) {
+                needsSetup = true;
+            }
+            user.lastLogin = new Date();
+            await user.save();
+        } else {
+            // Tạo user mới từ Google (chưa có tên/grade chính thức)
+            user = new User({
+                email,
+                name: name, // Dùng tên từ google làm tạm thời
+                password: 'GOOGLE_AUTH_USER', // Đánh dấu không dùng mật khẩu
+                role: 'student',
+                isVerified: true,
+                averageScore: 0,
+                totalExams: 0
+            });
+            await user.save();
+            user.studentId = 'VANS-' + user._id.toString().slice(-6).toUpperCase();
+            await user.save();
+            needsSetup = true;
+        }
+
+        res.json({ success: true, user, needsSetup });
+    } catch (e) {
+        console.error("Google Auth Error:", e);
+        res.status(401).json({ error: "Invalid Google Token" });
+    }
+});
+
+// Update score API
+app.post('/api/user/sync-score', async (req, res) => {
+    try {
+        const { studentId, score } = req.body;
+        if (!studentId) return res.status(400).json({ error: "StudentId is required" });
+
+        const user = await User.findOne({ studentId });
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        // Tính toán điểm trung bình mới
+        const totalScore = (user.averageScore * user.totalExams) + score;
+        user.totalExams += 1;
+        user.averageScore = totalScore / user.totalExams;
+        
+        await user.save();
+        res.json({ success: true, averageScore: user.averageScore, totalExams: user.totalExams });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+app.get('/api/rankings', async (req, res) => {
+    try {
+        const { grade } = req.query;
+        let query = { role: 'student' };
+        if (grade) query.grade = grade;
+
+        const rankings = await User.find(query)
+            .sort({ averageScore: -1, totalExams: -1 })
+            .limit(50)
+            .select('name grade averageScore totalExams school');
+
+        res.json(rankings);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
 });
 
 app.get('/api/sheet', (req, res) => {

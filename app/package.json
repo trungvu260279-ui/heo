@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@google/generative-ai": "^0.24.1",
+        "@react-oauth/google": "^0.13.4",
         "clsx": "^2.1.0",
         "dayjs": "^1.11.19",
         "framer-motion": "^11.0.0",

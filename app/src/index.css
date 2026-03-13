@@ -42,3 +42,27 @@
     .plan-content strong { @apply text-primary dark:text-accent font-bold; }
     .plan-content li { @apply text-sm text-slate-600 dark:text-slate-400 mb-1 flex items-start gap-2; }
 }
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-400/20 dark:bg-slate-700/30 rounded-full transition-colors;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-indigo-500/40 dark:bg-indigo-400/40;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.2) transparent;
+}

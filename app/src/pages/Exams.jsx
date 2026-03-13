@@ -6,10 +6,16 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { motion, AnimatePresence } from 'framer-motion'
 import RadarChart from '../components/RadarChart'
 import { addEvaluation, saveExamHistoryDetail } from '../hooks/useEvalStore'
+import { getAuthUser } from '../hooks/useAuth'
 
 const LOCAL_API_KEYS_TEXT = import.meta.env.VITE_GEMINI_API_KEYS || import.meta.env.GEMINI_API_KEYS || import.meta.env.VITE_GEMINI_API_KEY || ''
 const LOCAL_API_KEYS = LOCAL_API_KEYS_TEXT.split(',').map(k => k.trim()).filter(Boolean)
 const LOCAL_MODEL_NAME = import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash'
+
+// ─── Downloader (Mock) ────────────────────────────────────────────────────────
+function downloadFakeFile(filename) {
+    alert(`Đang chuẩn bị tải xuống: ${filename}\n(Tính năng này yêu cầu kết nối server để xuất bản Word)`);
+}
 
 // ─── Fix Vietnamese diacritics & OCR Spacing Bugs ─────────────────────────────
 function normalizeVN(text) {
@@ -76,14 +82,14 @@ function formatMarkdown(text) {
 }
 
 // ─── ExamCard ─────────────────────────────────────────────────────────────────
-function ExamCard({ exam, active, onClick }) {
+function ExamCard({ exam, active, onClick, bestScore }) {
     return (
         <motion.button
             layout
             whileHover={{ scale: 1.015 }}
             whileTap={{ scale: 0.985 }}
             onClick={onClick}
-            className={`w-full text-left p-4 rounded-2xl border transition-all duration-200 group
+            className={`w-full text-left p-4 rounded-2xl border transition-all duration-200 group relative
                 ${active
                     ? 'bg-indigo-600 border-indigo-600 shadow-lg shadow-indigo-200 dark:shadow-indigo-900/40 text-white'
                     : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-700 text-slate-700 dark:text-slate-300'
@@ -105,6 +111,15 @@ function ExamCard({ exam, active, onClick }) {
                     </p>
                 </div>
             </div>
+
+            {bestScore !== null && (
+                <div className={clsx(
+                    "absolute top-3 right-3 px-2 py-0.5 rounded-lg text-[9px] font-black tracking-wider",
+                    active ? "bg-white/20 text-white" : "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800"
+                )}>
+                    {bestScore.toFixed(1)}
+                </div>
+            )}
         </motion.button>
     )
 }
@@ -174,6 +189,151 @@ function QuestionBlock({ label, text, id, onHint, loadingHint, hint, answer, set
             />
         </motion.div>
     )
+}
+
+// ─── Ranking Dashboard ──────────────────────────────────────────────────────────
+function RankingDashboard() {
+    const [rankings, setRankings] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [filterGrade, setFilterGrade] = useState('');
+    const user = getAuthUser();
+
+    useEffect(() => {
+        fetchRankings();
+    }, [filterGrade]);
+
+    const fetchRankings = async () => {
+        setLoading(true);
+        try {
+            const url = filterGrade ? `/api/rankings?grade=${filterGrade}` : '/api/rankings';
+            const res = await fetch(url);
+            const data = await res.json();
+            setRankings(data);
+        } catch (e) {
+            console.error("Failed to fetch rankings", e);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const schoolAverage = rankings.length > 0 
+        ? rankings.reduce((acc, curr) => acc + (curr.averageScore || 0), 0) / rankings.length 
+        : 0;
+
+    const isDashboardLocked = schoolAverage < 6;
+
+    return (
+        <div className="p-4 md:p-8 space-y-8 max-w-4xl mx-auto">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-2 uppercase italic tracking-tight">BẢNG XẾP HẠNG NGỮ VĂN</h2>
+                    <p className="text-slate-500 text-sm font-medium">THPT Kim Xuyên · Cập nhật tự động từ AI chấm điểm</p>
+                </div>
+                <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl border border-slate-200 dark:border-slate-700 self-start">
+                    {['', '10', '11', '12'].map(g => (
+                        <button
+                            key={g}
+                            onClick={() => setFilterGrade(g)}
+                            className={clsx(
+                                "px-5 py-2 rounded-xl text-xs font-black transition-all",
+                                filterGrade === g 
+                                    ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-md ring-1 ring-black/5" 
+                                    : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                            )}
+                        >
+                            {g ? `KHỐI ${g}` : "TẤT CẢ"}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {loading ? (
+                <div className="flex flex-col items-center justify-center py-20 space-y-4">
+                    <div className="size-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+                    <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Đang tải bảng xếp hạng...</p>
+                </div>
+            ) : isDashboardLocked ? (
+                <div className="flex flex-col items-center justify-center py-20 px-6 text-center space-y-6 bg-white dark:bg-slate-900 rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-xl">
+                    <div className="size-20 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-4xl text-amber-500">lock</span>
+                    </div>
+                    <div className="space-y-2">
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white">Bảng Xếp Hạng Đang Khóa</h3>
+                        <p className="text-slate-500 text-sm max-w-md">
+                            Bảng vinh danh chỉ hiển thị khi điểm trung bình tổng toàn trường đạt từ <strong>6.0</strong> trở lên. 
+                            Hãy cùng nhau nỗ lực học tập nhé!
+                        </p>
+                    </div>
+                    <div className="px-6 py-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-sm font-bold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                        Điểm trung bình hiện tại: <span className="text-indigo-600 dark:text-indigo-400">{schoolAverage.toFixed(2)}</span>
+                    </div>
+                </div>
+            ) : (
+                <div className="bg-white dark:bg-slate-900 rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="bg-slate-50/50 dark:bg-slate-800/50">
+                                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">#</th>
+                                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Học sinh</th>
+                                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center">Khối</th>
+                                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center">Số bài làm</th>
+                                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Điểm TB</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                {rankings.map((rk, idx) => (
+                                    <tr 
+                                        key={idx} 
+                                        className={clsx(
+                                            "group transition-colors hover:bg-slate-50/50 dark:hover:bg-slate-800/30",
+                                            rk.name === user?.name && "bg-indigo-50/30 dark:bg-indigo-900/10"
+                                        )}
+                                    >
+                                        <td className="px-6 py-5">
+                                            <div className={clsx(
+                                                "size-8 rounded-lg flex items-center justify-center font-black text-sm",
+                                                idx === 0 ? "bg-amber-400 text-amber-900 shadow-lg shadow-amber-400/30" :
+                                                idx === 1 ? "bg-slate-300 text-slate-700 shadow-lg shadow-slate-300/30" :
+                                                idx === 2 ? "bg-orange-300 text-orange-900 shadow-lg shadow-orange-300/30" :
+                                                "text-slate-400"
+                                            )}>
+                                                {idx + 1}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-5">
+                                            <div className="flex items-center gap-3">
+                                                <div className="size-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-500 border border-slate-200 dark:border-slate-700">
+                                                    {rk.name[0].toUpperCase()}
+                                                </div>
+                                                <div>
+                                                    <p className="font-bold text-slate-900 dark:text-white text-sm">{rk.name}</p>
+                                                    <p className="text-[10px] text-slate-400 font-medium">{rk.school}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-5 text-center">
+                                            <span className="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold text-[10px]">
+                                                {rk.grade}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-5 text-center font-bold text-slate-400 text-sm tabular-nums">
+                                            {rk.totalExams || 0}
+                                        </td>
+                                        <td className="px-6 py-5 text-right">
+                                            <span className="text-lg font-black text-indigo-600 dark:text-indigo-400 tabular-nums">
+                                                {rk.averageScore?.toFixed(2) || "0.00"}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }
 
 // ─── Result Dashboard ────────────────────────────────────────────────────────
@@ -324,8 +484,19 @@ function EmptyState() {
 export default function Exams() {
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedExam, setSelectedExam] = useState(null)
+    const [showRankings, setShowRankings] = useState(false)
     const [isTakingExam, setIsTakingExam] = useState(false)
     const [answers, setAnswers] = useState({})
+    const [history, setHistory] = useState([])
+
+    useEffect(() => {
+        refreshHistory();
+    }, []);
+
+    const refreshHistory = async () => {
+        const h = await getAllExamHistoryDetails();
+        setHistory(h || []);
+    };
     const [hints, setHints] = useState({})
     const [materialAnalysis, setMaterialAnalysis] = useState(null)
     const [gradingResult, setGradingResult] = useState(null)
@@ -514,6 +685,43 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                 result: result,
                 answers: answers
             })
+
+            // --- SYNC SCORE TO BACKEND (Optimized: Best Score Only & >= 5.0) ---
+            const user = getAuthUser();
+            if (user && user.studentId && result.overall >= 5) {
+                // Find previous best score for this specific exam from local history
+                const examHistory = history.filter(h => h.examId === selectedExam.id);
+                const prevBest = examHistory.length > 0 ? Math.max(...examHistory.map(h => h.score || 0)) : 0;
+
+                if (result.overall > prevBest) {
+                    try {
+                        await fetch('/api/user/sync-score', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                studentId: user.studentId,
+                                studentName: user.name,
+                                examId: selectedExam.id,
+                                examTitle: selectedExam.title,
+                                score: result.overall,
+                                school: user.school,
+                                grade: user.grade,
+                                timestamp: Date.now()
+                            })
+                        });
+                        console.log("New best score! Database synchronized.");
+                    } catch (e) {
+                        console.warn("Failed to sync score to backend", e);
+                    }
+                } else {
+                    console.log("Not a new best score for this paper. Skipping DB sync to avoid data overload.");
+                }
+            } else if (result.overall < 5) {
+                console.log("Score below 5.0, skipping database sync.");
+            }
+
+            // Refresh history to update sidebar score
+            await refreshHistory();
         } catch (err) {
             console.error("Grading failed", err)
             alert("Có lỗi xảy ra khi AI chấm bài. Vui lòng thử lại.")
@@ -566,27 +774,45 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                     <div className="min-w-0">
                         <h2 className="text-base md:text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2 truncate">
                             <span className="material-symbols-outlined text-indigo-500 text-[20px] md:text-[22px] shrink-0">
-                                {isTakingExam ? 'edit_square' : 'library_books'}
+                                {isTakingExam ? 'edit_square' : (showRankings ? 'workspace_premium' : 'library_books')}
                             </span>
-                            {isTakingExam ? 'Đang làm bài' : 'Thư viện Đề thi'}
+                            {isTakingExam ? 'Đang làm bài' : (showRankings ? 'Bảng Xếp Hạng Ngữ Văn' : 'Thư viện Đề thi')}
                         </h2>
                         {!isTakingExam && (
-                            <p className="text-[10px] md:text-xs text-slate-400 truncate">Học tập & luyện tập trực tiếp</p>
+                            <p className="text-[10px] md:text-xs text-slate-400 truncate">
+                                {showRankings ? 'Cập nhật tự động từ AI chấm điểm' : 'Học tập & luyện tập trực tiếp'}
+                            </p>
                         )}
                     </div>
                 </div>
 
                 {!isTakingExam && !selectedExam && (
-                    <div className="relative w-40 sm:w-80">
-                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] pointer-events-none">search</span>
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm..."
-                            className="w-full pl-9 pr-3 py-1.5 bg-slate-100 dark:bg-slate-800 border border-transparent rounded-lg text-xs md:text-sm
-                                focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-700 outline-none transition-all"
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                        />
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => setShowRankings(!showRankings)}
+                            className={clsx(
+                                "flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs transition-all ring-1",
+                                showRankings 
+                                    ? "bg-indigo-600 text-white ring-indigo-500 shadow-lg shadow-indigo-500/20" 
+                                    : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-200 dark:ring-slate-700 hover:ring-indigo-500"
+                            )}
+                        >
+                            <span className="material-symbols-outlined text-[18px]">
+                                {showRankings ? 'list_alt' : 'workspace_premium'}
+                            </span>
+                            <span className="hidden sm:inline">{showRankings ? 'Quay lại Đề thi' : 'Xếp hạng'}</span>
+                        </button>
+                        <div className="relative w-40 sm:w-80">
+                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] pointer-events-none">search</span>
+                            <input
+                                type="text"
+                                placeholder="Tìm kiếm..."
+                                className="w-full pl-9 pr-3 py-1.5 bg-slate-100 dark:bg-slate-800 border border-transparent rounded-lg text-xs md:text-sm
+                                    focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-700 outline-none transition-all"
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                            />
+                        </div>
                     </div>
                 )}
             </header>
@@ -594,21 +820,26 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
             <div className="flex-1 flex overflow-hidden">
 
                 {/* ── Sidebar ── */}
-                {!isTakingExam && (
+                {!isTakingExam && !showRankings && (
                     <aside className={clsx(
                         "w-full md:w-72 shrink-0 border-r border-slate-200 dark:border-slate-800 overflow-y-auto p-4 space-y-2 bg-slate-50/60 dark:bg-slate-950 transition-all",
                         selectedExam ? "hidden md:block" : "block"
                     )}>
                         {filteredExams.length === 0
                             ? <p className="text-center text-sm text-slate-400 pt-10">Không tìm thấy đề nào.</p>
-                            : filteredExams.map(ex => (
-                                <ExamCard
-                                    key={ex.id}
-                                    exam={ex}
-                                    active={selectedExam?.id === ex.id}
-                                    onClick={() => handleSelectExam(ex)}
-                                />
-                            ))
+                            : filteredExams.map(ex => {
+                                const examScores = history.filter(h => h.examId === ex.id).map(h => h.score || 0);
+                                const bestScore = examScores.length > 0 ? Math.max(...examScores) : null;
+                                return (
+                                    <ExamCard
+                                        key={ex.id}
+                                        exam={ex}
+                                        bestScore={bestScore}
+                                        active={selectedExam?.id === ex.id}
+                                        onClick={() => handleSelectExam(ex)}
+                                    />
+                                );
+                            })
                         }
                     </aside>
                 )}
@@ -616,11 +847,18 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                 {/* ── Main Panel ── */}
                 <main ref={mainRef} className="flex-1 overflow-y-auto bg-white dark:bg-slate-900">
                     <AnimatePresence mode="wait">
-
-                        {/* No exam selected */}
-                        {!selectedExam ? (
+                        {showRankings ? (
+                            <motion.div
+                                key="rankings"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="flex-1"
+                            >
+                                <RankingDashboard />
+                            </motion.div>
+                        ) : !selectedExam ? (
                             <EmptyState key="empty" />
-
                         ) : isTakingExam ? (
                             /* ══ EXAM MODE ══════════════════════════════════════════ */
                             <motion.div
