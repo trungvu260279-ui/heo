@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { clsx } from 'clsx'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import LoginModal from './LoginModal'
 import { getAuthUser, logout } from '../hooks/useAuth'
@@ -12,7 +12,6 @@ const navItems = [
     { to: '/assistant', icon: 'smart_toy', label: 'Trợ lý AI' },
     { to: '/exams', icon: 'menu_book', label: 'Thư viện Đề thi' },
     { to: '/student-chat', icon: 'auto_stories', label: 'Gia sư Văn học' },
-    { to: '/profile', icon: 'account_circle', label: 'Hồ sơ cá nhân' },
     { to: '/teacher-assistant', icon: 'person_search', label: 'Trợ lý Giáo viên', role: 'teacher' },
 ]
 
@@ -34,14 +33,16 @@ export default function Layout() {
 
     const [showScrollTop, setShowScrollTop] = useState(false)
     const [scrollProgress, setScrollProgress] = useState(0)
+    const lastScrolledRef = useRef(null)
 
     useEffect(() => {
         const handleScroll = (e) => {
             const target = e.target
             if (target.tagName === 'MAIN' || target.classList.contains('overflow-y-auto')) {
+                lastScrolledRef.current = target
                 const scrolled = target.scrollTop
                 const maxHeight = target.scrollHeight - target.clientHeight
-                const progress = (scrolled / maxHeight) * 100
+                const progress = maxHeight > 0 ? (scrolled / maxHeight) * 100 : 0
                 setScrollProgress(progress)
                 setShowScrollTop(scrolled > 300)
             }
@@ -51,9 +52,13 @@ export default function Layout() {
     }, [])
 
     const scrollToTop = () => {
-        const scrollable = document.querySelector('.overflow-y-auto')
-        if (scrollable) {
-            scrollable.scrollTo({ top: 0, behavior: 'smooth' })
+        if (lastScrolledRef.current && document.body.contains(lastScrolledRef.current)) {
+            lastScrolledRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+        } else {
+            const scrollable = document.querySelector('main .overflow-y-auto') || document.querySelector('.overflow-y-auto')
+            if (scrollable) {
+                scrollable.scrollTo({ top: 0, behavior: 'smooth' })
+            }
         }
     }
 
@@ -148,7 +153,7 @@ export default function Layout() {
                     </div>
 
                     {/* Nav */}
-                    <nav className="flex flex-col gap-1">
+                    <nav className="flex flex-col gap-1 overflow-y-auto max-h-[calc(100vh-250px)] pr-1 custom-scrollbar">
                         {navItems.filter(item => !item.role || item.role === user?.role).map((item) => (
                             <NavLink
                                 key={item.label}

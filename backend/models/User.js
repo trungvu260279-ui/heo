@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     isVerified: { type: Boolean, default: false },
     averageScore: { type: Number, default: 0 }, // Điểm trung bình để xếp hạng
     totalExams: { type: Number, default: 0 },
+    completedExams: [{ type: String }], // Danh sách ID các đề đã thi
     lastLogin: { type: Date, default: Date.now }
 }, { timestamps: true });
 

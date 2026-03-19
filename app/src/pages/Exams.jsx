@@ -46,19 +46,6 @@ function normalizeVN(text) {
 
 // ─── Gemini API call ──────────────────────────────────────────────────────────
 async function callGeminiAPI(instruction) {
-    // 1. Nếu đang ở môi trường dev có key trong .env -> gọi thẳng
-    if (import.meta.env.DEV && LOCAL_API_KEYS.length > 0) {
-        for (let i = 0; i < LOCAL_API_KEYS.length; i++) {
-            try {
-                const genAI = new GoogleGenerativeAI(LOCAL_API_KEYS[i])
-                const model = genAI.getGenerativeModel({ model: LOCAL_MODEL_NAME })
-                const result = await model.generateContent(instruction)
-                return await result.response.text()
-            } catch (err) {
-                console.warn(`Local Gemini Key ${i} failed, trying next...`, err)
-            }
-        }
-    }
     const res = await fetch('/api/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -216,8 +203,8 @@ function RankingDashboard() {
         }
     };
 
-    const schoolAverage = rankings.length > 0 
-        ? rankings.reduce((acc, curr) => acc + (curr.averageScore || 0), 0) / rankings.length 
+    const schoolAverage = rankings.length > 0
+        ? rankings.reduce((acc, curr) => acc + (curr.averageScore || 0), 0) / rankings.length
         : 0;
 
     const isDashboardLocked = schoolAverage < 6;
@@ -236,8 +223,8 @@ function RankingDashboard() {
                             onClick={() => setFilterGrade(g)}
                             className={clsx(
                                 "px-5 py-2 rounded-xl text-xs font-black transition-all",
-                                filterGrade === g 
-                                    ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-md ring-1 ring-black/5" 
+                                filterGrade === g
+                                    ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-md ring-1 ring-black/5"
                                     : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
                             )}
                         >
@@ -260,7 +247,7 @@ function RankingDashboard() {
                     <div className="space-y-2">
                         <h3 className="text-xl font-bold text-slate-900 dark:text-white">Bảng Xếp Hạng Đang Khóa</h3>
                         <p className="text-slate-500 text-sm max-w-md">
-                            Bảng vinh danh chỉ hiển thị khi điểm trung bình tổng toàn trường đạt từ <strong>6.0</strong> trở lên. 
+                            Bảng vinh danh chỉ hiển thị khi điểm trung bình tổng toàn trường đạt từ <strong>6.0</strong> trở lên.
                             Hãy cùng nhau nỗ lực học tập nhé!
                         </p>
                     </div>
@@ -283,8 +270,8 @@ function RankingDashboard() {
                             </thead>
                             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                 {rankings.map((rk, idx) => (
-                                    <tr 
-                                        key={idx} 
+                                    <tr
+                                        key={idx}
                                         className={clsx(
                                             "group transition-colors hover:bg-slate-50/50 dark:hover:bg-slate-800/30",
                                             rk.name === user?.name && "bg-indigo-50/30 dark:bg-indigo-900/10"
@@ -294,9 +281,9 @@ function RankingDashboard() {
                                             <div className={clsx(
                                                 "size-8 rounded-lg flex items-center justify-center font-black text-sm",
                                                 idx === 0 ? "bg-amber-400 text-amber-900 shadow-lg shadow-amber-400/30" :
-                                                idx === 1 ? "bg-slate-300 text-slate-700 shadow-lg shadow-slate-300/30" :
-                                                idx === 2 ? "bg-orange-300 text-orange-900 shadow-lg shadow-orange-300/30" :
-                                                "text-slate-400"
+                                                    idx === 1 ? "bg-slate-300 text-slate-700 shadow-lg shadow-slate-300/30" :
+                                                        idx === 2 ? "bg-orange-300 text-orange-900 shadow-lg shadow-orange-300/30" :
+                                                            "text-slate-400"
                                             )}>
                                                 {idx + 1}
                                             </div>
@@ -369,7 +356,7 @@ function ResultDashboard({ result, onBack, examTitle, answers, examData }) {
                             Biểu đồ Năng lực
                         </h3>
                         <RadarChart skills={skills} size={240} color="#6366f1" />
-                        
+
                         <div className="w-full space-y-3 mt-8">
                             {skills.map(sk => (
                                 <div key={sk.label} className="space-y-1.5">
@@ -397,7 +384,7 @@ function ResultDashboard({ result, onBack, examTitle, answers, examData }) {
                             <span className="material-symbols-outlined text-emerald-500">verified</span>
                             Nhận xét từ AI Chuyên gia
                         </h3>
-                        
+
                         <div className="space-y-4">
                             {suggestions.map((s, i) => (
                                 <div key={i} className={`p-4 rounded-2xl border ${s.type === 'check' ? 'bg-emerald-50/50 border-emerald-100 text-emerald-900' : 'bg-amber-50/50 border-amber-100 text-amber-900'} dark:bg-slate-900/50 dark:border-slate-800`}>
@@ -440,8 +427,8 @@ function ResultDashboard({ result, onBack, examTitle, answers, examData }) {
                 </button>
                 <button
                     onClick={() => {
-                        navigate('/student-chat', { 
-                            state: { 
+                        navigate('/student-chat', {
+                            state: {
                                 type: 'EXAM_ANALYSIS',
                                 data: {
                                     title: examTitle,
@@ -450,7 +437,7 @@ function ResultDashboard({ result, onBack, examTitle, answers, examData }) {
                                     examData: examData,
                                     archiveId: archiveId
                                 }
-                            } 
+                            }
                         });
                     }}
                     className="w-full sm:w-auto px-8 py-3 rounded-2xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 dark:shadow-indigo-900/40"
@@ -534,7 +521,7 @@ export default function Exams() {
 
     async function getHint(qId, qLabel, qText, sectionName, exam) {
         setLoadingHintFor(qId)
-        
+
         const cleanNgulieu = normalizeVN(exam.sections.doc_hieu)
         let contextPrompt = `Bạn là chuyên gia luyện thi Ngữ Văn THPT. 
 Đang hỗ trợ học sinh làm bài trong đề thi: "${exam.title}".
@@ -660,10 +647,10 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                     answers: answers,
                     examData: selectedExam
                 };
-                
+
                 // Save to sessionStorage (Temporary, auto-deletes when tab closes)
                 sessionStorage.setItem(archiveId, JSON.stringify(archiveData));
-                
+
                 setGradingResult(prev => ({ ...prev, archiveId }));
                 console.log("[Exams] Session archive created:", archiveId);
             } catch (e) {
@@ -758,9 +745,9 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                 <div className="flex items-center gap-2 md:gap-3">
                     {(isTakingExam || selectedExam) && (
                         <button
-                            onClick={() => { 
+                            onClick={() => {
                                 if (isTakingExam) {
-                                    setIsTakingExam(false); 
+                                    setIsTakingExam(false);
                                     setSubmitDone(false);
                                 } else {
                                     setSelectedExam(null);
@@ -792,8 +779,8 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                             onClick={() => setShowRankings(!showRankings)}
                             className={clsx(
                                 "flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs transition-all ring-1",
-                                showRankings 
-                                    ? "bg-indigo-600 text-white ring-indigo-500 shadow-lg shadow-indigo-500/20" 
+                                showRankings
+                                    ? "bg-indigo-600 text-white ring-indigo-500 shadow-lg shadow-indigo-500/20"
                                     : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-200 dark:ring-slate-700 hover:ring-indigo-500"
                             )}
                         >
@@ -881,7 +868,7 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                                     {/* Reading passage */}
                                     <div className="p-4 md:p-6 rounded-2xl md:rounded-3xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50/50 dark:bg-indigo-950/20 blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-indigo-100/50" />
-                                        
+
                                         <div className="flex items-center justify-between mb-6 relative z-10">
                                             <div className="flex items-center gap-2">
                                                 <span className="w-1 h-3 md:w-1.5 md:h-4 rounded-full bg-indigo-500 inline-block shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
@@ -921,7 +908,7 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                                                         <span className="material-symbols-outlined text-indigo-500 text-[18px]">insights</span>
                                                         <span className="text-[11px] font-black uppercase tracking-widest text-slate-800 dark:text-slate-200">Góc nhìn AI Chuyên gia</span>
                                                     </div>
-                                                    <div 
+                                                    <div
                                                         className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed bg-indigo-50/30 dark:bg-indigo-900/10 p-5 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30"
                                                         dangerouslySetInnerHTML={{ __html: formatMarkdown(materialAnalysis) }}
                                                     />
@@ -984,9 +971,9 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                                 <div className="flex justify-center pb-4">
                                     <AnimatePresence mode="wait">
                                         {submitDone && gradingResult ? (
-                                            <ResultDashboard 
-                                                result={gradingResult} 
-                                                onBack={() => { setIsTakingExam(false); setSubmitDone(false); setGradingResult(null); }} 
+                                            <ResultDashboard
+                                                result={gradingResult}
+                                                onBack={() => { setIsTakingExam(false); setSubmitDone(false); setGradingResult(null); }}
                                                 examTitle={selectedExam.title}
                                                 answers={answers}
                                                 examData={selectedExam}

@@ -6,19 +6,10 @@ import remarkGfm from 'remark-gfm'
 import { getAuthUser } from '../hooks/useAuth'
 import mammoth from 'mammoth'
 import * as pdfjs from 'pdfjs-dist'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 
 // Set PDF worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`
 
-// Constants
-const LOCAL_API_KEYS_TEXT = import.meta.env.VITE_GEMINI_API_KEYS || import.meta.env.GEMINI_API_KEYS || import.meta.env.VITE_GEMINI_API_KEY || ''
-const LOCAL_API_KEYS = LOCAL_API_KEYS_TEXT.split(',').map(k => k.trim()).filter(Boolean)
-const LOCAL_MODEL_NAME = import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash'
-
-const LOCAL_GPT_KEYS_TEXT = import.meta.env.VITE_OPENAI_API_KEYS || ''
-const LOCAL_GPT_KEYS = LOCAL_GPT_KEYS_TEXT.split(',').map(k => k.trim()).filter(Boolean)
-const LOCAL_GPT_MODEL = import.meta.env.VITE_OPENAI_MODEL || 'gpt-4o'
 
 const SYSTEM_PROMPT = `Bạn là chatbot hỗ trợ ôn thi tốt nghiệp THPT (TN K12) môn Ngữ văn. 
 Nhiệm vụ: Hướng dẫn tư duy, hỗ trợ viết văn, chấm bài và giải thích đáp án dựa trên tài liệu ôn thi hệ thống.
@@ -345,7 +336,6 @@ Hãy hỏi: "Cậu muốn chúng mình bắt đầu 'mổ xẻ' từ câu/phần
 
             const updateAiMessage = (newText) => {
                 aiText = newText;
-                console.log("[updateAiMessage] Updating AI message:", { aiMsgId, text: aiText.substring(0, 50) + "..." });
                 setMessages(prev => {
                     const aiMsgIndex = prev.findIndex(m => m.id === aiMsgId);
                     if (aiMsgIndex === -1) {
@@ -393,197 +383,20 @@ Hãy hỏi: "Cậu muốn chúng mình bắt đầu 'mổ xẻ' từ câu/phần
                                 const data = JSON.parse(dataStr);
                                 if (data.text) {
                                     setRetryStatus(''); // Hide status once we have real data
-                                    updateAiMessage(aiText + data.text);
+                                    aiText += data.text;
+                                    updateAiMessage(aiText);
                                 }
                             } catch (e) { }
                         }
                     }
                 }
             } catch (err) {
-                console.warn("Backend stream failed, rolling local...", err);
-
-                if (LOCAL_API_KEYS.length > 0) {
-                    let success = false;
-                    for (let i = 0; i < LOCAL_API_KEYS.length; i++) {
-                        try {
-                            setRetryStatus('Đang phân tích...');
-                            const genAI = new GoogleGenerativeAI(LOCAL_API_KEYS[i])
-                            const model = genAI.getGenerativeModel({ model: LOCAL_MODEL_NAME })
-                            const chat = model.startChat({
-                                history: chatHistory.map(h => ({
-                                    role: h.role,
-                                    parts: h.parts.map(p => {
-                                        if (p.text) return { text: p.text };
-                                        if (p.inlineData) return { inlineData: p.inlineData };
-                                        return p;
-                                    })
-                                }))
-                            })
-
-                            const result = await chat.sendMessageStream(parts)
-
-                            for await (const chunk of result.stream) {
-                                const text = chunk.text()
-                                if (text) {
-                                    setRetryStatus('');
-                                    updateAiMessage(aiText + text);
-                                }
-                            }
-                            success = true;
-                            break;
-                        } catch (localErr) {
-                            console.error(`Local Key ${i} failed`); // Log quietly
-                        }
-                    }
-
-                    if (!success) {
-                        // NEW FALLBACK: GPT (OpenAI) for better file analysis/grading
-                        if (LOCAL_GPT_KEYS.length > 0) {
-                            for (let i = 0; i < LOCAL_GPT_KEYS.length; i++) {
-                                try {
-                                    setRetryStatus('Đang gọi GPT phân tích chuyên sâu...');
-                                    const gptRes = await fetch('https://api.openai.com/v1/chat/completions', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'Authorization': `Bearer ${LOCAL_GPT_KEYS[i]}`
-                                        },
-                                        body: JSON.stringify({
-                                            model: LOCAL_GPT_MODEL,
-                                            messages: [
-                                                { role: 'system', content: SYSTEM_PROMPT },
-                                                ...chatHistory.map(h => ({
-                                                    role: h.role === 'model' ? 'assistant' : 'user',
-                                                    content: h.parts[0].text
-                                                })),
-                                                { role: 'user', content: finalInput }
-                                            ],
-                                            stream: true
-                                        })
-                                    });
-
-                                    if (!gptRes.ok) throw new Error("GPT API failed");
-
-                                    const reader = gptRes.body.getReader();
-                                    const decoder = new TextDecoder();
-                                    let gptBuffer = '';
-
-                                    while (true) {
-                                        const { done, value } = await reader.read();
-                                        if (done) break;
-
-                                        gptBuffer += decoder.decode(value, { stream: true });
-                                        const lines = gptBuffer.split('\n');
-                                        gptBuffer = lines.pop();
-
-                                        for (const line of lines) {
-                                            if (line.trim().startsWith('data: ')) {
-                                                const dataStr = line.trim().substring(6);
-                                                if (dataStr === '[DONE]') continue;
-                                                try {
-                                                    const data = JSON.parse(dataStr);
-                                                    const content = data.choices[0]?.delta?.content;
-                                                    if (content) {
-                                                        setRetryStatus('');
-                                                        aiText += content;
-                                                        updateAiMessage(aiText);
-                                                    }
-                                                } catch (e) { }
-                                            }
-                                        }
-                                    }
-                                    success = true;
-                                    break;
-                                } catch (gptErr) {
-                                    console.error(`GPT Key ${i} failed:`, gptErr);
-                                }
-                            }
-                        }
-                    }
-
-                    if (!success) {
-                        // FINAL FALLBACK: Pollinations AI with Retry logic
-                        let pollinationsSuccess = false;
-                        const maxRetries = 3;
-
-                        for (let attempt = 1; attempt <= maxRetries; attempt++) {
-                            try {
-                                setRetryStatus(`Đang kết nối dự phòng (Lần ${attempt})...`);
-                                const pollinationsRes = await fetch('https://text.pollinations.ai/', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                        messages: [
-                                            { role: 'system', content: SYSTEM_PROMPT },
-                                            { role: 'user', content: finalInput }
-                                        ],
-                                        seed: Math.floor(Math.random() * 1000000)
-                                    })
-                                });
-
-                                if (!pollinationsRes.ok) throw new Error("Pollinations failed");
-
-                                const pollinationsText = await pollinationsRes.text();
-                                if (pollinationsText) {
-                                    setRetryStatus('');
-                                    updateAiMessage(pollinationsText);
-                                    pollinationsSuccess = true;
-                                    break;
-                                }
-                            } catch (pErr) {
-                                console.warn(`Pollinations Attempt ${attempt} failed:`, pErr);
-                                if (attempt === maxRetries) {
-                                    setRetryStatus('');
-                                    setMessages(prev => [...prev, {
-                                        role: 'assistant',
-                                        content: 'Hệ thống đang bận một chút do lượt truy cập cao. Cậu vui lòng thử lại sau giây lát nhé!',
-                                        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                                    }]);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    // Same Pollinations logic if no LOCAL_API_KEYS
-                    let pollinationsSuccess = false;
-                    const maxRetries = 3;
-                    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-                        try {
-                            setRetryStatus(`Đang kết nối dự phòng (Lần ${attempt})...`);
-                            const pollinationsRes = await fetch('https://text.pollinations.ai/', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    messages: [
-                                        { role: 'system', content: SYSTEM_PROMPT },
-                                        { role: 'user', content: finalInput }
-                                    ],
-                                    seed: Math.floor(Math.random() * 1000000)
-                                })
-                            });
-
-                            if (!pollinationsRes.ok) throw new Error("Pollinations failed");
-
-                            const pollinationsText = await pollinationsRes.text();
-                            if (pollinationsText) {
-                                setRetryStatus('');
-                                updateAiMessage(pollinationsText);
-                                pollinationsSuccess = true;
-                                break;
-                            }
-                        } catch (pErr) {
-                            console.warn(`Pollinations Attempt ${attempt} failed:`, pErr);
-                            if (attempt === maxRetries) {
-                                setRetryStatus('');
-                                setMessages(prev => [...prev, {
-                                    role: 'assistant',
-                                    content: 'Hệ thống đang bận. Cậu vui lòng thử lại sau giây lát nhé!',
-                                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                                }]);
-                            }
-                        }
-                    }
-                }
+                console.error("Chat request failed:", err);
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: 'Hệ thống đang bận một chút. Cậu vui lòng thử lại sau giây lát nhé!',
+                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                }]);
             }
         };
 

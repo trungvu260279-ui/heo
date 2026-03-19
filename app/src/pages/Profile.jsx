@@ -46,7 +46,8 @@ export default function Profile() {
     if (!user) return <div className="p-10 text-center text-slate-500 font-bold">Vui lòng đăng nhập để xem hồ sơ.</div>
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-8 md:py-12">
+        <div className="h-full overflow-y-auto px-4 py-8 md:py-12">
+            <div className="max-w-4xl mx-auto">
             <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -181,6 +182,7 @@ export default function Profile() {
                     </div>
                 </form>
             </motion.div>
+            </div>
         </div>
     )
 }

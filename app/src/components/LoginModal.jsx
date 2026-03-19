@@ -100,7 +100,8 @@ export default function LoginModal({ isOpen, onClose }) {
                 alert("Lỗi đăng nhập Google: " + data.error);
             }
         } catch (err) {
-            alert("Không thể kết nối server để xác thực Google");
+            console.error("Google verify error:", err);
+            alert("Không thể kết nối server để xác thực Google. " + (err.message || ""));
         } finally {
             setLoading(false);
         }

@@ -1,42 +1,23 @@
 import { useState, useRef, useEffect } from 'react'
 import RadarChart from '../components/RadarChart'
 import { readStore, writeStore, addEvaluation, saveExamHistoryDetail } from '../hooks/useEvalStore'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import { getAuthUser } from '../hooks/useAuth'
 
 const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL
 
 // Hỗ trợ chạy local với .env (nếu không chạy vercel dev)
-// Constants
-const LOCAL_API_KEYS_TEXT = import.meta.env.VITE_GEMINI_API_KEYS || import.meta.env.GEMINI_API_KEYS || import.meta.env.VITE_GEMINI_API_KEY || ''
-const LOCAL_API_KEYS = LOCAL_API_KEYS_TEXT.split(',').map(k => k.trim()).filter(Boolean)
-const LOCAL_MODEL_NAME = import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash'
-
 async function callGeminiAPI(instruction) {
-    // 1. Nếu đang ở môi trường dev và có key trong .env -> gọi thẳng (cho tiện)
-    if (import.meta.env.DEV && LOCAL_API_KEYS.length > 0) {
-        for (let i = 0; i < LOCAL_API_KEYS.length; i++) {
-            try {
-                const genAI = new GoogleGenerativeAI(LOCAL_API_KEYS[i])
-                const model = genAI.getGenerativeModel({ model: LOCAL_MODEL_NAME })
-                const result = await model.generateContent(instruction)
-                return await result.response.text()
-            } catch (err) {
-                console.warn(`Local Gemini Key ${i} failed, trying next...`, err)
-            }
-        }
-    }
-
-    // 2. Mặc định: gọi qua Vercel Serverless Function (Bảo mật cho Production)
     const res = await fetch('/api/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: instruction })
     })
+
     if (!res.ok) {
         const errData = await res.json().catch(() => ({}))
         throw new Error(errData.error || 'API request failed: ' + res.status)
     }
+
     const data = await res.json()
     if (data.error) throw new Error(data.error)
     return data.text

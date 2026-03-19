@@ -1,10 +1,11 @@
+console.log("[Backend] Server script starting...");
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { OAuth2Client } = require('google-auth-library');
 require('dotenv').config();
 
@@ -23,32 +24,68 @@ const DB_FILE = path.join(DATA_DIR, 'rankings.json');
 const ARCHIVE_DIR = path.join(DATA_DIR, 'archives');
 
 app.use(cors({ origin: '*', methods: ['GET', 'POST', 'OPTIONS'], allowedHeaders: ['Content-Type', 'Authorization'] }));
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// Initialize data directory
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
-if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, JSON.stringify([]));
+// Resolve Cross-Origin-Opener-Policy warning
+app.use((req, res, next) => {
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    next();
+});
+
+// Initialize data directory (Skip on Vercel or read-only environments)
+const isVercel = process.env.VERCEL === '1' || !!process.env.NOW_REGION;
+if (!isVercel) {
+    try {
+        if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+        if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
+        if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, JSON.stringify([]));
+        console.log("[Backend] Local data storage initialized at:", DATA_DIR);
+    } catch (e) {
+        console.warn("[Backend] Could not initialize local filesystem:", e.message);
+    }
+} else {
+    console.log("[Backend] Running on Vercel, skipping local filesystem initialization.");
+}
 
 const getDbFilePath = () => DB_FILE;
 
-app.get('/', (req, res) => {
+app.get(['/', '/api'], (req, res) => {
     res.json({ 
         status: "Online", 
         db: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
-        mode: "Full API" 
+        mode: "Full API (Vercel Ready)" 
     });
 });
 
-// MongoDB Connection
+// MongoDB Connection logic for Serverless
 const MONGODB_URI = process.env.MONGODB_URI;
-if (MONGODB_URI) {
-    mongoose.connect(MONGODB_URI)
-        .then(() => console.log("Successfully connected to MongoDB Atlas"))
-        .catch(err => console.error("MongoDB connection error:", err));
-} else {
-    console.warn("MONGODB_URI not found in environment variables. Database features will be disabled.");
-}
+let cachedConnection = null;
+
+const connectDB = async () => {
+    if (mongoose.connection.readyState >= 1) return;
+    if (!MONGODB_URI) {
+        console.warn("MONGODB_URI not found");
+        return;
+    }
+    if (!cachedConnection) {
+        console.log("[Backend] Connecting to MongoDB Atlas...");
+        cachedConnection = mongoose.connect(MONGODB_URI, {
+            serverSelectionTimeoutMS: 5000,
+        }).then(m => {
+            console.log("Connected to MongoDB!");
+            return m;
+        }).catch(err => {
+            cachedConnection = null;
+            console.error("MongoDB Connection Error:", err.message);
+            throw err;
+        });
+    }
+    return cachedConnection;
+};
+
+// Initial trigger (Keep-alive locally)
+if (!process.env.VERCEL) connectDB();
 
 // --- USER MANAGEMENT API ---
 app.post('/api/user/sync', async (req, res) => {
@@ -60,16 +97,20 @@ app.post('/api/user/sync', async (req, res) => {
         let user = await User.findOne({ email });
 
         if (user) {
-            // Nếu là user bình thường (không phải Google Auth) thì mới bắt check password
-            if (user.password !== 'GOOGLE_AUTH_USER') {
-                // Nếu có gửi password mới thì check, nếu không gửi (trường hợp update profile) thì bỏ qua nếu tin tưởng session
-                // Tuy nhiên hiện tại chúng ta chưa có JWT nên tạm thời vẫn bắt check nếu user.password tồn tại
-                if (!password) return res.status(400).json({ error: "Mật khẩu là bắt buộc để cập nhật tài khoản này!" });
-                
-                const isMatch = await bcrypt.compare(password, user.password);
-                if (!isMatch) {
-                    return res.status(401).json({ error: "Mật khẩu không chính xác!" });
-                }
+            // Nếu là tài khoản Google Auth, KHÔNG cho phép đồng bộ qua form mật khẩu thông thường
+            // để tránh việc ai đó biết email rồi vào "nhận vơ" hoặc ghi đè thông tin.
+            if (user.password === 'GOOGLE_AUTH_USER') {
+                return res.status(403).json({ 
+                    error: "Email này đã được đăng ký bằng Google. Vui lòng sử dụng 'Đăng nhập Google'!" 
+                });
+            }
+
+            // Nếu là user bình thường, bắt buộc check password để cập nhật
+            if (!password) return res.status(400).json({ error: "Mật khẩu là bắt buộc để cập nhật tài khoản này!" });
+            
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return res.status(401).json({ error: "Mật khẩu không chính xác!" });
             }
             
             // Cập nhật thông tin khác
@@ -113,32 +154,37 @@ app.post('/api/user/sync', async (req, res) => {
 
 app.post('/api/user/google-auth', async (req, res) => {
     try {
+        await connectDB();
         const { token } = req.body;
+        console.log("[Backend] Google Auth attempt received");
         if (!token) return res.status(400).json({ error: "Token is required" });
 
+        console.log("[Backend] Verifying Google token...");
         const ticket = await client.verifyIdToken({
             idToken: token,
             audience: process.env.GOOGLE_CLIENT_ID
         });
         const payload = ticket.getPayload();
         const { email, name, picture } = payload;
+        console.log(`[Backend] Google token verified for: ${email}`);
 
         let user = await User.findOne({ email });
         let needsSetup = false;
 
         if (user) {
-            // Nếu user đã có nhưng thiếu thông tin (tên/grade) thì vẫn báo needsSetup
+            console.log(`[Backend] Existing user found: ${user.studentId}`);
             if (!user.name || !user.grade) {
                 needsSetup = true;
+                console.log("[Backend] User needs setup info (name/grade missing)");
             }
             user.lastLogin = new Date();
             await user.save();
         } else {
-            // Tạo user mới từ Google (chưa có tên/grade chính thức)
+            console.log("[Backend] Creating new user from Google Auth");
             user = new User({
                 email,
-                name: name, // Dùng tên từ google làm tạm thời
-                password: 'GOOGLE_AUTH_USER', // Đánh dấu không dùng mật khẩu
+                name: name,
+                password: 'GOOGLE_AUTH_USER',
                 role: 'student',
                 isVerified: true,
                 averageScore: 0,
@@ -148,19 +194,27 @@ app.post('/api/user/google-auth', async (req, res) => {
             user.studentId = 'VANS-' + user._id.toString().slice(-6).toUpperCase();
             await user.save();
             needsSetup = true;
+            console.log(`[Backend] New user created: ${user.studentId}`);
         }
 
         res.json({ success: true, user, needsSetup });
     } catch (e) {
-        console.error("Google Auth Error:", e);
-        res.status(401).json({ error: "Invalid Google Token" });
+        console.error("[Backend] Google Auth Fatal Error:", e);
+        // Trả về lỗi chi tiết hơn ngay cả trong production để chúng ta gỡ rối
+        res.status(500).json({ 
+            success: false,
+            error: "Internal Server Error during Google Auth", 
+            message: e.message,
+            phase: "verification_or_db",
+            stack: e.stack // Sẽ giúp xác định chính xác dòng lỗi
+        });
     }
 });
 
 // Update score API
 app.post('/api/user/sync-score', async (req, res) => {
     try {
-        const { studentId, score } = req.body;
+        const { studentId, score, examId } = req.body;
         if (!studentId) return res.status(400).json({ error: "StudentId is required" });
 
         const user = await User.findOne({ studentId });
@@ -171,8 +225,18 @@ app.post('/api/user/sync-score', async (req, res) => {
         user.totalExams += 1;
         user.averageScore = totalScore / user.totalExams;
         
+        // Lưu ID đề thi đã hoàn thành để khóa thi lại sau này
+        if (examId && !user.completedExams.includes(examId)) {
+            user.completedExams.push(examId);
+        }
+        
         await user.save();
-        res.json({ success: true, averageScore: user.averageScore, totalExams: user.totalExams });
+        res.json({ 
+            success: true, 
+            averageScore: user.averageScore, 
+            totalExams: user.totalExams,
+            completedExams: user.completedExams 
+        });
     } catch (e) {
         res.status(500).json({ error: e.message });
     }

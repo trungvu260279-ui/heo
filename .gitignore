@@ -35,3 +35,6 @@ teacher_data_v2.json
 # Backend dynamic data
 backend/uploads/
 backend/data/
+
+.vercel
+.env*.local
