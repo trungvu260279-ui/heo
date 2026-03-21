@@ -6,9 +6,9 @@
     "backend"
   ],
   "scripts": {
-    "build": "cd app && npm run build",
-    "vercel-build": "cd app && npm run build",
-    "install-all": "npm install && cd app && npm install && cd ../backend && npm install"
+    "build": "npm run build -w thpt-kim-xuyen",
+    "vercel-build": "npm run build -w thpt-kim-xuyen",
+    "install-all": "npm install"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -21,5 +21,12 @@
     "html-to-docx": "^1.8.0",
     "mongoose": "^8.10.0",
     "multer": "^2.1.1"
+  },
+  "devDependencies": {
+    "vite": "^5.1.6",
+    "@vitejs/plugin-react-swc": "^3.6.0",
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.35",
+    "autoprefixer": "^10.4.18"
   }
 }

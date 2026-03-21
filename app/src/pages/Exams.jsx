@@ -1,20 +1,52 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { clsx } from 'clsx'
 import examsData from '../data/exams.json'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import { motion, AnimatePresence } from 'framer-motion'
 import RadarChart from '../components/RadarChart'
-import { addEvaluation, saveExamHistoryDetail } from '../hooks/useEvalStore'
+import { addEvaluation, saveExamHistoryDetail, getAllExamHistoryDetails } from '../hooks/useEvalStore'
 import { getAuthUser } from '../hooks/useAuth'
 
 const LOCAL_API_KEYS_TEXT = import.meta.env.VITE_GEMINI_API_KEYS || import.meta.env.GEMINI_API_KEYS || import.meta.env.VITE_GEMINI_API_KEY || ''
 const LOCAL_API_KEYS = LOCAL_API_KEYS_TEXT.split(',').map(k => k.trim()).filter(Boolean)
 const LOCAL_MODEL_NAME = import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash'
 
-// ─── Downloader (Mock) ────────────────────────────────────────────────────────
-function downloadFakeFile(filename) {
-    alert(`Đang chuẩn bị tải xuống: ${filename}\n(Tính năng này yêu cầu kết nối server để xuất bản Word)`);
+// ─── Downloader (Word) ────────────────────────────────────────────────────────
+async function downloadExamFile(exam) {
+    if (!exam) return;
+    try {
+        const res = await fetch('/api/export-docx', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                html: `
+                    <h1 style="text-align: center;">KỲ THI TỐT NGHIỆP TRUNG HỌC PHỔ THÔNG</h1>
+                    <h2 style="text-align: center;">Bài thi: NGỮ VĂN</h2>
+                    <h3 style="text-align: center;">Đề thi: ${exam.title}</h3>
+                    <hr/>
+                    <div style="white-space: pre-wrap; line-height: 1.6;">
+                        ${normalizeVN(exam.sections.full_text)}
+                    </div>
+                `,
+                filename: `${exam.title.replace(/\s+/g, '_')}.docx`
+            })
+        });
+
+        if (!res.ok) throw new Error('Download failed');
+
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${exam.title.replace(/\s+/g, '_')}.docx`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (e) {
+        console.error("Download error:", e);
+        alert("Có lỗi xảy ra khi tải đề thi. Vui lòng thử lại sau.");
+    }
 }
 
 // ─── Fix Vietnamese diacritics & OCR Spacing Bugs ─────────────────────────────
@@ -467,6 +499,475 @@ function EmptyState() {
     )
 }
 
+// ─── Room Modal (Tạo / Tham gia phòng thi) ───────────────────────────────────
+function ExamRoomModal({ onClose, onJoin, examsData }) {
+    const [tab, setTab] = useState('join')            // 'join' | 'create'
+    const [code, setCode] = useState('')              // input khi join
+    const [selectedExamId, setSelectedExamId] = useState(examsData[0]?.id || '')
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+    // Sau khi tạo phòng thành công, hiện màn share link
+    const [createdRoom, setCreatedRoom] = useState(null)  // { roomCode, examId, link }
+    const [copied, setCopied] = useState(false)
+    const user = getAuthUser()
+
+    function genCode() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+        let c = 'VAN-'
+        for (let i = 0; i < 4; i++) c += chars[Math.floor(Math.random() * chars.length)]
+        return c
+    }
+
+    // Trích xuất mã phòng từ link hoặc chuỗi thô
+    function extractCode(raw) {
+        const s = raw.trim()
+        // Nếu là URL, lấy query ?room=XXX hoặc path cuối /XXX
+        try {
+            const url = new URL(s)
+            const roomParam = url.searchParams.get('room')
+            if (roomParam) return roomParam.toUpperCase()
+            // pathname cuối
+            const parts = url.pathname.split('/').filter(Boolean)
+            if (parts.length) return parts[parts.length - 1].toUpperCase()
+        } catch { /* không phải URL, dùng thẳng */ }
+        return s.toUpperCase()
+    }
+
+    function buildLink(roomCode) {
+        return `${window.location.origin}/exams?room=${roomCode}`
+    }
+
+    async function handleCreate() {
+        setLoading(true); setError('')
+        const roomCode = genCode()
+        try {
+            await fetch('/api/room', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    roomCode,
+                    examId: selectedExamId,
+                    createdBy: user?.name || 'Unknown',
+                    createdAt: new Date().toISOString()
+                })
+            })
+            setCreatedRoom({ roomCode, examId: selectedExamId, link: buildLink(roomCode) })
+        } catch {
+            setError('Không thể tạo phòng. Thử lại nhé.')
+        } finally { setLoading(false) }
+    }
+
+    function handleCopyLink() {
+        if (!createdRoom) return
+        navigator.clipboard.writeText(createdRoom.link)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2500)
+    }
+
+    async function handleJoin() {
+        const extracted = extractCode(code)
+        if (!extracted) { setError('Nhập mã phòng hoặc dán link vào đây.'); return }
+        setLoading(true); setError('')
+        try {
+            const res = await fetch(`/api/room/${extracted}`)
+            if (!res.ok) throw new Error('not found')
+            const room = await res.json()
+            onJoin(room.roomCode, room.examId)
+        } catch {
+            setError('Mã phòng không tồn tại hoặc link không hợp lệ.')
+        } finally { setLoading(false) }
+    }
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.92, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.92, y: 20 }}
+                className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden"
+            >
+                {/* Header */}
+                <div className="flex items-center justify-between px-6 pt-6 pb-4">
+                    <div>
+                        <h2 className="text-lg font-black text-slate-900 dark:text-white">Phòng Thi</h2>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                            {createdRoom ? 'Phòng đã tạo — chia sẻ link cho học sinh' : 'Tạo hoặc tham gia phòng thi có mã'}
+                        </p>
+                    </div>
+                    <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors">
+                        <span className="material-symbols-outlined text-[20px]">close</span>
+                    </button>
+                </div>
+
+                {/* ── Màn hình SHARE LINK sau khi tạo phòng ── */}
+                {createdRoom ? (
+                    <div className="px-6 pb-6 space-y-5">
+                        {/* Room code display */}
+                        <div className="flex flex-col items-center gap-2 py-5 bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-950/40 dark:to-violet-950/40 rounded-2xl border border-indigo-100 dark:border-indigo-900/50">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Mã phòng thi</p>
+                            <p className="text-4xl font-black tracking-[0.2em] text-indigo-700 dark:text-indigo-300 font-mono">
+                                {createdRoom.roomCode}
+                            </p>
+                            <p className="text-[10px] text-slate-400">Học sinh dùng mã này hoặc link bên dưới</p>
+                        </div>
+
+                        {/* Link to copy */}
+                        <div className="space-y-2">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Link tham gia</p>
+                            <div className="flex items-center gap-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <span className="material-symbols-outlined text-slate-400 text-[18px] shrink-0">link</span>
+                                <p className="flex-1 text-xs text-slate-600 dark:text-slate-300 font-mono truncate">
+                                    {createdRoom.link}
+                                </p>
+                            </div>
+                            <button
+                                onClick={handleCopyLink}
+                                className={`w-full py-3 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 ${
+                                    copied
+                                        ? 'bg-emerald-500 text-white'
+                                        : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200 dark:shadow-indigo-900/40'
+                                }`}
+                            >
+                                <span className="material-symbols-outlined text-[18px]">
+                                    {copied ? 'check_circle' : 'content_copy'}
+                                </span>
+                                {copied ? 'Đã copy link!' : 'Copy link chia sẻ'}
+                            </button>
+                        </div>
+
+                        {/* Enter as creator */}
+                        <button
+                            onClick={() => onJoin(createdRoom.roomCode, createdRoom.examId)}
+                            className="w-full py-2.5 rounded-2xl border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 font-black text-sm hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all flex items-center justify-center gap-2"
+                        >
+                            <span className="material-symbols-outlined text-[18px]">play_circle</span>
+                            Vào phòng và bắt đầu làm bài
+                        </button>
+                    </div>
+                ) : (
+                    <>
+                        {/* Tabs */}
+                        <div className="flex mx-6 mb-5 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl">
+                            {[['join', 'Nhập mã / Link'], ['create', 'Tạo phòng mới']].map(([key, label]) => (
+                                <button key={key} onClick={() => { setTab(key); setError('') }}
+                                    className={clsx(
+                                        'flex-1 py-2 rounded-xl text-xs font-black transition-all',
+                                        tab === key
+                                            ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                                            : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                                    )}>
+                                    {label}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="px-6 pb-6 space-y-4">
+                            {tab === 'join' ? (
+                                <>
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 block">
+                                            Mã phòng hoặc link tham gia
+                                        </label>
+                                        <textarea
+                                            value={code}
+                                            onChange={e => setCode(e.target.value)}
+                                            onKeyDown={e => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleJoin())}
+                                            placeholder={"Dán link vào đây\nVD: https://app.../exams?room=VAN-4X2K\nhoặc nhập thẳng mã: VAN-4X2K"}
+                                            rows={3}
+                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-mono text-sm focus:ring-2 focus:ring-indigo-400 outline-none transition-all placeholder:font-sans placeholder:text-xs placeholder:tracking-normal placeholder:text-slate-400 resize-none"
+                                        />
+                                    </div>
+                                    {error && <p className="text-xs text-red-500 font-bold">{error}</p>}
+                                    <button onClick={handleJoin} disabled={loading}
+                                        className="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 dark:shadow-indigo-900/40">
+                                        {loading
+                                            ? <><div className="size-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Đang kiểm tra...</>
+                                            : <><span className="material-symbols-outlined text-[18px]">login</span> Vào phòng thi</>
+                                        }
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 block">Chọn đề thi</label>
+                                        <select
+                                            value={selectedExamId}
+                                            onChange={e => setSelectedExamId(e.target.value)}
+                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 outline-none transition-all"
+                                        >
+                                            {examsData.map(ex => (
+                                                <option key={ex.id} value={ex.id}>{ex.title}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="p-3 rounded-xl bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/50">
+                                        <p className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold">
+                                            💡 Sau khi tạo, bạn sẽ nhận link để chia sẻ cho học sinh.
+                                        </p>
+                                    </div>
+                                    {error && <p className="text-xs text-red-500 font-bold">{error}</p>}
+                                    <button onClick={handleCreate} disabled={loading}
+                                        className="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 dark:shadow-indigo-900/40">
+                                        {loading
+                                            ? <><div className="size-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Đang tạo...</>
+                                            : <><span className="material-symbols-outlined text-[18px]">add_circle</span> Tạo phòng thi</>
+                                        }
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    </>
+                )}
+            </motion.div>
+        </div>
+    )
+}
+
+// ─── Room Ranking Modal (Popup BXH sau khi nộp bài) ──────────────────────────
+const AVA_COLORS = ['#6366f1','#8b5cf6','#06b6d4','#10b981','#f59e0b','#ef4444','#ec4899']
+
+function ScoreCounter({ target }) {
+    const [displayed, setDisplayed] = useState(0)
+    useEffect(() => {
+        let n = 0; const steps = 18
+        const iv = setInterval(() => {
+            n++
+            setDisplayed(parseFloat((target * n / steps).toFixed(1)))
+            if (n >= steps) { setDisplayed(target); clearInterval(iv) }
+        }, 28)
+        return () => clearInterval(iv)
+    }, [target])
+    return <>{displayed.toFixed(1)}</>
+}
+
+function RoomRankingModal({ roomCode, currentUser, onClose, onContinue }) {
+    const [rankings, setRankings] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [copied, setCopied] = useState(false)
+
+    useEffect(() => {
+        fetch(`/api/room/${roomCode}/ranking`)
+            .then(r => r.json())
+            .then(data => setRankings(Array.isArray(data) ? data : []))
+            .catch(() => setRankings([]))
+            .finally(() => setLoading(false))
+    }, [roomCode])
+
+    function copyCode() {
+        const link = `${window.location.origin}/exams?room=${roomCode}`
+        navigator.clipboard.writeText(link)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+    }
+
+    const myIdx = rankings.findIndex(r => r.name === currentUser?.name)
+    const myRank = myIdx + 1
+
+    function scoreClass(v) {
+        return v >= 8 ? '#d97706' : v >= 6.5 ? '#4f46e5' : v >= 5 ? '#059669' : '#dc2626'
+    }
+
+    function rankBadge(i) {
+        if (i === 0) return <span style={{fontSize:22}}>🥇</span>
+        if (i === 1) return <span style={{fontSize:22}}>🥈</span>
+        if (i === 2) return <span style={{fontSize:22}}>🥉</span>
+        return (
+            <div style={{
+                width:28,height:28,borderRadius:8,background:'#f1f5f9',border:'1px solid #e2e8f0',
+                fontSize:12,fontWeight:700,color:'#94a3b8',
+                display:'flex',alignItems:'center',justifyContent:'center'
+            }}>{i+1}</div>
+        )
+    }
+
+    return (
+        <div style={{
+            position:'fixed',inset:0,zIndex:50,display:'flex',alignItems:'center',
+            justifyContent:'center',padding:16,background:'rgba(0,0,0,.6)',backdropFilter:'blur(6px)'
+        }}>
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 30 }}
+                transition={{ type: 'spring', bounce: 0.28 }}
+                style={{
+                    width:'100%',maxWidth:540,
+                    background:'#fff',borderRadius:24,border:'1px solid #e4e9f5',
+                    boxShadow:'0 4px 40px rgba(99,120,220,.16)',overflow:'hidden',
+                    fontFamily:"'Outfit', 'Inter', sans-serif"
+                }}
+            >
+                {/* ── Header ── */}
+                <div style={{
+                    padding:'24px 28px 20px',
+                    background:'linear-gradient(135deg,#eef2ff 0%,#f5f0ff 100%)',
+                    borderBottom:'1px solid #e8ecf8',
+                    display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:12
+                }}>
+                    <div>
+                        <div style={{fontSize:11,fontWeight:700,letterSpacing:'.14em',color:'#818cf8',textTransform:'uppercase',marginBottom:5}}>
+                            Phòng thi · Kết quả
+                        </div>
+                        <div style={{fontSize:26,fontWeight:900,color:'#1e1b4b',letterSpacing:'-.01em',lineHeight:1}}>
+                            Bảng xếp hạng
+                        </div>
+                        {myRank > 0 && (
+                            <div style={{marginTop:6,fontSize:13,color:'#64748b',fontWeight:500}}>
+                                Bạn xếp hạng <b style={{color:'#4f46e5',fontWeight:700}}>#{myRank}</b> trong phòng này
+                            </div>
+                        )}
+                        {/* Code chip */}
+                        <div
+                            onClick={copyCode}
+                            style={{
+                                marginTop:14,display:'inline-flex',alignItems:'center',gap:8,
+                                background: copied ? '#f0fdf4' : '#fff',
+                                border: copied ? '1.5px solid #86efac' : '1.5px solid #c7d2fe',
+                                borderRadius:10,padding:'7px 14px',cursor:'pointer',transition:'.15s',userSelect:'none'
+                            }}
+                        >
+                            <span style={{fontSize:13,color: copied ? '#4ade80' : '#a5b4fc'}}>⊞</span>
+                            <span style={{
+                                fontFamily:'monospace',fontSize:15,fontWeight:800,
+                                letterSpacing:'.18em',color: copied ? '#16a34a' : '#4f46e5'
+                            }}>
+                                {copied ? 'Đã copy link!' : roomCode}
+                            </span>
+                            <span style={{fontSize:13,color: copied ? '#4ade80' : '#a5b4fc'}}>
+                                {copied ? '✓' : '⎘'}
+                            </span>
+                        </div>
+                    </div>
+                    <button onClick={onClose} style={{
+                        width:32,height:32,borderRadius:10,flexShrink:0,
+                        background:'#fff',border:'1px solid #e2e8f0',
+                        color:'#94a3b8',cursor:'pointer',fontSize:16,
+                        display:'flex',alignItems:'center',justifyContent:'center'
+                    }}>✕</button>
+                </div>
+
+                {/* ── Column headers ── */}
+                <div style={{
+                    display:'grid',gridTemplateColumns:'48px 1fr 72px',gap:'0 12px',
+                    padding:'10px 28px 8px',borderBottom:'1px solid #f1f5f9'
+                }}>
+                    {['Hạng','Học sinh','Điểm'].map((h,i) => (
+                        <div key={h} style={{
+                            fontSize:10,fontWeight:700,letterSpacing:'.12em',
+                            color:'#94a3b8',textTransform:'uppercase',
+                            textAlign: i === 2 ? 'right' : 'left'
+                        }}>{h}</div>
+                    ))}
+                </div>
+
+                {/* ── List ── */}
+                <div style={{maxHeight:300,overflowY:'auto'}}>
+                    {loading ? (
+                        <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'64px 0',gap:12}}>
+                            <div style={{width:40,height:40,border:'4px solid #e0e7ff',borderTopColor:'#6366f1',borderRadius:'50%',animation:'spin 1s linear infinite'}} />
+                            <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+                            <p style={{fontSize:11,fontWeight:700,color:'#94a3b8',letterSpacing:'.12em',textTransform:'uppercase'}}>Đang tải...</p>
+                        </div>
+                    ) : rankings.length === 0 ? (
+                        <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'64px 0',gap:8,textAlign:'center'}}>
+                            <span style={{fontSize:40}}>🏁</span>
+                            <p style={{fontWeight:700,color:'#334155'}}>Bạn là người đầu tiên!</p>
+                            <p style={{fontSize:12,color:'#94a3b8'}}>Share mã phòng để bạn bè cùng thi nào.</p>
+                        </div>
+                    ) : rankings.map((rk, idx) => {
+                        const isMe = rk.name === currentUser?.name
+                        const timeStr = rk.submittedAt
+                            ? new Date(rk.submittedAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+                            : ''
+                        return (
+                            <motion.div
+                                key={rk.name}
+                                initial={{ opacity: 0, x: -8 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.06 }}
+                                style={{
+                                    display:'grid',gridTemplateColumns:'48px 1fr 72px',
+                                    alignItems:'center',gap:'0 12px',
+                                    padding:'13px 28px',
+                                    borderBottom: idx < rankings.length - 1 ? '1px solid #f8fafc' : 'none',
+                                    background: isMe ? '#f5f3ff' : 'transparent',
+                                    position:'relative',
+                                }}
+                            >
+                                {isMe && <div style={{position:'absolute',left:0,top:0,bottom:0,width:3,background:'#6366f1',borderRadius:'0 2px 2px 0'}} />}
+
+                                {/* Rank */}
+                                <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                                    {rankBadge(idx)}
+                                </div>
+
+                                {/* Person */}
+                                <div style={{display:'flex',alignItems:'center',gap:11,minWidth:0}}>
+                                    <div style={{
+                                        width:38,height:38,borderRadius:'50%',flexShrink:0,
+                                        display:'flex',alignItems:'center',justifyContent:'center',
+                                        fontSize:14,fontWeight:800,color:'#fff',
+                                        background: AVA_COLORS[idx % AVA_COLORS.length],
+                                        border: isMe ? '2px solid #a5b4fc' : '2px solid rgba(255,255,255,.6)',
+                                        boxShadow: isMe ? '0 0 0 3px #c7d2fe' : 'none'
+                                    }}>
+                                        {(rk.name?.[0] || '?').toUpperCase()}
+                                    </div>
+                                    <div style={{minWidth:0,flex:1}}>
+                                        <div style={{
+                                            fontSize:14,fontWeight:700,
+                                            color: isMe ? '#4338ca' : '#1e293b',
+                                            whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',
+                                            display:'flex',alignItems:'center',gap:6,lineHeight:1.2
+                                        }}>
+                                            {rk.name}
+                                            {isMe && <span style={{
+                                                fontSize:9,fontWeight:800,letterSpacing:'.08em',
+                                                background:'#ede9fe',color:'#6d28d9',
+                                                borderRadius:4,padding:'1px 6px',textTransform:'uppercase'
+                                            }}>Bạn</span>}
+                                        </div>
+                                        {timeStr && <div style={{fontSize:11,color:'#94a3b8',fontWeight:500,marginTop:2}}>{timeStr}</div>}
+                                    </div>
+                                </div>
+
+                                {/* Score */}
+                                <div style={{textAlign:'right'}}>
+                                    <div style={{
+                                        fontSize:26,fontWeight:900,lineHeight:1,
+                                        letterSpacing:'-.01em',color: scoreClass(rk.score)
+                                    }}>
+                                        <ScoreCounter target={rk.score || 0} />
+                                    </div>
+                                    <div style={{fontSize:10,fontWeight:600,color:'#cbd5e1',marginTop:1}}>/ 10.0</div>
+                                </div>
+                            </motion.div>
+                        )
+                    })}
+                </div>
+
+                {/* ── Footer ── */}
+                <div style={{
+                    display:'flex',gap:10,padding:'16px 28px',
+                    borderTop:'1px solid #f1f5f9',background:'#fafbff'
+                }}>
+                    <button onClick={onClose} style={{
+                        flex:1,padding:'13px 0',borderRadius:12,
+                        fontSize:13,fontWeight:700,cursor:'pointer',transition:'.15s',
+                        background:'#fff',border:'1.5px solid #e2e8f0',color:'#64748b'
+                    }}>Đóng</button>
+                    <button onClick={onContinue} style={{
+                        flex:1,padding:'13px 0',borderRadius:12,
+                        fontSize:14,fontWeight:700,cursor:'pointer',transition:'.15s',
+                        background:'#4f46e5',color:'#fff',border:'none',
+                        boxShadow:'0 4px 14px rgba(79,70,229,.25)'
+                    }}>✦ Phân tích AI chuyên sâu</button>
+                </div>
+            </motion.div>
+        </div>
+    )
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function Exams() {
     const [searchTerm, setSearchTerm] = useState('')
@@ -475,9 +976,38 @@ export default function Exams() {
     const [isTakingExam, setIsTakingExam] = useState(false)
     const [answers, setAnswers] = useState({})
     const [history, setHistory] = useState([])
+    const [showRoomModal, setShowRoomModal] = useState(false)
+    const [activeRoomCode, setActiveRoomCode] = useState(null)      // mã phòng đang thi
+    const [showRoomRanking, setShowRoomRanking] = useState(false)   // popup BXH
+
+    const [searchParams, setSearchParams] = useSearchParams()
 
     useEffect(() => {
         refreshHistory();
+    }, []);
+
+    // Auto-join room nếu URL có ?room=XXX
+    useEffect(() => {
+        const roomParamCode = searchParams.get('room')
+        if (!roomParamCode) return
+
+        // Xoá param khỏi URL ngay để tránh re-trigger
+        setSearchParams({}, { replace: true })
+
+        // Fetch thông tin phòng rồi tự động join
+        fetch(`/api/room/${roomParamCode.toUpperCase()}`)
+            .then(r => {
+                if (!r.ok) throw new Error('not found')
+                return r.json()
+            })
+            .then(room => {
+                handleJoinRoom(room.roomCode, room.examId)
+            })
+            .catch(() => {
+                // Phòng không tồn tại → mở modal với mã đã điền sẵn
+                setShowRoomModal(true)
+            })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const refreshHistory = async () => {
@@ -636,6 +1166,9 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
             const result = JSON.parse(match[0])
             setGradingResult(result)
             setSubmitDone(true)
+            if (activeRoomCode) {
+                setTimeout(() => setShowRoomRanking(true), 800) // delay 800ms để animation kết quả xong
+            }
 
             // Session-based Archiving for Chat Synchronization (Token Saving & Automatic Deletion)
             let archiveId = null;
@@ -676,12 +1209,13 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
             // --- SYNC SCORE TO BACKEND (Optimized: Best Score Only & >= 5.0) ---
             const user = getAuthUser();
             if (user && user.studentId && result.overall >= 5) {
-                // Find previous best score for this specific exam from local history
+                // 1. Update Personal Progress (DB User)
                 const examHistory = history.filter(h => h.examId === selectedExam.id);
                 const prevBest = examHistory.length > 0 ? Math.max(...examHistory.map(h => h.score || 0)) : 0;
 
                 if (result.overall > prevBest) {
                     try {
+                        // Sync to MongoDB
                         await fetch('/api/user/sync-score', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -696,7 +1230,22 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                                 timestamp: Date.now()
                             })
                         });
-                        console.log("New best score! Database synchronized.");
+
+                        // 2. Sync to Ranking (rankings.json / api/sheet)
+                        await fetch('/api/sheet', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                email: user.email,
+                                name: user.name,
+                                role: 'student',
+                                score: result.overall,
+                                exercise: selectedExam.title,
+                                date: new Date().toISOString()
+                            })
+                        });
+
+                        console.log("New best score! Database and Ranking synchronized.");
                     } catch (e) {
                         console.warn("Failed to sync score to backend", e);
                     }
@@ -705,6 +1254,24 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                 }
             } else if (result.overall < 5) {
                 console.log("Score below 5.0, skipping database sync.");
+            }
+
+            // Sync score vào room ranking nếu đang trong phòng thi
+            if (activeRoomCode) {
+                try {
+                    await fetch(`/api/room/${activeRoomCode}/score`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: user?.name || 'Ẩn danh',
+                            email: user?.email || '',
+                            score: result.overall,
+                            submittedAt: new Date().toISOString()
+                        })
+                    })
+                } catch (e) {
+                    console.warn('Room score sync failed', e)
+                }
             }
 
             // Refresh history to update sidebar score
@@ -735,6 +1302,23 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
         setMaterialAnalysis(null)
         setGradingResult(null)
         setSubmitDone(false)
+    }
+
+    function handleJoinRoom(roomCode, examId) {
+        const exam = examsData.find(e => e.id === examId)
+        if (!exam) return
+        setActiveRoomCode(roomCode)
+        setShowRoomModal(false)
+        handleSelectExam(exam)
+        // Delay nhỏ để state settle rồi mới startExam
+        setTimeout(() => {
+            setAnswers({})
+            setHints({})
+            setMaterialAnalysis(null)
+            setGradingResult(null)
+            setSubmitDone(false)
+            setIsTakingExam(true)
+        }, 50)
     }
 
     return (
@@ -774,7 +1358,18 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                 </div>
 
                 {!isTakingExam && !selectedExam && (
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 md:gap-4">
+                        <button
+                            onClick={() => setShowRoomModal(true)}
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs transition-all ring-1 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-200 dark:ring-slate-700 hover:ring-indigo-500"
+                        >
+                            <span className="material-symbols-outlined text-[18px]">meeting_room</span>
+                            <span className="hidden sm:inline">Phòng thi</span>
+                            {activeRoomCode && (
+                                <span className="font-mono text-indigo-500 text-[10px]">{activeRoomCode}</span>
+                            )}
+                        </button>
+
                         <button
                             onClick={() => setShowRankings(!showRankings)}
                             className={clsx(
@@ -1026,7 +1621,7 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                                     </div>
                                     <div className="flex gap-2 shrink-0 mt-1">
                                         <button
-                                            onClick={() => downloadFakeFile(selectedExam.filename)}
+                                            onClick={() => downloadExamFile(selectedExam)}
                                             className="p-3 rounded-xl border border-slate-200 dark:border-slate-800
                                                 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 transition-colors"
                                             title="Tải đề thi (.docx)"
@@ -1075,7 +1670,32 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
 
                     </AnimatePresence>
                 </main>
-            </div>
         </div>
+
+        {/* Room Modal */}
+        <AnimatePresence>
+            {showRoomModal && (
+                <ExamRoomModal
+                    examsData={examsData}
+                    onClose={() => setShowRoomModal(false)}
+                    onJoin={handleJoinRoom}
+                />
+            )}
+        </AnimatePresence>
+
+        {/* Room Ranking Popup */}
+        <AnimatePresence>
+            {showRoomRanking && activeRoomCode && (
+                <RoomRankingModal
+                    roomCode={activeRoomCode}
+                    currentUser={getAuthUser()}
+                    onClose={() => setShowRoomRanking(false)}
+                    onContinue={() => {
+                        setShowRoomRanking(false)
+                    }}
+                />
+            )}
+        </AnimatePresence>
+    </div>
     )
 }

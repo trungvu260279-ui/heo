@@ -131,32 +131,42 @@ function exportCSV(data) {
 
 // ─── Parse dữ liệu từ Google Sheets ──────────────────────────────────────────
 function parseSheetData(raw) {
-    if (!Array.isArray(raw) || raw.length < 2) return []
-    // Bỏ dòng header (dòng 0)
-    const rows = raw.slice(1)
+    if (!Array.isArray(raw)) return []
 
-    // Gộp theo email, lấy điểm cao nhất
     const map = {}
-    for (const row of rows) {
-        const [email, name, role, score, exercise, date] = row
+    for (const row of raw) {
+        const { email, name, role, score, exercise, date } = row
         if (!email || !name) continue
         const s = parseFloat(score) || 0
-        if (!map[email] || s > map[email].gpa) {
-            map[email] = { email, name, role, gpa: s, exercise, date }
+
+        if (!map[email]) {
+            map[email] = { email, name, role, exercise, date, scores: [] }
+        }
+
+        map[email].scores.push(s)
+
+        // Giữ bài gần nhất (so sánh date)
+        if (!map[email].date || new Date(date) > new Date(map[email].date)) {
+            map[email].exercise = exercise
+            map[email].date = date
         }
     }
 
     return Object.values(map)
-        .filter(u => u.role !== 'teacher') // Chỉ xếp hạng học sinh
+        .filter(u => u.role !== 'teacher')
+        .map(u => {
+            const avg = u.scores.reduce((a, b) => a + b, 0) / u.scores.length
+            return {
+                ...u,
+                id: u.email,
+                gpa: Math.round(avg * 10) / 10, // làm tròn 1 chữ số thập phân
+                grade: getGrade(avg),
+                color: getColor(u.name),
+                initials: getInitials(u.name),
+            }
+        })
         .sort((a, b) => b.gpa - a.gpa)
-        .map((u, i) => ({
-            ...u,
-            id: u.email,
-            rank: i + 1,
-            grade: getGrade(u.gpa),
-            color: getColor(u.name),
-            initials: getInitials(u.name),
-        }))
+        .map((u, i) => ({ ...u, rank: i + 1 }))
 }
 
 export default function Ranking() {
@@ -280,9 +290,9 @@ export default function Ranking() {
                                     <tr className="border-b border-white/5">
                                         <th className="text-left px-5 py-3 text-[11px] text-slate-500 font-semibold uppercase tracking-wider w-16">Hạng</th>
                                         <th className="text-left px-4 py-3 text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Học sinh</th>
-                                        <th className="text-left px-4 py-3 text-[11px] text-slate-500 font-semibold uppercase tracking-wider w-24">Điểm Văn</th>
+                                        <th className="text-left px-4 py-3 text-[11px] text-slate-500 font-semibold uppercase tracking-wider w-24">Điểm TB</th>
                                         <th className="text-left px-4 py-3 text-[11px] text-slate-500 font-semibold uppercase tracking-wider w-28">Xếp loại</th>
-                                        <th className="text-left px-4 py-3 text-[11px] text-slate-500 font-semibold uppercase tracking-wider hidden md:table-cell">Bài gần nhất</th>
+                                        <th className="text-center px-4 py-3 text-[11px] text-slate-500 font-semibold uppercase tracking-wider hidden md:table-cell w-24">Số bài làm</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -313,8 +323,10 @@ export default function Ranking() {
                                                     {student.grade}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-3.5 hidden md:table-cell">
-                                                <p className="text-xs text-slate-400 truncate max-w-[180px]">{student.exercise}</p>
+                                            <td className="px-4 py-3.5 hidden md:table-cell text-center">
+                                                <span className="text-xs font-bold text-slate-400 bg-white/5 px-2.5 py-1 rounded-lg border border-white/5">
+                                                    {student.scores?.length || 1}
+                                                </span>
                                             </td>
                                         </motion.tr>
                                     ))}

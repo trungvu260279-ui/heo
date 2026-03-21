@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import RadarChart from '../components/RadarChart'
 import ProgressChart from '../components/ProgressChart'
 import { readStore, getAllExamHistoryDetails } from '../hooks/useEvalStore'
@@ -19,12 +20,9 @@ function classifyXepLoai(avg) {
     return { label: 'Cần cố gắng', color: 'text-red-500' }
 }
 
-import { useNavigate } from 'react-router-dom'
-
 export default function Assessment() {
     const [store, setStore] = useState(() => readStore())
     const navigate = useNavigate()
-
 
     // Listen for updates from Assistant (exercise submissions)
     useEffect(() => {

@@ -10,6 +10,9 @@ const { OAuth2Client } = require('google-auth-library');
 require('dotenv').config();
 
 const User = require('./models/User');
+const RankingLog = require('./models/RankingLog');
+const ExamArchive = require('./models/ExamArchive');
+const ExamRoom = require('./models/ExamRoom');
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -90,6 +93,7 @@ if (!process.env.VERCEL) connectDB();
 // --- USER MANAGEMENT API ---
 app.post('/api/user/sync', async (req, res) => {
     try {
+        await connectDB();
         const { email, name, role, grade, school, password, phone, bio } = req.body;
         if (!email) return res.status(400).json({ error: "Email is required" });
 
@@ -214,6 +218,7 @@ app.post('/api/user/google-auth', async (req, res) => {
 // Update score API
 app.post('/api/user/sync-score', async (req, res) => {
     try {
+        await connectDB();
         const { studentId, score, examId } = req.body;
         if (!studentId) return res.status(400).json({ error: "StudentId is required" });
 
@@ -243,6 +248,7 @@ app.post('/api/user/sync-score', async (req, res) => {
 });
 app.get('/api/rankings', async (req, res) => {
     try {
+        await connectDB();
         const { grade } = req.query;
         let query = { role: 'student' };
         if (grade) query.grade = grade;
@@ -258,58 +264,166 @@ app.get('/api/rankings', async (req, res) => {
     }
 });
 
-app.get('/api/sheet', (req, res) => {
+app.get('/api/sheet', async (req, res) => {
     try {
-        const raw = fs.readFileSync(getDbFilePath(), 'utf-8');
-        res.json(JSON.parse(raw));
+        await connectDB();
+        const logs = await RankingLog.find({}).sort({ createdAt: -1 }).limit(1000);
+        
+        // Merge with local data IF not on Vercel (for development consistency)
+        if (!isVercel) {
+            try {
+                const raw = fs.readFileSync(getDbFilePath(), 'utf-8');
+                const localData = JSON.parse(raw);
+                // Simple merge for local dev
+                return res.json([...localData, ...logs].slice(-1000));
+            } catch (e) { console.warn("Local sync failed", e.message); }
+        }
+
+        res.json(logs);
     } catch(e) {
+        console.error("Sheet Fetch Error:", e);
         res.status(500).json({ error: e.message });
     }
 });
 
-app.post('/api/sheet', (req, res) => {
+app.post('/api/sheet', async (req, res) => {
     try {
+        await connectDB();
         const { email, name, role, score, exercise, date } = req.body;
-        const raw = fs.readFileSync(getDbFilePath(), 'utf-8');
-        const data = JSON.parse(raw);
-        data.push({ email, name, role, score, exercise, date });
-        fs.writeFileSync(getDbFilePath(), JSON.stringify(data, null, 2));
+        
+        // MongoDB Save (Vercel Ready)
+        const newLog = new RankingLog({ email, name, role, score, exercise, date });
+        await newLog.save();
+
+        // Local Sync (Fallback for local dev if needed)
+        if (!isVercel) {
+            try {
+                const raw = fs.readFileSync(getDbFilePath(), 'utf-8');
+                const data = JSON.parse(raw);
+                data.push({ email, name, role, score, exercise, date });
+                fs.writeFileSync(getDbFilePath(), JSON.stringify(data, null, 2));
+            } catch (e) { console.warn("Local sync failed", e.message); }
+        }
+
         res.json({ success: true });
     } catch(e) {
+        console.error("Sheet Sync Error:", e);
         res.status(500).json({ error: e.message });
     }
 });
 
-// Archive Exam Data
-app.post('/api/archive-exam', (req, res) => {
+// Archive Exam Data (MongoDB Ready)
+app.post('/api/archive-exam', async (req, res) => {
     try {
-        if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
+        await connectDB();
         const data = req.body;
-        console.log("[Backend] Archiving exam data, size:", JSON.stringify(data).length);
         const id = 'VANS-' + Math.random().toString(36).substring(2, 6).toUpperCase();
-        const filePath = path.join(ARCHIVE_DIR, `${id}.json`);
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-        console.log("[Backend] Exam archived successfully with ID:", id);
+        
+        // MongoDB Save
+        const archive = new ExamArchive({ archiveId: id, data });
+        await archive.save();
+
+        // Local Fallback
+        if (!isVercel) {
+            try {
+                if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
+                fs.writeFileSync(path.join(ARCHIVE_DIR, `${id}.json`), JSON.stringify(data, null, 2));
+            } catch (e) { }
+        }
+
         res.json({ id });
     } catch(e) {
-        console.error("[Backend] Archive Error:", e);
+        console.error("Archive Error:", e);
         res.status(500).json({ error: e.message });
     }
 });
 
-app.get('/api/archive-exam/:id', (req, res) => {
+app.get('/api/archive-exam/:id', async (req, res) => {
     try {
+        await connectDB();
         const { id } = req.params;
-        const filePath = path.join(ARCHIVE_DIR, `${id}.json`);
-        if (!fs.existsSync(filePath)) return res.status(404).json({ error: "Not found" });
-        const raw = fs.readFileSync(filePath, 'utf-8');
-        res.json(JSON.parse(raw));
+        
+        // Try MongoDB first
+        const archive = await ExamArchive.findOne({ archiveId: id });
+        if (archive) return res.json(archive.data);
+
+        // Fallback to local
+        if (!isVercel) {
+            const filePath = path.join(ARCHIVE_DIR, `${id}.json`);
+            if (fs.existsSync(filePath)) {
+                return res.json(JSON.parse(fs.readFileSync(filePath, 'utf-8')));
+            }
+        }
+
+        res.status(404).json({ error: "Not found" });
     } catch(e) {
         res.status(500).json({ error: e.message });
     }
 });
 
 const HTMLtoDOCX = require('html-to-docx');
+
+// --- EXAM ROOM API ---
+app.post('/api/room', async (req, res) => {
+    try {
+        await connectDB();
+        const { roomCode, examId, createdBy } = req.body;
+        const newRoom = new ExamRoom({ roomCode, examId, createdBy });
+        await newRoom.save();
+        res.json({ success: true });
+    } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.get('/api/room/:code', async (req, res) => {
+    try {
+        await connectDB();
+        const room = await ExamRoom.findOne({ roomCode: req.params.code });
+        if (!room) return res.status(404).json({ error: "Room not found" });
+        res.json(room);
+    } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.get('/api/room/:code/ranking', async (req, res) => {
+    try {
+        await connectDB();
+        const room = await ExamRoom.findOne({ roomCode: req.params.code });
+        if (!room) return res.status(404).json({ error: "Room not found" });
+        // Sắp xếp các thí sinh theo điểm cao nhất
+        const ranking = [...room.participants].sort((a, b) => (b.score || 0) - (a.score || 0));
+        res.json(ranking);
+    } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Nộp bài vào phòng thi
+app.post('/api/room/:code/score', async (req, res) => {
+    try {
+        await connectDB();
+        const { name, score } = req.body;
+        const room = await ExamRoom.findOne({ roomCode: req.params.code });
+        if (!room) return res.status(404).json({ error: "Room not found" });
+
+        // Tìm xem học sinh đã nộp chưa
+        const idx = room.participants.findIndex(p => p.name === name);
+        if (idx !== -1) {
+            // Chỉ cập nhật nếu điểm cao hơn (tùy nhu cầu, ở đây cập nhật mọi bài nộp gần nhất)
+            room.participants[idx].score = score;
+            room.participants[idx].submittedAt = new Date();
+        } else {
+            room.participants.push({ name, score, submittedAt: new Date() });
+        }
+
+        await room.save();
+        res.json({ success: true });
+    } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
 
 app.post('/api/gemini-stream', async (req, res) => {
     const { prompt, history = [] } = req.body;
