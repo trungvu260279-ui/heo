@@ -6,6 +6,8 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import mammoth from 'mammoth'
 import * as pdfjs from 'pdfjs-dist'
+import TeacherDashboard from '../components/TeacherDashboard'
+import TeacherRoomHistory from '../components/TeacherRoomHistory'
 
 // Set PDF worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`
@@ -344,6 +346,7 @@ export default function TeacherAssistant() {
     const [editingId, setEditingId] = useState(null)
     const [editingTitle, setEditingTitle] = useState('')
     const [isDark, setIsDark] = useState(true)
+    const [activeTab, setActiveTab] = useState('chat')
 
     const C = isDark ? DarkC : LightC
 
@@ -355,8 +358,10 @@ export default function TeacherAssistant() {
     useEffect(() => {
         if (!chatEndRef.current) return
         const behavior = (isLoading && messages.length > 0) ? 'auto' : 'smooth'
-        chatEndRef.current.scrollIntoView({ behavior })
+                chatEndRef.current.scrollIntoView({ behavior })
     }, [messages, isLoading])
+
+    // Toggle effect is now scoped to the component's root div instead of global document.
 
     // ── Persist conversation whenever messages change (after AI replies) ──
     useEffect(() => {
@@ -511,7 +516,7 @@ export default function TeacherAssistant() {
     const grouped = groupByDate(conversations)
 
     return (
-        <div style={{ display: 'flex', height: '100%', background: C.bg, overflow: 'hidden', fontFamily: "'DM Sans', 'Inter', sans-serif", color: C.onSurfaceVariant }}>
+        <div className={isDark ? 'dark' : ''} style={{ display: 'flex', height: '100%', background: C.bg, overflow: 'hidden', fontFamily: "'DM Sans', 'Inter', sans-serif", color: C.onSurfaceVariant }}>
 
             {/* ── LEFT SIDEBAR ── */}
             <aside style={{
@@ -634,9 +639,29 @@ export default function TeacherAssistant() {
                     borderBottom: `0.5px solid ${C.outlineVariant}`, position: 'sticky', top: 0, zIndex: 40
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-                        <h1 style={{ fontSize: '13px', fontWeight: 500, color: C.primaryFixed, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {messages.length > 0 ? (messages[0]?.parts[0]?.text?.slice(0, 50) || 'Trợ lý Giáo viên') : 'Trợ lý Giáo viên Ngữ Văn'}
+                        <h1 style={{ fontSize: '13px', fontWeight: 500, color: C.primaryFixed, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                            {messages.length > 0 && activeTab === 'chat' ? (messages[0]?.parts[0]?.text?.slice(0, 50) || 'Trợ lý Giáo viên') : 'Trợ lý Giáo viên Ngữ Văn'}
                         </h1>
+                        <div style={{ display: 'flex', background: C.surfaceContainer, borderRadius: '6px', padding: '2px', marginLeft: '12px' }}>
+                            <button 
+                                onClick={() => setActiveTab('chat')}
+                                style={{ padding: '4px 12px', borderRadius: '4px', fontSize: '12px', fontWeight: 600, border: 'none', cursor: 'pointer', background: activeTab === 'chat' ? C.primary : 'transparent', color: activeTab === 'chat' ? C.bg : C.onSurfaceVariant, transition: 'all 0.2s' }}
+                            >
+                                AI Trợ giảng
+                            </button>
+                            <button 
+                                onClick={() => setActiveTab('rooms')}
+                                style={{ padding: '4px 12px', borderRadius: '4px', fontSize: '12px', fontWeight: 600, border: 'none', cursor: 'pointer', background: activeTab === 'rooms' ? C.primary : 'transparent', color: activeTab === 'rooms' ? C.bg : C.onSurfaceVariant, transition: 'all 0.2s' }}
+                            >
+                                Quản lý Phòng thi
+                            </button>
+                            <button 
+                                onClick={() => setActiveTab('dashboard')}
+                                style={{ padding: '4px 12px', borderRadius: '4px', fontSize: '12px', fontWeight: 600, border: 'none', cursor: 'pointer', background: activeTab === 'dashboard' ? C.primary : 'transparent', color: activeTab === 'dashboard' ? C.bg : C.onSurfaceVariant, transition: 'all 0.2s' }}
+                            >
+                                Thống kê Lớp
+                            </button>
+                        </div>
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -646,11 +671,21 @@ export default function TeacherAssistant() {
 
 
 
-                {/* ── CHAT AREA ── */}
-                <section className="overflow-y-auto" style={{
-                    flex: 1, overflowY: 'auto', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: '28px',
-                    scrollBehavior: 'auto', overflowAnchor: 'auto'
-                }}>
+                {activeTab === 'dashboard' ? (
+                    <div style={{ flex: 1, overflowY: 'auto', background: C.bg }}>
+                        <TeacherDashboard user={user} onAskAI={(prompt) => { setActiveTab('chat'); handleSend(prompt); }} />
+                    </div>
+                ) : activeTab === 'rooms' ? (
+                    <div style={{ flex: 1, overflowY: 'auto', background: C.bg }}>
+                        <TeacherRoomHistory user={user} />
+                    </div>
+                ) : (
+                    <>
+                        {/* ── CHAT AREA ── */}
+                        <section className="overflow-y-auto" style={{
+                            flex: 1, overflowY: 'auto', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: '28px',
+                            scrollBehavior: 'auto', overflowAnchor: 'auto'
+                        }}>
                     <div ref={chatTopRef} />
                     <div style={{ maxWidth: '720px', width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '28px' }}>
 
@@ -840,6 +875,8 @@ export default function TeacherAssistant() {
                         </div>
                     </div>
                 </footer>
+                </>
+                )}
             </main>
 
             {/* Keyframe animations */}

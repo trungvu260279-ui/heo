@@ -500,16 +500,18 @@ function EmptyState() {
 }
 
 // ─── Room Modal (Tạo / Tham gia phòng thi) ───────────────────────────────────
-function ExamRoomModal({ onClose, onJoin, examsData }) {
-    const [tab, setTab] = useState('join')            // 'join' | 'create'
+function ExamRoomModal({ onClose, onJoin, examsData, initialTab = 'join', initialExamId = null }) {
+    const [tab, setTab] = useState(initialTab)            // 'join' | 'create'
     const [code, setCode] = useState('')              // input khi join
-    const [selectedExamId, setSelectedExamId] = useState(examsData[0]?.id || '')
+    const [selectedExamId, setSelectedExamId] = useState(initialExamId || examsData[0]?.id || '')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     // Sau khi tạo phòng thành công, hiện màn share link
     const [createdRoom, setCreatedRoom] = useState(null)  // { roomCode, examId, link }
     const [copied, setCopied] = useState(false)
     const user = getAuthUser()
+
+
 
     function genCode() {
         const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
@@ -541,19 +543,26 @@ function ExamRoomModal({ onClose, onJoin, examsData }) {
         setLoading(true); setError('')
         const roomCode = genCode()
         try {
-            await fetch('/api/room', {
+            const res = await fetch('/api/room', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     roomCode,
                     examId: selectedExamId,
-                    createdBy: user?.name || 'Unknown',
+                    createdBy: user?.email || user?.name || 'Unknown',
                     createdAt: new Date().toISOString()
                 })
             })
+            
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.error || `Lỗi server: ${res.status}`);
+            }
+            
             setCreatedRoom({ roomCode, examId: selectedExamId, link: buildLink(roomCode) })
-        } catch {
-            setError('Không thể tạo phòng. Thử lại nhé.')
+        } catch (err) {
+            console.error(err);
+            setError(`Không thể tạo phòng: ${err.message}`);
         } finally { setLoading(false) }
     }
 
@@ -648,8 +657,8 @@ function ExamRoomModal({ onClose, onJoin, examsData }) {
                     <>
                         {/* Tabs */}
                         <div className="flex mx-6 mb-5 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl">
-                            {[['join', 'Nhập mã / Link'], ['create', 'Tạo phòng mới']].map(([key, label]) => (
-                                <button key={key} onClick={() => { setTab(key); setError('') }}
+                            {[['join', 'Vào phòng'], ['create', 'Tạo phòng']].map(([key, label]) => (
+                                <button key={key} onClick={() => { setTab(key); setError(''); setCreatedRoom(null) }}
                                     className={clsx(
                                         'flex-1 py-2 rounded-xl text-xs font-black transition-all',
                                         tab === key
@@ -686,7 +695,7 @@ function ExamRoomModal({ onClose, onJoin, examsData }) {
                                         }
                                     </button>
                                 </>
-                            ) : (
+                            ) : tab === 'create' ? (
                                 <>
                                     <div>
                                         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 block">Chọn đề thi</label>
@@ -714,7 +723,7 @@ function ExamRoomModal({ onClose, onJoin, examsData }) {
                                         }
                                     </button>
                                 </>
-                            )}
+                            ) : null}
                         </div>
                     </>
                 )}
@@ -977,6 +986,8 @@ export default function Exams() {
     const [answers, setAnswers] = useState({})
     const [history, setHistory] = useState([])
     const [showRoomModal, setShowRoomModal] = useState(false)
+    const [modalInitialTab, setModalInitialTab] = useState('join')
+    const [modalInitialExamId, setModalInitialExamId] = useState(null)
     const [activeRoomCode, setActiveRoomCode] = useState(null)      // mã phòng đang thi
     const [showRoomRanking, setShowRoomRanking] = useState(false)   // popup BXH
 
@@ -1360,7 +1371,11 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                 {!isTakingExam && !selectedExam && (
                     <div className="flex items-center gap-2 md:gap-4">
                         <button
-                            onClick={() => setShowRoomModal(true)}
+                            onClick={() => {
+                                setModalInitialTab('join');
+                                setModalInitialExamId(null);
+                                setShowRoomModal(true);
+                            }}
                             className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs transition-all ring-1 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-200 dark:ring-slate-700 hover:ring-indigo-500"
                         >
                             <span className="material-symbols-outlined text-[18px]">meeting_room</span>
@@ -1621,6 +1636,18 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                                     </div>
                                     <div className="flex gap-2 shrink-0 mt-1">
                                         <button
+                                            onClick={() => {
+                                                setModalInitialTab('create');
+                                                setModalInitialExamId(selectedExam.id);
+                                                setShowRoomModal(true);
+                                            }}
+                                            className="px-4 py-3 rounded-xl border border-indigo-200 dark:border-indigo-800 bg-indigo-50/50 hover:bg-indigo-100 dark:bg-indigo-900/20 dark:hover:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 font-bold transition-colors flex items-center gap-2"
+                                            title="Tạo phòng cho đề này"
+                                        >
+                                            <span className="material-symbols-outlined text-[20px]">hotel_class</span>
+                                            Tạo phòng 
+                                        </button>
+                                        <button
                                             onClick={() => downloadExamFile(selectedExam)}
                                             className="p-3 rounded-xl border border-slate-200 dark:border-slate-800
                                                 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 transition-colors"
@@ -1679,6 +1706,8 @@ Lưu ý: "skills" bao gồm: Ngôn ngữ, Tư duy PB (phản biện), Cấu trú
                     examsData={examsData}
                     onClose={() => setShowRoomModal(false)}
                     onJoin={handleJoinRoom}
+                    initialTab={modalInitialTab}
+                    initialExamId={modalInitialExamId}
                 />
             )}
         </AnimatePresence>

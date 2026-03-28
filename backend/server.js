@@ -24,6 +24,7 @@ const DATA_DIR = process.env.DATA_DIR && process.env.DATA_DIR !== '/data'
     ? process.env.DATA_DIR 
     : path.join(__dirname, 'data');
 const DB_FILE = path.join(DATA_DIR, 'rankings.json');
+const ROOMS_FILE = path.join(DATA_DIR, 'rooms.json');
 const ARCHIVE_DIR = path.join(DATA_DIR, 'archives');
 
 app.use(cors({ origin: '*', methods: ['GET', 'POST', 'OPTIONS'], allowedHeaders: ['Content-Type', 'Authorization'] }));
@@ -43,6 +44,7 @@ if (!isVercel) {
         if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
         if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
         if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, JSON.stringify([]));
+        if (!fs.existsSync(ROOMS_FILE)) fs.writeFileSync(ROOMS_FILE, JSON.stringify([]));
         console.log("[Backend] Local data storage initialized at:", DATA_DIR);
     } catch (e) {
         console.warn("[Backend] Could not initialize local filesystem:", e.message);
@@ -368,10 +370,61 @@ app.post('/api/room', async (req, res) => {
     try {
         await connectDB();
         const { roomCode, examId, createdBy } = req.body;
-        const newRoom = new ExamRoom({ roomCode, examId, createdBy });
-        await newRoom.save();
+        
+        if (mongoose.connection.readyState === 1) {
+            const newRoom = new ExamRoom({ roomCode, examId, createdBy });
+            await newRoom.save();
+        } 
+        
+        // Luôn lưu local dự phòng nếu không phải Vercel để đồng bộ data
+        if (!isVercel) {
+            try {
+                let data = [];
+                if (fs.existsSync(ROOMS_FILE)) {
+                    const raw = fs.readFileSync(ROOMS_FILE, 'utf-8');
+                    try {
+                        data = JSON.parse(raw);
+                    } catch (e) { data = []; }
+                }
+                
+                if (!data.find(r => r.roomCode === roomCode)) {
+                    data.push({ roomCode, examId, createdBy, participants: [], createdAt: new Date().toISOString() });
+                    if (!fs.existsSync(path.dirname(ROOMS_FILE))) {
+                        fs.mkdirSync(path.dirname(ROOMS_FILE), { recursive: true });
+                    }
+                    fs.writeFileSync(ROOMS_FILE, JSON.stringify(data, null, 2));
+                }
+            } catch (e) { console.warn("Local room safe failed", e.message); }
+        }
         res.json({ success: true });
     } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.delete('/api/room/:code', async (req, res) => {
+    try {
+        await connectDB();
+        const { code } = req.params;
+
+        if (mongoose.connection.readyState === 1) {
+            await ExamRoom.deleteOne({ roomCode: code });
+        }
+
+        if (!isVercel) {
+            try {
+                if (fs.existsSync(ROOMS_FILE)) {
+                    const raw = fs.readFileSync(ROOMS_FILE, 'utf-8');
+                    let data = JSON.parse(raw);
+                    data = data.filter(r => r.roomCode !== code);
+                    fs.writeFileSync(ROOMS_FILE, JSON.stringify(data, null, 2));
+                }
+            } catch (e) {
+                console.warn("Local room delete failed", e.message);
+            }
+        }
+        res.json({ success: true });
+    } catch (e) {
         res.status(500).json({ error: e.message });
     }
 });
@@ -379,7 +432,22 @@ app.post('/api/room', async (req, res) => {
 app.get('/api/room/:code', async (req, res) => {
     try {
         await connectDB();
-        const room = await ExamRoom.findOne({ roomCode: req.params.code });
+        let room = null;
+        if (mongoose.connection.readyState === 1) {
+            room = await ExamRoom.findOne({ roomCode: req.params.code });
+        } 
+        
+        // Nếu không thấy trong DB hoặc DB offline, check local
+        if (!room && !isVercel) {
+            try {
+                if (fs.existsSync(ROOMS_FILE)) {
+                    const raw = fs.readFileSync(ROOMS_FILE, 'utf-8');
+                    const data = JSON.parse(raw);
+                    room = data.find(r => r.roomCode === req.params.code);
+                }
+            } catch (e) { }
+        }
+        
         if (!room) return res.status(404).json({ error: "Room not found" });
         res.json(room);
     } catch(e) {
@@ -390,10 +458,24 @@ app.get('/api/room/:code', async (req, res) => {
 app.get('/api/room/:code/ranking', async (req, res) => {
     try {
         await connectDB();
-        const room = await ExamRoom.findOne({ roomCode: req.params.code });
+        let room = null;
+        if (mongoose.connection.readyState === 1) {
+            room = await ExamRoom.findOne({ roomCode: req.params.code });
+        } 
+
+        if (!room && !isVercel) {
+            try {
+                if (fs.existsSync(ROOMS_FILE)) {
+                    const raw = fs.readFileSync(ROOMS_FILE, 'utf-8');
+                    const data = JSON.parse(raw);
+                    room = data.find(r => r.roomCode === req.params.code);
+                }
+            } catch (e) { }
+        }
+
         if (!room) return res.status(404).json({ error: "Room not found" });
-        // Sắp xếp các thí sinh theo điểm cao nhất
-        const ranking = [...room.participants].sort((a, b) => (b.score || 0) - (a.score || 0));
+
+        const ranking = [...(room.participants || [])].sort((a, b) => (b.score || 0) - (a.score || 0));
         res.json(ranking);
     } catch(e) {
         res.status(500).json({ error: e.message });
@@ -404,23 +486,174 @@ app.get('/api/room/:code/ranking', async (req, res) => {
 app.post('/api/room/:code/score', async (req, res) => {
     try {
         await connectDB();
-        const { name, score } = req.body;
-        const room = await ExamRoom.findOne({ roomCode: req.params.code });
-        if (!room) return res.status(404).json({ error: "Room not found" });
-
-        // Tìm xem học sinh đã nộp chưa
-        const idx = room.participants.findIndex(p => p.name === name);
-        if (idx !== -1) {
-            // Chỉ cập nhật nếu điểm cao hơn (tùy nhu cầu, ở đây cập nhật mọi bài nộp gần nhất)
-            room.participants[idx].score = score;
-            room.participants[idx].submittedAt = new Date();
-        } else {
-            room.participants.push({ name, score, submittedAt: new Date() });
+        const { name, score, email } = req.body;
+        
+        let roomUpdated = false;
+        
+        if (mongoose.connection.readyState === 1) {
+            const room = await ExamRoom.findOne({ roomCode: req.params.code });
+            if (room) {
+                const idx = room.participants.findIndex(p => p.name === name || (email && p.email === email));
+                if (idx !== -1) {
+                    room.participants[idx].score = score;
+                    room.participants[idx].submittedAt = new Date();
+                } else {
+                    room.participants.push({ name, email, score, submittedAt: new Date() });
+                }
+                await room.save();
+                roomUpdated = true;
+            }
         }
 
-        await room.save();
+        // Nếu chưa update (do offline hoặc không thấy trong DB), thử update local
+        if (!roomUpdated && !isVercel) {
+            try {
+                let data = [];
+                if (fs.existsSync(ROOMS_FILE)) {
+                    data = JSON.parse(fs.readFileSync(ROOMS_FILE, 'utf-8'));
+                }
+                const rIdx = data.findIndex(r => r.roomCode === req.params.code);
+                if (rIdx !== -1) {
+                    const pIdx = data[rIdx].participants.findIndex(p => p.name === name || (email && p.email === email));
+                    if (pIdx !== -1) {
+                        data[rIdx].participants[pIdx].score = score;
+                        data[rIdx].participants[pIdx].submittedAt = new Date().toISOString();
+                    } else {
+                        data[rIdx].participants.push({ name, email, score, submittedAt: new Date().toISOString() });
+                    }
+                    fs.writeFileSync(ROOMS_FILE, JSON.stringify(data, null, 2));
+                    roomUpdated = true;
+                }
+            } catch (e) { }
+        }
+
+        if (!roomUpdated) return res.status(404).json({ error: "Room not found for score submission" });
         res.json({ success: true });
     } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.get('/api/teacher/dashboard/:email', async (req, res) => {
+    try {
+        await connectDB();
+        const { email } = req.params;
+        
+        let rooms = [];
+        if (mongoose.connection.readyState === 1) {
+            const dbRooms = await ExamRoom.find({ createdBy: email }).sort({ createdAt: 1 });
+            rooms = dbRooms.map(r => r.toObject());
+        } 
+        
+        // Hợp nhất với data local nếu có (dành cho phát triển local)
+        if (!isVercel) {
+            try {
+                let localData = [];
+                if (fs.existsSync(ROOMS_FILE)) {
+                    localData = JSON.parse(fs.readFileSync(ROOMS_FILE, 'utf-8'));
+                }
+                const localRooms = localData.filter(r => r.createdBy === email);
+                
+                // Merge không trùng lặp dựa trên roomCode
+                const roomCodes = new Set(rooms.map(r => r.roomCode));
+                localRooms.forEach(lr => {
+                    if (!roomCodes.has(lr.roomCode)) {
+                        rooms.push(lr);
+                    }
+                });
+                
+                // Sắp xếp lại danh sách đã gộp
+                rooms.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            } catch (e) { console.warn("Local dashboard sync failed", e.message); }
+        }
+        
+        let totalStudents = 0;
+        let sumScore = 0;
+        let examTrends = [];
+        let scoreDistribution = {
+            'Giỏi (8-10)': 0,
+            'Khá (6.5-8)': 0,
+            'TB (5-6.5)': 0,
+            'Yếu (<5)': 0,
+        };
+        let studentScores = {};
+
+        rooms.forEach((room) => {
+            const participants = room.participants || [];
+            const numPart = participants.length;
+            totalStudents += numPart;
+            
+            let roomSum = 0;
+            participants.forEach(p => {
+                const s = p.score || 0;
+                roomSum += s;
+                
+                // Phổ điểm
+                if (s >= 8) scoreDistribution['Giỏi (8-10)']++;
+                else if (s >= 6.5) scoreDistribution['Khá (6.5-8)']++;
+                else if (s >= 5) scoreDistribution['TB (5-6.5)']++;
+                else scoreDistribution['Yếu (<5)']++;
+
+                // Lịch sử học sinh
+                if (!studentScores[p.name]) studentScores[p.name] = [];
+                studentScores[p.name].push({ room: room.roomCode, score: s, date: p.submittedAt });
+            });
+            
+            sumScore += roomSum;
+            
+            if (numPart > 0) {
+                examTrends.push({
+                    name: `Phòng ${room.roomCode}`,
+                    avgScore: Number((roomSum / numPart).toFixed(2))
+                });
+            }
+        });
+
+        const avgScore = totalStudents > 0 ? (sumScore / totalStudents).toFixed(2) : 0;
+        
+        let studentAverages = Object.keys(studentScores).map(name => {
+            const scores = studentScores[name];
+            const avg = scores.reduce((a, b) => a + b.score, 0) / scores.length;
+            return { name, avg: Number(avg.toFixed(2)), count: scores.length, latestScore: scores[scores.length-1].score };
+        });
+        
+        // Học sinh xuất sắc nhất
+        const topStudents = [...studentAverages].sort((a, b) => b.avg - a.avg).slice(0, 3).filter(s => s.avg >= 6.5);
+        
+        // Học sinh yếu / tụt dốc
+        const strugglingStudents = [...studentAverages].sort((a, b) => a.avg - b.avg).slice(0, 3).filter(s => s.avg < 6.5 || s.latestScore < 5);
+        
+        // Lịch sử phòng thi nguyên bản
+        const roomHistory = rooms.map(r => ({
+            roomCode: r.roomCode,
+            examId: r.examId,
+            createdAt: r.createdAt,
+            participantCount: (r.participants || []).length,
+            avgScore: (r.participants || []).length > 0 
+                ? (r.participants.reduce((a, b) => a + (b.score || 0), 0) / r.participants.length).toFixed(1) 
+                : 0
+        })).reverse(); // Mới nhất lên đầu
+
+        // Chuyển Format distribution cho Recharts
+        const formattedDistribution = Object.keys(scoreDistribution).map(k => ({
+            name: k,
+            value: scoreDistribution[k]
+        }));
+
+        res.json({
+            overview: {
+                totalRooms: rooms.length,
+                totalStudents,
+                avgScore
+            },
+            examTrends,
+            scoreDistribution: formattedDistribution,
+            topStudents,
+            strugglingStudents,
+            roomHistory
+        });
+
+    } catch (e) {
         res.status(500).json({ error: e.message });
     }
 });
