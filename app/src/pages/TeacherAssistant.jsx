@@ -347,6 +347,7 @@ export default function TeacherAssistant() {
     const [editingTitle, setEditingTitle] = useState('')
     const [isDark, setIsDark] = useState(true)
     const [activeTab, setActiveTab] = useState('chat')
+    const [sidebarOpen, setSidebarOpen] = useState(false)
 
     const C = isDark ? DarkC : LightC
 
@@ -518,11 +519,27 @@ export default function TeacherAssistant() {
     return (
         <div className={isDark ? 'dark' : ''} style={{ display: 'flex', height: '100%', background: C.bg, overflow: 'hidden', fontFamily: "'DM Sans', 'Inter', sans-serif", color: C.onSurfaceVariant }}>
 
+            {/* ── MOBILE SIDEBAR BACKDROP ── */}
+            {sidebarOpen && (
+                <div
+                    onClick={() => setSidebarOpen(false)}
+                    style={{
+                        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)',
+                        zIndex: 29, backdropFilter: 'blur(2px)'
+                    }}
+                />
+            )}
+
             {/* ── LEFT SIDEBAR ── */}
             <aside style={{
                 width: '220px', flexShrink: 0, height: '100%', display: 'flex', flexDirection: 'column',
                 background: C.bg, borderRight: `0.5px solid ${C.outlineVariant}`, padding: '16px',
-                position: 'relative', zIndex: 10
+                // Mobile: fixed drawer; Desktop: static
+                position: window.innerWidth < 768 ? 'fixed' : 'relative',
+                top: 0, left: 0, bottom: 0,
+                zIndex: 30,
+                transform: window.innerWidth < 768 ? (sidebarOpen ? 'translateX(0)' : 'translateX(-100%)') : 'none',
+                transition: 'transform 0.28s cubic-bezier(0.4,0,0.2,1)',
             }}>
                 {/* Brand */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
@@ -638,28 +655,43 @@ export default function TeacherAssistant() {
                     padding: '0 16px', background: `${C.bg}cc`, backdropFilter: 'blur(12px)',
                     borderBottom: `0.5px solid ${C.outlineVariant}`, position: 'sticky', top: 0, zIndex: 40
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-                        <h1 style={{ fontSize: '13px', fontWeight: 500, color: C.primaryFixed, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                            {messages.length > 0 && activeTab === 'chat' ? (messages[0]?.parts[0]?.text?.slice(0, 50) || 'Trợ lý Giáo viên') : 'Trợ lý Giáo viên Ngữ Văn'}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1, overflow: 'hidden' }}>
+                        {/* Hamburger — mobile only */}
+                        <button
+                            onClick={() => setSidebarOpen(v => !v)}
+                            style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                width: 32, height: 32, borderRadius: '6px', border: `0.5px solid ${C.outlineVariant}`,
+                                background: 'transparent', cursor: 'pointer', color: C.onSurfaceVariant,
+                                flexShrink: 0,
+                            }}
+                        >
+                            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>menu</span>
+                        </button>
+
+                        <h1 style={{ fontSize: '13px', fontWeight: 500, color: C.primaryFixed, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 1 }}>
+                            {messages.length > 0 && activeTab === 'chat' ? (messages[0]?.parts[0]?.text?.slice(0, 40) || 'Trợ lý GV') : 'Trợ lý Giáo viên'}
                         </h1>
-                        <div style={{ display: 'flex', background: C.surfaceContainer, borderRadius: '6px', padding: '2px', marginLeft: '12px' }}>
+
+                        {/* Tab switcher — scrollable on small screens */}
+                        <div style={{ display: 'flex', background: C.surfaceContainer, borderRadius: '6px', padding: '2px', marginLeft: '4px', overflowX: 'auto', flexShrink: 0 }}>
                             <button 
                                 onClick={() => setActiveTab('chat')}
-                                style={{ padding: '4px 12px', borderRadius: '4px', fontSize: '12px', fontWeight: 600, border: 'none', cursor: 'pointer', background: activeTab === 'chat' ? C.primary : 'transparent', color: activeTab === 'chat' ? C.bg : C.onSurfaceVariant, transition: 'all 0.2s' }}
+                                style={{ padding: '4px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 600, border: 'none', cursor: 'pointer', background: activeTab === 'chat' ? C.primary : 'transparent', color: activeTab === 'chat' ? C.bg : C.onSurfaceVariant, transition: 'all 0.2s', whiteSpace: 'nowrap' }}
                             >
-                                AI Trợ giảng
+                                AI Chat
                             </button>
                             <button 
                                 onClick={() => setActiveTab('rooms')}
-                                style={{ padding: '4px 12px', borderRadius: '4px', fontSize: '12px', fontWeight: 600, border: 'none', cursor: 'pointer', background: activeTab === 'rooms' ? C.primary : 'transparent', color: activeTab === 'rooms' ? C.bg : C.onSurfaceVariant, transition: 'all 0.2s' }}
+                                style={{ padding: '4px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 600, border: 'none', cursor: 'pointer', background: activeTab === 'rooms' ? C.primary : 'transparent', color: activeTab === 'rooms' ? C.bg : C.onSurfaceVariant, transition: 'all 0.2s', whiteSpace: 'nowrap' }}
                             >
-                                Quản lý Phòng thi
+                                Phòng thi
                             </button>
                             <button 
                                 onClick={() => setActiveTab('dashboard')}
-                                style={{ padding: '4px 12px', borderRadius: '4px', fontSize: '12px', fontWeight: 600, border: 'none', cursor: 'pointer', background: activeTab === 'dashboard' ? C.primary : 'transparent', color: activeTab === 'dashboard' ? C.bg : C.onSurfaceVariant, transition: 'all 0.2s' }}
+                                style={{ padding: '4px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 600, border: 'none', cursor: 'pointer', background: activeTab === 'dashboard' ? C.primary : 'transparent', color: activeTab === 'dashboard' ? C.bg : C.onSurfaceVariant, transition: 'all 0.2s', whiteSpace: 'nowrap' }}
                             >
-                                Thống kê Lớp
+                                Thống kê
                             </button>
                         </div>
                     </div>

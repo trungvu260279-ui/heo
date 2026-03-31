@@ -1,165 +1,239 @@
-# 📚 THPT Kim Xuyên — Nền tảng Ngữ văn AI
+# VanPlatform — Nền tảng Ngữ văn AI (THPT Kim Xuyên)
 
-> Ứng dụng web hỗ trợ giảng dạy và học tập Ngữ văn tại THPT Kim Xuyên, tích hợp trí tuệ nhân tạo, đánh giá năng lực và quản lý nội dung học liệu.
-
----
-
-## 🛠 Tech Stack
-
-| Thành phần | Công nghệ |
-|---|---|
-| Framework | React 18 + Vite 5 |
-| Styling | TailwindCSS 3 |
-| Routing | React Router DOM v6 |
-| Animation | Framer Motion |
-| Charts | Recharts |
-| Icons | Lucide React + Material Symbols |
-| AI | Gemini API |
+> **Dành cho AI agent:** Đọc file này TRƯỚC khi đụng vào bất kỳ file nào khác. Mọi ngữ cảnh quan trọng đều ở đây.
 
 ---
 
-## ✅ Chức năng hiện tại
-
-### 🏠 Trang chủ (`/home`)
-- Giao diện chính của ứng dụng
-- Điều hướng đến các tính năng khác
-- Sidebar với thông tin giáo viên, nút nâng cấp Pro
-
-### 📊 Đánh giá Năng lực (`/assessment`)
-- **Biểu đồ Radar SVG** hiển thị 4 trục kỹ năng:
-  - Năng lực Ngôn ngữ
-  - Tư duy Phản biện
-  - Năng lực Số
-  - Viết Sáng tạo
-- **Thống kê tổng hợp**: điểm trung bình, xếp loại, thứ hạng khối, số bài đã làm
-- **AI Gợi ý Cải thiện**: phân tích điểm yếu và thế mạnh của học sinh
-- **Lịch sử Đánh giá**: timeline các bài kiểm tra với điểm số và xu hướng thay đổi
-
-### 🤖 Student AI Assistant (`/student-chat`)
-- **Gia sư Ngữ văn chuyên sâu**: Tích hợp hệ thống Prompt học thuật (Scaffolding).
-- **Đa phương tiện**: Phân tích trực tiếp từ ảnh chụp bài làm, tệp PDF, Word.
-- **Công cụ bồi dưỡng**: Tích hợp thanh toolbar (Phân tích phong cách, Tìm dẫn chứng, Trích dẫn).
-- **Streaming & Fallback**: Hỗ trợ streaming real-time với cơ chế fallback local-first cho môi trường DEV.
-
-### 🤖 Trợ lý AI Cũ (`/assistant`)
-- Chat AI hỗ trợ giải đáp câu hỏi Ngữ văn cơ bản.
-
-### 🏆 Xếp hạng Học sinh (`/ranking`)
-- **Podium Top 3** — bục vàng/bạc/đồng có spring animation, crown 👑
-- **4 Stat Cards**: GPA cao nhất, Điểm TB toàn trường, Tỉ lệ đạt, Tổng học sinh
-- **Biểu đồ cột** điểm TB từng môn theo lớp (Recharts, màu động theo mức điểm)
-- **Bảng xếp hạng** đầy đủ với:
-  - Huy hiệu hạng 🥇🥈🥉 + số cho các hạng tiếp theo
-  - Avatar initials màu riêng từng học sinh
-  - Mini score bars cho 4 môn chính
-  - Badge xếp loại (Xuất sắc / Giỏi / Khá / Trung bình)
-  - Xu hướng ↑↓ so với kỳ trước
-- **Modal chi tiết học sinh**: bar chart 8 môn + 8 score cards khi click
-- **Tìm kiếm** theo tên học sinh
-- **Lọc** theo lớp (10A1, 10A2, 11B1, 11B2, 12C1)
-- **Xuất CSV** danh sách học sinh hiện tại
-
-#### Dữ liệu mẫu hiện tại
-- 20 học sinh, 5 lớp, 8 môn học (Toán, Văn, Anh, Lý, Hóa, Sinh, Sử, Địa)
-
-### 🎨 Hệ thống giao diện
-- **Dark mode** toàn bộ ứng dụng (`bg-[#0d0d1a]`)
-- **Glassmorphism** (`bg-white/5`, `backdrop-blur`, `border-white/10`)
-- **Gradient tím–xanh** làm accent chính
-- Sidebar cố định với nav items + user profile
-- Responsive layout
-
----
-
-## 📁 Cấu trúc thư mục
+## 🏗️ Kiến trúc tổng quan
 
 ```
-app/
-├── src/
-│   ├── components/
-│   │   └── Layout.jsx          # Sidebar + nav chính
-│   ├── data/
-│   │   └── students.js         # Mock data 20 học sinh
-│   ├── pages/
-│   │   ├── Home.jsx
-│   │   ├── Assessment.jsx      # Đánh giá năng lực
-│   │   ├── Assistant.jsx       # Trợ lý AI
-│   │   └── Ranking.jsx         # Dashboard xếp hạng
-│   ├── App.jsx                 # Router
-│   ├── main.jsx
-│   └── index.css
-├── package.json
-├── tailwind.config.js
-└── vite.config.js
+Monorepo (npm workspaces)
+├── app/          → Frontend: React + Vite + TailwindCSS  (chạy port 5173)
+├── backend/      → Backend: Node.js + Express            (chạy port 10000)
+├── api/          → Vercel serverless adapter             (proxy tới backend/)
+├── vercel.json   → Config deploy: /api/* → backend, /* → app/dist
+└── .env.local    → Biến môi trường dùng chung (KHÔNG commit)
+```
+
+**Deploy:** Vercel (frontend) + Render (backend cho production persistent connections)
+- Frontend tự build → `app/dist/`
+- Backend expose qua `api/index.js` (Vercel serverless) HOẶC chạy riêng trên Render
+- MongoDB Atlas là DB chính; `backend/data/*.json` là fallback khi offline
+
+---
+
+## 📁 Cấu trúc chi tiết
+
+### `/app` — Frontend (React 18 + Vite + TailwindCSS 3)
+
+```
+app/src/
+├── main.jsx              → Entry point; bọc BrowserRouter + GoogleOAuthProvider
+├── App.jsx               → Định nghĩa Routes (tất cả lazy-loaded)
+├── index.css             → CSS global + Tailwind directives
+│
+├── components/           → Shared UI components
+│   ├── Layout.jsx        → Shell chính: sidebar nav + header mobile + outlet
+│   ├── LoginModal.jsx    → Modal đăng nhập/đăng ký (email+password & Google OAuth)
+│   ├── ProgressChart.jsx → Line chart tiến trình học
+│   ├── RadarChart.jsx    → Radar chart kỹ năng (Ngôn ngữ, Tư duy PB, Cấu trúc, Diễn đạt)
+│   ├── TeacherDashboard.jsx  → Dashboard thống kê giáo viên (charts Recharts)
+│   └── TeacherRoomHistory.jsx → Lịch sử & quản lý phòng thi của giáo viên
+│
+├── pages/                → Route-level components (lazy import trong App.jsx)
+│   ├── Home.jsx          → Trang chủ/landing
+│   ├── Assessment.jsx    → Đánh giá năng lực ngữ văn (AI chấm điểm)
+│   ├── Assistant.jsx     → Trợ lý AI tổng quát (chat với Gemini)
+│   ├── StudentAssistant.jsx → Gia sư Văn học cho học sinh (chat + suggestion chips)
+│   ├── TeacherAssistant.jsx → Trợ lý Giáo viên: soạn giáo án, tạo đề, quản lý phòng thi, Google Search
+│   ├── Exams.jsx         → Thư viện đề thi THPT (làm bài online, nộp điểm phòng thi)
+│   ├── Ranking.jsx       → Bảng xếp hạng học sinh theo điểm TB
+│   ├── Roadmap.jsx       → Lộ trình học tập
+│   └── Profile.jsx       → Trang hồ sơ cá nhân
+│
+├── hooks/
+│   ├── useAuth.js        → Auth store (localStorage key: 'van_auth_user')
+│   │                        Exports: getAuthUser(), saveAuthUser(user), logout()
+│   │                        User shape: { name, email, role, grade, studentId, school, isVerified }
+│   │                        Events: 'van_auth_update', 'van_eval_update' (window events)
+│   ├── useEvalStore.js   → Evaluation store (localStorage + localforage)
+│   │                        Lưu kết quả đánh giá kỹ năng & lịch sử làm bài
+│   │                        Key localStorage: 'van_eval_store_{email}'
+│   │                        Key localforage: '{email}_exam_{timestamp}_{examId}'
+│   └── useTeacherDashboard.js → Fetch dashboard data cho giáo viên
+│
+└── data/
+    ├── exams.json        → ~470KB: toàn bộ đề thi THPT (nguồn tĩnh)
+    ├── teacher_data_v2.json → ~117KB: dữ liệu mẫu giảng dạy
+    └── students.js       → Dữ liệu học sinh mẫu (dùng local dev)
+```
+
+### `/backend` — Backend API (Node.js + Express + MongoDB)
+
+```
+backend/
+├── server.js             → Main Express app (775 dòng); export module cho Vercel
+├── models/
+│   ├── User.js           → Schema: studentId, email, password, role, grade, school,
+│   │                        phone, bio, averageScore, totalExams, completedExams[]
+│   ├── ExamRoom.js       → Schema: roomCode, examId, createdBy, participants[]
+│   ├── RankingLog.js     → Schema: email, name, role, score, exercise, date
+│   └── ExamArchive.js    → Schema: archiveId, data (lưu đề thi đã xuất bản)
+└── data/                 → JSON fallback (dùng khi develop local, không có MongoDB)
+    ├── rankings.json
+    ├── rooms.json
+    └── archives/
+```
+
+### `/api` — Vercel Serverless Adapter
+
+```
+api/index.js              → Re-export backend/server.js dưới dạng serverless handler
 ```
 
 ---
 
-## 🚀 Khởi động
+## 🔌 API Endpoints (tất cả prefix `/api/`)
+
+### Auth & User
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| POST | `/api/user/sync` | Đăng ký / cập nhật user (email+password) |
+| POST | `/api/user/google-auth` | Đăng nhập Google OAuth (verify token phía server) |
+| POST | `/api/user/sync-score` | Cập nhật điểm TB sau khi nộp bài |
+
+### Ranking
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| GET | `/api/rankings?grade=12` | Lấy bảng xếp hạng (lọc theo lớp) |
+| GET | `/api/sheet` | Lấy log điểm chi tiết |
+| POST | `/api/sheet` | Lưu log điểm mới |
+
+### Exam Room (Phòng thi real-time)
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| POST | `/api/room` | Tạo phòng thi mới |
+| GET | `/api/room/:code` | Lấy thông tin phòng |
+| DELETE | `/api/room/:code` | Xóa phòng |
+| POST | `/api/room/:code/score` | Nộp điểm vào phòng |
+| GET | `/api/room/:code/ranking` | Xếp hạng trong phòng |
+| GET | `/api/teacher/dashboard/:email` | Dashboard thống kê giáo viên |
+
+### AI & Export
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| POST | `/api/gemini` | Gọi Gemini (non-streaming) |
+| POST | `/api/gemini-stream` | Gọi Gemini (SSE streaming) — dùng chính |
+| POST | `/api/export-docx` | Xuất HTML → file .docx |
+| POST | `/api/archive-exam` | Lưu đề thi lên cloud |
+| GET | `/api/archive-exam/:id` | Lấy đề thi đã lưu |
+
+---
+
+## 🔑 Biến môi trường
+
+### Backend (`backend/.env` và `.env.local` gốc)
+```
+GEMINI_API_KEY=key1,key2,...    # Nhiều key, server tự retry key tiếp theo khi quota hết
+GEMINI_API_KEYS=key1,key2,...   # Alias (cùng giá trị)
+VITE_GEMINI_MODEL=gemini-2.5-flash  # Model mặc định
+GOOGLE_CLIENT_ID=...            # Google OAuth client ID
+MONGODB_URI=mongodb+srv://...   # MongoDB Atlas connection string
+PORT=10000
+```
+
+### Frontend (`app/.env`)
+```
+VITE_BACKEND_URL=http://localhost:10000   # URL backend (local)
+# Production: relative /api/... path (Vercel tự route)
+```
+
+---
+
+## 🧩 Các pattern quan trọng
+
+### 1. Gọi AI (Gemini)
+**KHÔNG** gọi Gemini trực tiếp từ frontend. Tất cả AI calls đi qua backend:
+```js
+// Streaming (dùng SSE):
+const res = await fetch('/api/gemini-stream', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ prompt, history: [] })
+})
+// Đọc từng chunk: reader = res.body.getReader()
+
+// Non-streaming:
+const res = await fetch('/api/gemini', { method:'POST', body: JSON.stringify({ prompt }) })
+```
+
+### 2. Xác thực người dùng
+- Auth state: `localStorage['van_auth_user']` (JSON object)
+- Kiểm tra role: `user.role === 'teacher'` | `'student'`
+- Sau login/logout: dispatch `window.dispatchEvent(new Event('van_auth_update'))`
+- Teacher-only nav item: `TeacherAssistant` (ẩn với student)
+
+### 3. Dual Storage (MongoDB + JSON fallback)
+Backend tự detect môi trường:
+```js
+const isVercel = process.env.VERCEL === '1' || !!process.env.NOW_REGION;
+// MongoDB Atlas: dùng khi online
+// backend/data/*.json: fallback khi local dev không có MongoDB
+```
+
+### 4. Phòng thi (Exam Room)
+- Giáo viên tạo phòng → nhận `roomCode` → share link `?room=CODE`
+- Học sinh vào link → auto join phòng → làm bài `Exams.jsx` → nộp điểm `/api/room/:code/score`
+- Giáo viên xem kết quả real-time qua `/api/room/:code/ranking`
+
+### 5. Eval Store (điểm kỹ năng)
+- 4 kỹ năng: `Ngôn ngữ`, `Tư duy PB`, `Cấu trúc`, `Diễn đạt` (thang 0-10)
+- Tính trung bình lũy tiến qua nhiều lần làm bài
+- Lưu vào `localStorage` (summary) + `localforage/IndexedDB` (chi tiết từng bài)
+
+---
+
+## 🚀 Chạy local
 
 ```bash
-cd app
-npm install
-npm run dev
-# → http://localhost:5173
+# Cài dependencies
+npm install          # root workspace (cài cả app + backend)
+
+# Chạy đồng thời (dùng start-all.bat)
+# Terminal 1 - Frontend:
+cd app && npm run dev       # → http://localhost:5173
+
+# Terminal 2 - Backend:
+cd backend && node server.js  # → http://localhost:10000
 ```
 
----
-
-## 💡 Ý tưởng tương lai
-
-### 🔌 Backend & Dữ liệu thực
-- [ ] Kết nối với database thực (PostgreSQL / Supabase) thay cho mock data
-- [ ] API quản lý học sinh: thêm, sửa, xóa, import từ Excel
-- [ ] Authentication: đăng nhập giáo viên / học sinh / admin
-- [ ] Phân quyền: giáo viên xem lớp mình, admin xem toàn trường
-
-### 📈 Dashboard Xếp hạng (mở rộng)
-- [ ] So sánh xếp hạng giữa các kỳ học (kỳ 1 vs kỳ 2)
-- [ ] Biểu đồ đường xu hướng GPA theo thời gian từng học sinh
-- [ ] Heatmap điểm số các môn theo lớp
-- [ ] Lọc thêm: theo môn học, theo xếp loại, theo xu hướng
-- [ ] In bảng xếp hạng (PDF)
-- [ ] Thông báo/email tự động cho phụ huynh
-
-### 📊 Đánh giá Năng lực (nâng cao)
-- [ ] Biểu đồ radar động (thay SVG tĩnh bằng Recharts RadarChart)
-- [ ] Lịch sử đánh giá thực từ database
-- [ ] AI phân tích lộ trình học tập cá nhân hoá bằng Gemini API
-- [ ] So sánh năng lực với trung bình khối / toàn trường
-
-### 🤖 Student AI (Chiến lược phát triển)
-- [ ] **Luyện đề → Phân tích sâu**: Kết nối trực tiếp phần Luyện đề (`Exams`) với Chat. Sau khi làm bài, học sinh có thể đẩy bài làm vào Chat để AI mổ xẻ, chấm chữa và gợi ý hướng phát triển.
-- [ ] **Tối ưu hóa Context**: Cải thiện thuật toán "quét" file để lọc nhiễu, tiết kiệm Token và tăng độ chính xác khi phân tích văn bản dài.
-- [ ] **Exclusion**: Tạm thời cô lập dữ liệu với phần Giáo viên để đảm bảo tính riêng tư và chuyên biệt của công cụ học tập.
-
-### 📚 Thư viện & Đề thi
-- [ ] Quản lý kho bài giảng / video / tài liệu
-- [ ] Hệ thống đề thi online với timer
-- [ ] Chấm bài trắc nghiệm tự động
-- [ ] Ngân hàng câu hỏi theo chủ đề, mức độ
-
-### 🔔 Tiện ích khác
-- [ ] Thông báo real-time (kết quả mới, lịch thi)
-- [ ] Lịch học / lịch thi tích hợp
-- [ ] Mode sáng (light mode) cho giao diện
-- [ ] PWA (Progressive Web App) — dùng được offline
-- [ ] App mobile (React Native)
+Hoặc dùng `start-all.bat` ở root.
 
 ---
 
-## 📝 Changelog
+## 📦 Deploy
 
-| Ngày | Thay đổi |
-|---|---|
-| 10/03/2026 | Triển khai **Student AI** (Scholar Mode): Hỗ trợ đa phương tiện, Streaming API, Toolbar học thuật |
-| 10/03/2026 | Tối ưu hóa giao diện: Gỡ bỏ Language Selector, thêm Custom Scrollbar, fix UI Border |
-| 05/03/2026 | Thêm trang Xếp hạng học sinh (`/ranking`) với podium, leaderboard, biểu đồ, modal |
-| 01/03/2026 | Tính năng export CSV, bảo mật video YouTube |
-| 01/03/2026 | Sửa lỗi export crash & YouTube embed error |
-| 01/03/2026 | Thêm bảo mật video: anti-click, IFrame API controls |
-| 01/03/2026 | Bulk move & cut/paste cho quản lý nội dung |
+```bash
+# Deploy lên Vercel (tự động qua CI hoặc dùng script):
+DEPLOY_TO_VERCEL.bat
+
+# Build check:
+npm run vercel-build    # = npm run build -w thpt-kim-xuyen
+```
+
+Vercel routing (`vercel.json`):
+- `/api/*` → `api/index.js` (serverless backend)
+- `/*` → `app/dist/index.html` (SPA fallback)
 
 ---
 
-*Dự án phát triển nội bộ — THPT Kim Xuyên*
+## ⚠️ Lưu ý cho AI Agent
+
+1. **Không có file `.env` nào được commit** — nếu thiếu biến môi trường, check `.env.local` ở root
+2. **Gemini API key là array** (nhiều key, phân tách bằng dấu phẩy) — backend tự failover
+3. **`exams.json` (~470KB) KHÔNG được chỉnh tay** — file static lớn, chỉ update khi có yêu cầu rõ ràng
+4. **Backend `server.js` dùng CommonJS (`require`)**, frontend dùng ESM (`import`)
+5. **Mỗi khi thêm route mới vào App.jsx** thì phải lazy import và bọc `<Suspense>`
+6. **`TeacherAssistant.jsx` là file lớn nhất (~57KB)** — tìm feature theo comment section trong file
+7. **Google Search trong Teacher Assistant** dùng Gemini API với tool `googleSearch`, không phải fetch trực tiếp Google
+8. **Dark mode** support: dùng Tailwind `dark:` prefix; toggle state lưu trong `localStorage['van_theme']`

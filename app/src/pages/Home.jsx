@@ -87,15 +87,97 @@ export default function Home() {
             </section>
 
             {/* Footer */}
-            <footer className="border-t border-slate-200 dark:border-slate-800 py-8 px-6 text-center">
-                <div className="flex flex-wrap justify-center gap-6 mb-4">
-                    {['Về chúng tôi', 'Tính năng', 'Điều khoản', 'Bảo mật', 'Trợ giúp'].map((item) => (
-                        <a key={item} href="#" className="text-slate-500 hover:text-primary dark:hover:text-white text-sm transition-colors">
-                            {item}
-                        </a>
-                    ))}
+            <footer style={{ background: 'linear-gradient(135deg, #0b131e 0%, #133a36 100%)', borderTop: 'none', marginTop: 0 }}>
+                {/* Top accent line */}
+                <div style={{ height: 3, background: 'linear-gradient(90deg, #0d9488, #2563eb, #7c3aed)' }} />
+
+                <div className="max-w-6xl mx-auto px-8 py-12">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+                        {/* Brand column */}
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-3">
+                                <div style={{ width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg, #0d9488, #2563eb)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 15px rgba(13,148,136,0.3)' }}>
+                                    <span className="material-symbols-outlined text-white text-xl">school</span>
+                                </div>
+                                <div>
+                                    <p style={{ color: 'white', fontWeight: 800, fontSize: 16, letterSpacing: '0.05em' }}>THPT KIM XUYÊN</p>
+                                    <p style={{ color: '#2dd4bf', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Nền tảng Ngữ Văn AI</p>
+                                </div>
+                            </div>
+                            <p style={{ color: '#94a3b8', fontSize: 13, lineHeight: 1.7, maxWidth: 260 }}>
+                                Ứng dụng trí tuệ nhân tạo vào dạy và học Ngữ Văn THPT — hỗ trợ học sinh và giáo viên đạt kết quả tối ưu.
+                            </p>
+                            {/* Social icons */}
+                            <div className="flex gap-3 mt-1">
+                                {[
+                                    { icon: 'language', label: 'Website' },
+                                    { icon: 'mail', label: 'Email' },
+                                    { icon: 'groups', label: 'Cộng đồng' },
+                                ].map(s => (
+                                    <button key={s.label} title={s.label} style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b', cursor: 'pointer', transition: 'all 0.2s' }}
+                                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(13,148,136,0.2)'; e.currentTarget.style.color = '#2dd4bf'; e.currentTarget.style.borderColor = 'rgba(13,148,136,0.3)' }}
+                                        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)' }}
+                                    >
+                                        <span className="material-symbols-outlined text-sm">{s.icon}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Quick links */}
+                        <div>
+                            <p style={{ color: 'white', fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Khám phá</p>
+                            <div className="flex flex-col gap-3">
+                                {[
+                                    { label: 'Trợ lý Giáo viên', icon: 'co_present', path: '/teacher' },
+                                    { label: 'Gia sư Học sinh', icon: 'person_raised_hand', path: '/assistant' },
+                                    { label: 'Bảng xếp hạng', icon: 'trophy', path: '/ranking' },
+                                    { label: 'Đánh giá năng lực', icon: 'quiz', path: '/assessment' },
+                                ].map(link => (
+                                    <a key={link.label} href={link.path} style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#94a3b8', fontSize: 13, textDecoration: 'none', transition: 'color 0.2s', fontWeight: 500 }}
+                                        onMouseEnter={e => e.currentTarget.style.color = '#2dd4bf'}
+                                        onMouseLeave={e => e.currentTarget.style.color = '#94a3b8'}
+                                    >
+                                        <span className="material-symbols-outlined" style={{ fontSize: 16 }}>{link.icon}</span>
+                                        {link.label}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Legal + info */}
+                        <div>
+                            <p style={{ color: 'white', fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Hỗ trợ</p>
+                            <div className="flex flex-col gap-3">
+                                {['Điều khoản sử dụng', 'Chính sách bảo mật', 'Trợ giúp & FAQ', 'Liên hệ chúng tôi'].map(item => (
+                                    <a key={item} href="#" style={{ color: '#94a3b8', fontSize: 13, textDecoration: 'none', transition: 'color 0.2s', fontWeight: 500 }}
+                                        onMouseEnter={e => e.currentTarget.style.color = '#2dd4bf'}
+                                        onMouseLeave={e => e.currentTarget.style.color = '#94a3b8'}
+                                    >
+                                        {item}
+                                    </a>
+                                ))}
+                            </div>
+
+                            {/* Status badge */}
+                            <div style={{ marginTop: 24, display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 20, padding: '4px 12px' }}>
+                                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px rgba(16,185,129,0.8)' }} />
+                                <span style={{ color: '#34d399', fontSize: 11, fontWeight: 700, letterSpacing: '0.02em' }}>Hệ thống đang hoạt động</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Bottom bar */}
+                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 40, paddingTop: 24, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+                        <p style={{ color: '#64748b', fontSize: 12 }}>© 2026 <span style={{ color: '#cbd5e1', fontWeight: 600 }}>THPT KIM XUYÊN</span>. All rights reserved.</p>
+                        <p style={{ color: '#64748b', fontSize: 11 }}>
+                            Làm bởi <span style={{ color: '#2dd4bf', fontWeight: 700 }}>Khổng Quang Huy 12C9</span>
+                            <span style={{ margin: '0 8px', opacity: 0.3 }}>|</span>
+                            Made with <span style={{ color: '#f43f5e' }}>❤</span> for Vietnam
+                        </p>
+                    </div>
                 </div>
-                <p className="text-slate-400 text-xs">© 2024 THPT KIM XUYÊN. All rights reserved.</p>
             </footer>
         </div>
     )
